@@ -93,6 +93,13 @@ textarea{width:100%;font-family:inherit;font-size:14px;padding:9px 11px;border:1
 .fb.good{background:#ecf8f2;color:#14603f}
 .fb.warn{background:#fdf3ec;color:#8a4b12}
 .hist{border:1px solid var(--line);border-radius:11px;padding:10px 13px;margin-bottom:8px;font-size:13.5px}
+.hm{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;margin:8px 0}
+.hm div{aspect-ratio:1;border-radius:3px;background:#ece9df}
+.hm .l1{background:#e8d9a8}.hm .l2{background:#d4b95e}.hm .l3{background:#b28f2e}.hm .l4{background:#16345c}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:8px 0}
+.statbox{background:var(--accent-soft);border-radius:11px;padding:10px;text-align:center}
+.statbox b{font-size:22px;color:var(--accent);display:block}
+.statbox span{font-size:11.5px;color:var(--sub)}
 nav{scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
 /* ===== 密碼閘門 ===== */
@@ -165,6 +172,7 @@ html.unlocked #gate{display:none}
   <button data-t="daily">⚡ 每日十分</button>
   <button data-t="mock">🎙️ 模擬面試</button>
   <button data-t="sprint">📅 衝刺計畫</button>
+  <button data-t="stats">📈 統計</button>
   <button data-t="bank">📚 題庫瀏覽</button>
   <button data-t="reading">🎤 朗讀練習</button>
   <button data-t="review">📋 面試回顧</button>
@@ -250,6 +258,28 @@ html.unlocked #gate{display:none}
   <div id="sprintList"></div>
 </section>
 
+<!-- ============ 統計與複習 ============ -->
+<section id="tab-stats" class="hidden">
+  <div class="card">
+    <h2>🧠 今天該複習的弱點題</h2>
+    <p class="section-note">弱點清單的題目會依「遺忘曲線」排程：記得了→間隔加倍（1→2→4→8…天），還不熟→明天再出現。</p>
+    <div id="srsArea"></div>
+  </div>
+  <div class="card">
+    <h2>📈 練習統計</h2>
+    <div id="dashArea"></div>
+  </div>
+  <div class="card">
+    <h2>💾 備份與跨裝置同步</h2>
+    <p class="section-note">紀錄存在各裝置瀏覽器裡。匯出成檔案後，在另一台裝置匯入，就能把弱點清單、連續天數、衝刺勾選、模擬逐字稿帶過去（錄音檔太大不包含）。</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="expBtn">⬇️ 匯出備份檔</button>
+      <label class="btn sec" style="cursor:pointer">⬆️ 匯入備份檔<input type="file" id="impFile" accept=".json" style="display:none"></label>
+    </div>
+    <p class="sub" id="bkMsg" style="margin-top:8px"></p>
+  </div>
+</section>
+
 <!-- ============ 模擬面試 ============ -->
 <section id="tab-mock" class="hidden">
   <div class="card">
@@ -262,9 +292,13 @@ html.unlocked #gate{display:none}
         <option value="zh">用中文作答</option>
         <option value="en">用英文作答</option>
       </select>
+      <select id="mMode">
+        <option value="single">單題模式</option>
+        <option value="panel">🎬 一鏡到底（自介＋4題）</option>
+      </select>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" id="mDraw">🎲 抽一題開始模擬</button>
+      <button class="btn" id="mDraw">🎲 開始模擬</button>
     </div>
     <p class="sub" id="mSupport" style="margin-top:8px"></p>
   </div>
@@ -691,6 +725,27 @@ const store = {
 DATA.forEach((it,i)=> it.id = i);
 $("#totalCount").textContent = DATA.length;
 
+/* TTS 語音朗讀（需在渲染前定義） */
+const SAYS = {}; let sayN = 0;
+function sayBtn(text, lang, label){
+  if(!text) return "";
+  const id = "say" + (++sayN);
+  SAYS[id] = {t: text, l: lang};
+  return `<button class="chip say" data-sid="${id}">${label}</button>`;
+}
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".say"); if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  try{
+    if(typeof speechSynthesis === "undefined"){ b.textContent = "此瀏覽器不支援語音"; return; }
+    if(speechSynthesis.speaking){ speechSynthesis.cancel(); return; }
+    const s = SAYS[b.dataset.sid]; if(!s) return;
+    const u = new SpeechSynthesisUtterance(s.t);
+    u.lang = s.l; u.rate = 0.92;
+    speechSynthesis.speak(u);
+  }catch(err){}
+});
+
 /* ================= 分頁 ================= */
 $("#nav").addEventListener("click", e=>{
   const b = e.target.closest("button"); if(!b) return;
@@ -701,6 +756,7 @@ $("#nav").addEventListener("click", e=>{
   if(b.dataset.t==="mock") renderMHistory();
   if(b.dataset.t==="daily") dgStreakPaint();
   if(b.dataset.t==="sprint") spPaint();
+  if(b.dataset.t==="stats") renderDash();
 });
 
 /* ================= 抽題練習 ================= */
@@ -747,7 +803,7 @@ function draw(){
   curQ = fresh[Math.floor(Math.random()*fresh.length)];
   practiced[curQ.id] = (practiced[curQ.id]||0)+1;
   store.set("practiced", practiced);
-  sessionN++;
+  sessionN++; bump("draw");
   renderQ();
   startTimer();
 }
@@ -796,6 +852,7 @@ $("#revealBtn").addEventListener("click", ()=>{
   if(d.a_en) h += `<div class="en">${esc(d.a_en)}</div>`;
   if(!d.a_zh && !d.a_en) h += `<div class="sub">這題沒有預存擬答——用你的故事庫即興回答，練臨場反應！</div>`;
   h += `</div>`;
+  h += `<div class="chips" style="margin-top:6px">${sayBtn(d.a_zh,"zh-TW","🔊 聽中文")}${sayBtn(d.a_en,"en-US","🔊 Listen")}</div>`;
   if(d.tip) h += `<div class="tip">💡 ${esc(d.tip)}</div>`;
   $("#ansArea").innerHTML = h;
 });
@@ -807,9 +864,7 @@ function updateStarBtn(){
 }
 $("#starBtn").addEventListener("click", ()=>{
   if(!curQ) return;
-  const i = stars.indexOf(curQ.id);
-  if(i>=0) stars.splice(i,1); else stars.push(curQ.id);
-  store.set("stars",stars); updateStarBtn();
+  toggleStar(curQ.id); updateStarBtn();
 });
 
 /* ================= 題庫瀏覽 ================= */
@@ -825,6 +880,7 @@ function qaCard(d, open){
       ${d.a_zh?`<p style="margin-bottom:6px">${esc(d.a_zh)}</p>`:""}
       ${d.a_en?`<p style="color:#33475c">${esc(d.a_en)}</p>`:""}
       ${!d.a_zh&&!d.a_en?`<p class="sub">（純題目，無預存擬答）</p>`:""}
+      <div class="chips">${sayBtn(d.a_zh,"zh-TW","🔊 聽中文")}${sayBtn(d.a_en,"en-US","🔊 Listen")}</div>
       ${d.tip?`<div class="tip">💡 ${esc(d.tip)}</div>`:""}
       <p class="sub" style="margin-top:6px">來源：${esc(d.src)} · ${esc(d.cat)}</p>
     </div></details>`;
@@ -853,9 +909,8 @@ function renderBank(){
 $("#bankList").addEventListener("click", e=>{
   const s = e.target.closest(".star"); if(!s) return;
   e.preventDefault(); e.stopPropagation();
-  const id = +s.dataset.id, i = stars.indexOf(id);
-  if(i>=0) stars.splice(i,1); else stars.push(id);
-  store.set("stars",stars);
+  const id = +s.dataset.id;
+  toggleStar(id);
   s.classList.toggle("on", stars.includes(id));
 });
 renderBank();
@@ -863,7 +918,8 @@ renderBank();
 /* ================= 朗讀練習 ================= */
 $("#readingList").innerHTML = READINGS.map(r=>`
  <div class="card"><h2><span class="tag ${TAGC[r.air]}">${r.air}</span>${esc(r.title)}</h2>
- <div class="readblock ${r.en?"en":""}">${esc(r.body)}</div></div>`).join("");
+ <div class="readblock ${r.en?"en":""}">${esc(r.body)}</div>
+ <div class="chips" style="margin-top:6px">${sayBtn(r.body, r.en?"en-US":"zh-TW", r.en?"🔊 聽示範（跟讀用）":"🔊 聽整段（跟讀用）")}</div></div>`).join("");
 let readSec = 30, readTimer = null;
 $$(".rchip").forEach(c=>c.addEventListener("click",()=>{
   $$(".rchip").forEach(x=>x.classList.remove("on")); c.classList.add("on");
@@ -895,6 +951,7 @@ $("#reviewList").innerHTML = REVIEWS.map(r=>`
      r.qa.map(x=>`<details><summary>${x.asked?"✔️":"💤"}　${esc(x.q)}</summary><div class="body">
        ${x.orig?`<p class="sub" style="margin:4px 0 3px">🕐 當下的回答</p><div class="ansbox" style="background:#f4f3ee;border-color:#e0dccc">${esc(x.orig)}</div>`:""}
        <p class="sub" style="margin:8px 0 3px">✨ 優化版本</p><div class="ansbox">${esc(x.better)}</div>
+       <div class="chips">${sayBtn(x.better, /[一-鿿]/.test(x.better)?"zh-TW":"en-US", "🔊 聽優化版")}</div>
        ${x.note?`<div class="tip">💡 ${esc(x.note)}</div>`:""}
      </div></details>`).join(""):""}
  </div>`).join("") + `
@@ -924,9 +981,7 @@ function renderStars(){
 $("#starList").addEventListener("click", e=>{
   const s = e.target.closest(".star"); if(!s) return;
   e.preventDefault(); e.stopPropagation();
-  const id = +s.dataset.id, i = stars.indexOf(id);
-  if(i>=0) stars.splice(i,1); else stars.push(id);
-  store.set("stars",stars); renderStars();
+  toggleStar(+s.dataset.id); renderStars();
 });
 
 /* ================= 模擬面試 ================= */
@@ -952,7 +1007,7 @@ function mdb(){ return new Promise(res=>{
   r.onsuccess = e => res(e.target.result);
   r.onerror = () => res(null);
 });}
-async function mSave(rec){ const db = await mdb(); if(!db) return;
+async function mSave(rec){ bump("mock"); const db = await mdb(); if(!db) return;
   await new Promise(res=>{ const tx=db.transaction("recs","readwrite"); tx.objectStore("recs").add(rec); tx.oncomplete=res; tx.onerror=res; }); }
 async function mList(){ const db = await mdb(); if(!db) return [];
   return new Promise(res=>{ const out=[]; const tx=db.transaction("recs","readonly");
@@ -980,9 +1035,21 @@ function mDraw(){
   const lang = $("#mLang").value, cat = $("#mCat").value;
   const p = DATA.filter(d=>(!M.air||d.airline===M.air)&&(!cat||d.cat===cat)&&(lang==="zh"?d.q_zh:d.q_en));
   if(!p.length){ alert("這個範圍沒有題目，換個條件試試"); return; }
-  M.q = p[Math.floor(Math.random()*p.length)];
+  if($("#mMode").value === "panel"){
+    const intro = {airline: M.air||"綜合", cat:"自我介紹", id:-1,
+      q_zh:"請自我介紹（30–60 秒）", q_en:"Please introduce yourself (30–60 seconds).",
+      a_zh:"", a_en:"", tip:"一鏡到底第一題：用最新版自介，語速放慢 15%。", src:"panel"};
+    M.queue = [intro, ...pickN(p, Math.min(4, p.length))];
+    M.qi = 0; M.panel = [];
+    M.q = M.queue[0];
+  } else { M.queue = null; M.q = p[Math.floor(Math.random()*p.length)]; }
+  mRenderQ();
+}
+function mRenderQ(){
+  const lang = $("#mLang").value;
   $("#mCard").classList.remove("hidden");
-  $("#mMeta").innerHTML = `<span class="tag ${TAGC[M.q.airline]}">${M.q.airline}</span><span class="tag cat">${M.q.cat}</span>`;
+  $("#mMeta").innerHTML = (M.queue?`<span class="tag" style="background:var(--gold-soft);color:var(--gold-deep)">🎬 第 ${M.qi+1} / ${M.queue.length} 題</span>`:"") +
+    `<span class="tag ${TAGC[M.q.airline]||"cat"}">${M.q.airline}</span><span class="tag cat">${M.q.cat}</span>`;
   $("#mBody").innerHTML = (lang==="zh"&&M.q.q_zh?`<div class="qtext">${esc(M.q.q_zh)}</div>`:"") +
                           (lang==="en"&&M.q.q_en?`<div class="qtext en">${esc(M.q.q_en)}</div>`:"") +
                           (lang==="en"&&!M.q.q_en?`<div class="qtext">${esc(M.q.q_zh)}<span class="sub">（請用英文回答）</span></div>`:"");
@@ -1123,6 +1190,26 @@ function mShowResult(transcript){
           ${d.a_en?`<p style="color:#33475c">${esc(d.a_en)}</p>`:""}
           ${d.tip?`<div class="tip">💡 ${esc(d.tip)}</div>`:""}</div></details>`;
   }
+  if(M.queue){
+    /* 一鏡到底：自動存檔、續往下一題 */
+    mSave({ ts: Date.now(), air: M.q.airline, q: M.q.q_zh || M.q.q_en, lang,
+            dur: M.dur, transcript, fb: fb.map(x=>x[1]), audio: M.blob });
+    M.panel.push({ q: M.q.q_zh || M.q.q_en, dur: M.dur, warn: fb.filter(x=>x[0]==="warn").length });
+    const last = M.qi >= M.queue.length - 1;
+    h += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn" id="mPanelNext">${last?"🏁 完成，看總結":"▶ 下一題（"+(M.qi+2)+"/"+M.queue.length+"）"}</button></div>
+          <p class="sub" style="margin-top:6px">已自動存入紀錄。真實面試不能重來——直接往下！</p>`;
+    $("#mResult").innerHTML = h;
+    $("#mRean").addEventListener("click", ()=>{
+      const t = $("#mTrans").value.trim();
+      $("#mFb").innerHTML = fbHtml(analyze(t, M.dur, lang, M.q));
+    });
+    $("#mPanelNext").addEventListener("click", ()=>{
+      if(last){ mPanelSummary(); } else { M.qi++; M.q = M.queue[M.qi]; mRenderQ(); }
+    });
+    renderMHistory();
+    return;
+  }
   h += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
         <button class="btn" id="mSaveBtn">💾 存入紀錄</button>
         <button class="btn ghost" id="mRetry">🔁 同一題再答一次</button></div>`;
@@ -1140,6 +1227,18 @@ function mShowResult(transcript){
     $("#mSaveBtn").textContent = "✅ 已儲存"; $("#mSaveBtn").disabled = true;
     renderMHistory();
   });
+}
+function mPanelSummary(){
+  const total = M.panel.reduce((s,x)=>s+x.dur,0);
+  const warns = M.panel.reduce((s,x)=>s+x.warn,0);
+  $("#mMeta").innerHTML = `<span class="tag" style="background:var(--gold-soft);color:var(--gold-deep)">🎬 一鏡到底完成</span>`;
+  $("#mBody").innerHTML = ""; $("#mTimer").textContent = ""; $("#mLive").textContent = "";
+  $("#mResult").innerHTML = `<div style="text-align:center;padding:8px"><div style="font-size:34px">🏁</div>
+    <h3>完整跑完 ${M.panel.length} 題！總時 ${Math.floor(total/60)} 分 ${total%60} 秒</h3></div>
+    ${M.panel.map((x,i)=>`<div class="fb ${x.warn<=2?"good":"warn"}">第${i+1}題「${esc(x.q.slice(0,22))}…」 ${x.dur} 秒 · ${x.warn} 個待改善點</div>`).join("")}
+    <div class="tip">💡 每題的錄音、逐字稿與完整建議都在下方「我的模擬紀錄」。建議明天同模式再跑一輪，比較待改善點是否下降。</div>
+    <button class="btn" style="margin-top:8px" onclick="document.getElementById('mDraw').click()">再跑一輪</button>`;
+  M.queue = null;
 }
 
 /* --- 紀錄 --- */
@@ -1193,6 +1292,7 @@ $("#sqStart").addEventListener("click", ()=>{
     const right = +b.dataset.i === sqCur.a;
     sqScore.total++; if(right) sqScore.ok++;
     store.set("sqScore", sqScore); sqPaint();
+    bump("quiz"); if(right) bump("quizOk");
     $("#sqArea").querySelectorAll(".opt").forEach(x=>{
       x.disabled = true;
       if(+x.dataset.i===sqCur.a) x.classList.add("right");
@@ -1314,7 +1414,7 @@ function dgRender(){
     });
     $("#dgOk").addEventListener("click", ()=>{ DG.marks.q++; dgNext(); });
     $("#dgStuck").addEventListener("click", ()=>{
-      if(!stars.includes(d.id)){ stars.push(d.id); store.set("stars",stars); }
+      if(!stars.includes(d.id)) toggleStar(d.id);
       dgNext();
     });
   } else if(s.t==="quiz"){
@@ -1384,6 +1484,7 @@ function dgFinish(){
   const d = store.get("daily", {last:"", streak:0});
   const today = todayStr(), yest = todayStr(new Date(Date.now()-864e5));
   if(d.last !== today){ d.streak = (d.last===yest) ? d.streak+1 : 1; d.last = today; store.set("daily", d); }
+  bump("daily");
   $("#dgProg").textContent = "完成！"; $("#dgBarFill").style.width = "100%";
   $("#dgBody").innerHTML = `<div style="text-align:center;padding:14px">
     <div style="font-size:36px">🎉</div>
@@ -1455,6 +1556,130 @@ $("#sprintList").addEventListener("change", e=>{
 });
 $("#spReset").addEventListener("click", ()=>{ store.set("sprint", {}); spPaint(); });
 spPaint();
+
+/* ================= 統計與間隔複習 ================= */
+function bump(k, n){
+  const s = store.get("stats", {});
+  const t = todayStr();
+  if(!s[t]) s[t] = {};
+  s[t][k] = (s[t][k]||0) + (n||1);
+  store.set("stats", s);
+}
+function toggleStar(id){
+  const srs = store.get("srs", {});
+  const i = stars.indexOf(id);
+  if(i >= 0){ stars.splice(i,1); delete srs[id]; }
+  else { stars.push(id); srs[id] = {due: todayStr(), ivl: 1}; }
+  store.set("stars", stars); store.set("srs", srs);
+}
+/* 舊收藏補上排程 */
+(function(){
+  const srs = store.get("srs", {});
+  let changed = false;
+  stars.forEach(id=>{ if(!srs[id]){ srs[id] = {due: todayStr(), ivl: 1}; changed = true; } });
+  if(changed) store.set("srs", srs);
+})();
+function addDays(n){ return todayStr(new Date(Date.now() + n*864e5)); }
+function srsDueIds(){
+  const srs = store.get("srs", {});
+  const t = todayStr();
+  return stars.filter(id => srs[id] && srs[id].due <= t && DATA[id]);
+}
+let srsQueue = [];
+function renderSrs(){
+  const due = srsDueIds();
+  const el = $("#srsArea");
+  if(!stars.length){ el.innerHTML = `<p class="sub">弱點清單是空的——抽題時按「☆」收藏，會自動排進複習。</p>`; return; }
+  if(!due.length){ el.innerHTML = `<p class="fb good" style="display:block">✅ 今天排程的弱點題都複習完了！（清單共 ${stars.length} 題在排程中）</p>`; return; }
+  el.innerHTML = `<p style="font-size:14px;font-weight:700">今天到期 <b style="color:var(--gold-deep)">${due.length}</b> 題（清單共 ${stars.length} 題）</p>
+    <button class="btn" id="srsStart">開始複習</button><div id="srsBody"></div>`;
+  $("#srsStart").addEventListener("click", ()=>{ srsQueue = srsDueIds(); srsNext(); });
+}
+function srsNext(){
+  const body = $("#srsBody");
+  if(!srsQueue.length){ renderSrs(); renderDash(); return; }
+  const d = DATA[srsQueue[0]];
+  body.innerHTML = `<div style="margin-top:10px"><span class="tag ${TAGC[d.airline]||"cat"}">${d.airline}</span><span class="tag cat">${esc(d.cat)}</span></div>
+    ${d.q_zh?`<div class="qtext">${esc(d.q_zh)}</div>`:""}${d.q_en?`<div class="qtext en">${esc(d.q_en)}</div>`:""}
+    <p class="sub">先出聲回答，再對照擬答自評：</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+      <button class="btn sec" id="srsShow">看擬答</button>
+      <button class="btn" id="srsOk">記得了 ✓（間隔加倍）</button>
+      <button class="btn ghost" id="srsNo">還不熟（明天再考）</button></div><div id="srsAns"></div>`;
+  $("#srsShow").addEventListener("click", ()=>{
+    $("#srsAns").innerHTML = `<div class="ansbox">${d.a_zh?`<div class="zh">${esc(d.a_zh)}</div>`:""}${d.a_en?`<div class="en">${esc(d.a_en)}</div>`:""}</div>`;
+  });
+  const grade = ok=>{
+    const srs = store.get("srs", {});
+    const e = srs[d.id] || {ivl:1};
+    if(ok){ e.ivl = Math.min((e.ivl||1)*2, 30); } else { e.ivl = 1; }
+    e.due = addDays(e.ivl);
+    srs[d.id] = e; store.set("srs", srs);
+    bump("review");
+    srsQueue.shift(); srsNext();
+  };
+  $("#srsOk").addEventListener("click", ()=>grade(true));
+  $("#srsNo").addEventListener("click", ()=>grade(false));
+}
+function renderDash(){
+  renderSrs();
+  const s = store.get("stats", {});
+  const t = todayStr();
+  const today = s[t] || {};
+  const daily = store.get("daily", {streak:0});
+  const sq = store.get("sqScore", {ok:0,total:0});
+  let w7 = {draw:0, quiz:0, mock:0, review:0};
+  for(let i=0;i<7;i++){ const d = s[todayStr(new Date(Date.now()-i*864e5))] || {};
+    for(const k in w7) w7[k] += d[k]||0; }
+  let hm = "";
+  for(let i=55;i>=0;i--){
+    const d = s[todayStr(new Date(Date.now()-i*864e5))] || {};
+    const v = (d.draw||0)+(d.quiz||0)+(d.mock||0)+(d.review||0)+((d.daily||0)*5);
+    const lv = v===0?"":v<5?"l1":v<12?"l2":v<25?"l3":"l4";
+    hm += `<div class="${lv}" title="${v}"></div>`;
+  }
+  $("#dashArea").innerHTML = `
+    <div class="statgrid">
+      <div class="statbox"><b>${today.draw||0}</b><span>今日抽題</span></div>
+      <div class="statbox"><b>${today.mock||0}</b><span>今日模擬</span></div>
+      <div class="statbox"><b>${today.review||0}</b><span>今日複習</span></div>
+      <div class="statbox"><b style="color:var(--gold-deep)">🔥${daily.streak||0}</b><span>連續天數</span></div>
+    </div>
+    <p class="sub">近 7 天：抽題 ${w7.draw}、安全測驗 ${w7.quiz}、模擬面試 ${w7.mock}、弱點複習 ${w7.review}　｜　安全測驗累積答對率 ${sq.total?Math.round(sq.ok/sq.total*100)+"%":"—"}</p>
+    <h3>近 8 週活動熱圖</h3><div class="hm">${hm}</div>
+    <p class="sub">顏色越深＝當天練越多（金→藍）。目標：面試前一個月不留白格。</p>`;
+}
+renderDash();
+
+/* ================= 備份匯出／匯入 ================= */
+const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats"];
+$("#expBtn").addEventListener("click", async ()=>{
+  const data = {_v:1, _date:new Date().toISOString()};
+  BK_KEYS.forEach(k=> data[k] = store.get(k, null));
+  const recs = await mList();
+  data.mockRecs = recs.map(r=>({ts:r.ts, air:r.air, q:r.q, lang:r.lang, dur:r.dur, transcript:r.transcript, fb:r.fb}));
+  const blob = new Blob([JSON.stringify(data)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "空服練習備份-" + todayStr().replace(/-/g,"") + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  $("#bkMsg").textContent = "✅ 已匯出（含 " + data.mockRecs.length + " 筆模擬逐字稿）";
+});
+$("#impFile").addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = async ()=>{
+    try{
+      const data = JSON.parse(r.result);
+      BK_KEYS.forEach(k=>{ if(data[k]!==null && data[k]!==undefined) store.set(k, data[k]); });
+      stars = store.get("stars", []);
+      if(Array.isArray(data.mockRecs)) for(const rec of data.mockRecs) await mSave(rec);
+      $("#bkMsg").textContent = "✅ 匯入完成！所有進度已還原。";
+      renderDash(); renderStars(); spPaint(); dgStreakPaint(); renderMHistory(); renderBank();
+    }catch(err){ $("#bkMsg").textContent = "⚠️ 檔案格式不對，請確認是本站匯出的備份檔。"; }
+  };
+  r.readAsText(f);
+});
 </script>
 </body>
 </html>
