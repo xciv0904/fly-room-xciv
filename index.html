@@ -100,10 +100,12 @@ textarea{width:100%;font-family:inherit;font-size:14px;padding:9px 11px;border:1
 .statbox{background:var(--accent-soft);border-radius:11px;padding:10px;text-align:center}
 .statbox b{font-size:22px;color:var(--accent);display:block}
 .statbox span{font-size:11.5px;color:var(--sub)}
-nav{scrollbar-width:none}
+nav{scrollbar-width:none;position:relative}
 nav::-webkit-scrollbar{display:none}
+.navfade{position:absolute;top:0;right:0;bottom:0;width:26px;background:linear-gradient(90deg,transparent,rgba(11,30,58,.95));pointer-events:none;transition:opacity .25s;z-index:2}
+.navfade.hide{opacity:0}
 /* ===== 密碼閘門 ===== */
-html:not(.unlocked) header, html:not(.unlocked) nav, html:not(.unlocked) main, html:not(.unlocked) footer{display:none!important}
+html:not(.unlocked) header, html:not(.unlocked) nav, html:not(.unlocked) main, html:not(.unlocked) footer, html:not(.unlocked) #dataBanner, html:not(.unlocked) #onboard{display:none!important}
 #gate{position:fixed;inset:0;background:linear-gradient(150deg,#0b1e3a,#16345c 60%,#274b7e);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
 #gate .gbox{border-top:4px solid var(--gold)}
 html.unlocked #gate{display:none}
@@ -147,6 +149,7 @@ html.unlocked #gate{display:none}
   <input type="password" id="gpw" placeholder="通關密碼" autocomplete="off">
   <button id="gbtn">進入</button>
   <div class="gerr" id="gerr"></div>
+  <p style="font-size:11.5px;color:var(--sub);margin-top:12px;opacity:.8">這是 Shelly 的空服面試個人練習室・忘記密碼請直接問本人 🌸</p>
 </div></div>
 <script>
 (function(){
@@ -167,6 +170,26 @@ html.unlocked #gate{display:none}
   <h1>✈️ 空服面試練習室</h1>
   <p>Shelly 專屬 · 目標：華航／星宇 · 練習：國泰／阿聯酋 · 題庫 <span id="totalCount"></span> 題（全附擬答）· 六家公司檔案＋安全知識</p>
 </header>
+<div id="dataBanner" class="hidden warnbox" style="max-width:860px;margin:10px auto 0;border-radius:12px">
+  📭 這台裝置目前沒有練習紀錄。如果你曾在別的裝置或瀏覽器練習過，先匯入備份檔就能接續進度；如果這是新的一份，按「知道了」就可以開始。
+  <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn sec" id="dataBannerBtn" style="padding:8px 14px;font-size:13px">前往匯入</button>
+    <button class="btn ghost" id="dataBannerClose" style="padding:8px 14px;font-size:13px">知道了，這是新的一份</button>
+  </div>
+</div>
+<div id="onboard" class="hidden" style="position:fixed;inset:0;background:rgba(11,30,58,.55);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:18px;padding:26px 24px;max-width:380px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3)">
+    <h2 style="margin-bottom:10px">👋 歡迎回來，Shelly</h2>
+    <p style="font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:16px">
+      第一次用這頁，或好一陣子沒開？建議這樣走：<br>
+      1️⃣ <b>⚡每日十分鐘</b>——每天固定暖身，10 分鐘掃過快問快答、安全測驗、記憶力、關鍵字閃卡。<br>
+      2️⃣ <b>🎯抽題練習</b>裡按「☆」收藏卡住的題目，會自動排進「📈統計」頁的弱點複習。<br>
+      3️⃣ 換裝置練習前，先到「📈統計」頁最上方<b>匯入備份檔</b>，進度才會接起來。<br>
+      4️⃣ 有面試日期就先到「📅衝刺計畫」設定，會自動告訴你現在該做什麼。
+    </p>
+    <button class="btn" id="onboardOk" style="width:100%">我知道了，開始練習</button>
+  </div>
+</div>
 <nav id="nav">
   <button data-t="practice" class="on">🎯 抽題練習</button>
   <button data-t="daily">⚡ 每日十分</button>
@@ -179,6 +202,7 @@ html.unlocked #gate{display:none}
   <button data-t="weak">💪 弱點加強</button>
   <button data-t="safety">🛟 安全知識</button>
   <button data-t="airlines">🏢 航空公司</button>
+  <div class="navfade" id="navFade"></div>
 </nav>
 <main>
 
@@ -260,16 +284,7 @@ html.unlocked #gate{display:none}
 
 <!-- ============ 統計與複習 ============ -->
 <section id="tab-stats" class="hidden">
-  <div class="card">
-    <h2>🧠 今天該複習的弱點題</h2>
-    <p class="section-note">弱點清單的題目會依「遺忘曲線」排程：記得了→間隔加倍（1→2→4→8…天），還不熟→明天再出現。</p>
-    <div id="srsArea"></div>
-  </div>
-  <div class="card">
-    <h2>📈 練習統計</h2>
-    <div id="dashArea"></div>
-  </div>
-  <div class="card">
+  <div class="card" id="backupCard">
     <h2>💾 備份與跨裝置同步</h2>
     <p class="section-note">紀錄存在各裝置瀏覽器裡。匯出成檔案後，在另一台裝置匯入，就能把弱點清單、連續天數、衝刺勾選、模擬逐字稿帶過去（錄音檔太大不包含）。</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -278,13 +293,23 @@ html.unlocked #gate{display:none}
     </div>
     <p class="sub" id="bkMsg" style="margin-top:8px"></p>
   </div>
+  <div class="card">
+    <h2>🧠 今天該複習的弱點題</h2>
+    <p class="section-note">弱點清單的題目會依「遺忘曲線」排程：記得了→間隔加倍（1→2→4→8…天），還不熟→明天再出現。<b>還沒到複習日的題目本來就不會出現在這裡——它沒有消失，只是還沒到時間，一樣躺在弱點清單裡。</b></p>
+    <div id="srsArea"></div>
+  </div>
+  <div class="card">
+    <h2>📈 練習統計</h2>
+    <div id="dashArea"></div>
+  </div>
 </section>
 
 <!-- ============ 模擬面試 ============ -->
 <section id="tab-mock" class="hidden">
   <div class="card">
     <h2>🎙️ 模擬面試</h2>
-    <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。錄音與分析會存在這台裝置上，隨時回聽。第一次使用請允許麥克風權限。</p>
+    <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。</p>
+    <div class="tip">🔒 <b>隱私說明：</b>錄音與逐字稿只存在「這台裝置」的瀏覽器裡，不會上傳到任何地方。第一次按下🔴會跳出麥克風權限請求，請允許。</div>
     <div class="chips" id="mAirline"></div>
     <div class="searchrow">
       <select id="mCat"><option value="">全部類別</option></select>
@@ -300,12 +325,12 @@ html.unlocked #gate{display:none}
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn" id="mDraw">🎲 開始模擬</button>
     </div>
-    <p class="sub" id="mSupport" style="margin-top:8px"></p>
   </div>
 
   <div class="card hidden" id="mCard">
     <div id="mMeta"></div>
     <div id="mBody"></div>
+    <div id="mSupport" style="margin-top:10px"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
       <button class="btn" id="mRec">🔴 開始錄音</button>
       <button class="btn sec" id="mStop" disabled>⏹ 完成回答</button>
@@ -725,6 +750,46 @@ const store = {
 DATA.forEach((it,i)=> it.id = i);
 $("#totalCount").textContent = DATA.length;
 
+/* ===== 新手導覽（首次或未匯入資料時提示）===== */
+function showOnboard(){
+  if(store.get("onboarded", false)) return;
+  $("#onboard").classList.remove("hidden");
+}
+$("#onboardOk").addEventListener("click", ()=>{
+  store.set("onboarded", true);
+  $("#onboard").classList.add("hidden");
+});
+(function(){
+  const tryShow = ()=>{ if(document.documentElement.classList.contains("unlocked")) showOnboard(); };
+  if(document.documentElement.classList.contains("unlocked")) tryShow();
+  const gbtn = document.getElementById("gbtn"), gpw = document.getElementById("gpw");
+  if(gbtn) gbtn.addEventListener("click", ()=> setTimeout(tryShow, 60));
+  if(gpw) gpw.addEventListener("keydown", e=>{ if(e.key==="Enter") setTimeout(tryShow, 60); });
+})();
+
+/* ===== 本機資料是否為空 → 提示匯入備份 ===== */
+function isDeviceDataEmpty(){
+  const noStars = !(store.get("stars",[])||[]).length;
+  const noStats = Object.keys(store.get("stats",{})||{}).length===0;
+  const noStreak = !((store.get("daily",{streak:0})||{}).streak);
+  const noSprint = Object.keys(store.get("sprint",{})||{}).length===0;
+  return noStars && noStats && noStreak && noSprint;
+}
+function checkDataBanner(){
+  if(store.get("bannerDismissed", false)) return;
+  $("#dataBanner").classList.toggle("hidden", !isDeviceDataEmpty());
+}
+$("#dataBannerBtn").addEventListener("click", ()=>{
+  $("#dataBanner").classList.add("hidden");
+  document.querySelector('#nav button[data-t="stats"]').click();
+  setTimeout(()=>{ const c = document.getElementById("backupCard"); if(c) c.scrollIntoView({behavior:"smooth"}); }, 50);
+});
+$("#dataBannerClose").addEventListener("click", ()=>{
+  $("#dataBanner").classList.add("hidden");
+  store.set("bannerDismissed", true);
+});
+checkDataBanner();
+
 /* TTS 語音朗讀（需在渲染前定義） */
 const SAYS = {}; let sayN = 0;
 function sayBtn(text, lang, label){
@@ -758,6 +823,18 @@ $("#nav").addEventListener("click", e=>{
   if(b.dataset.t==="sprint") spPaint();
   if(b.dataset.t==="stats") renderDash();
 });
+/* nav 可橫向捲動提示：捲到底就淡出漸層 */
+(function(){
+  const nv = $("#nav"), fade = $("#navFade");
+  if(!nv || !fade) return;
+  function paint(){
+    const atEnd = nv.scrollWidth - nv.clientWidth - nv.scrollLeft < 8;
+    fade.classList.toggle("hide", atEnd);
+  }
+  nv.addEventListener("scroll", paint);
+  window.addEventListener("resize", paint);
+  paint();
+})();
 
 /* ================= 抽題練習 ================= */
 let selAir = "", curQ = null, timer = null, practiced = store.get("practiced",{}), sessionN = 0;
@@ -941,11 +1018,12 @@ $("#readTimerBtn").addEventListener("click", ()=>{
 $("#reviewList").innerHTML = REVIEWS.map(r=>`
  <div class="card">
    <h2><span class="tag ${TAGC[r.air]}">${r.air}</span>面試回顧與優化</h2>
+   <p class="sub" style="margin-bottom:4px">✅ ${r.good.length} 個優勢　🔧 ${r.fix.length} 個待改善${r.qa?`　🗣️ ${r.qa.length} 題實戰回顧`:""}</p>
    <div class="flow">${r.flow.map((f,i)=>(i?"<em>→</em>":"")+`<span>${esc(f)}</span>`).join("")}</div>
-   <h3 style="color:var(--good)">✅ 持續把握的優勢</h3>
-   <ul class="tight">${r.good.map(g=>`<li>${esc(g)}</li>`).join("")}</ul>
-   <h3 style="color:var(--warn)">🔧 重點改善方向</h3>
-   <ul class="tight">${r.fix.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>
+   <details open><summary style="color:var(--good)">✅ 持續把握的優勢</summary><div class="body">
+   <ul class="tight">${r.good.map(g=>`<li>${esc(g)}</li>`).join("")}</ul></div></details>
+   <details open><summary style="color:var(--warn)">🔧 重點改善方向</summary><div class="body">
+   <ul class="tight">${r.fix.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></div></details>
    <div class="tip">💡 <b>${esc(r.extra.title)}：</b>${esc(r.extra.body)}</div>
    ${r.qa?`<h3>🗣️ 實戰題目回顧 <span class="sub" style="font-weight:400">✔️＝當場被問到　💤＝備用題（先準備好）</span></h3>`+
      r.qa.map(x=>`<details><summary>${x.asked?"✔️":"💤"}　${esc(x.q)}</summary><div class="body">
@@ -992,11 +1070,16 @@ const hasMedia = (typeof navigator!=="undefined" && navigator.mediaDevices && na
 const hasIDB = (typeof indexedDB!=="undefined");
 
 (function(){
-  const s = [];
-  s.push(hasMedia ? "✅ 支援錄音" : "⚠️ 此瀏覽器不支援錄音");
-  s.push(SR ? "✅ 支援語音轉文字（需連網）" : "⚠️ 不支援即時轉文字——仍可錄音，結束後可手動貼上內容分析");
-  s.push(hasIDB ? "✅ 紀錄可保存" : "⚠️ 無法保存紀錄");
-  $("#mSupport").textContent = s.join("　");
+  const issues = [];
+  if(!hasMedia) issues.push("⚠️ 此瀏覽器不支援錄音——請改用 Safari 或 Chrome 開啟本頁。");
+  if(!SR) issues.push("⚠️ 此瀏覽器不支援即時語音轉文字（iOS Safari 常見）——仍可正常錄音，回答完後在下方文字框手動打字，一樣能拿到分析建議。");
+  if(!hasIDB) issues.push("⚠️ 此瀏覽器無法保存練習紀錄，錄音結束後請自行下載保存。");
+  const el = $("#mSupport");
+  if(issues.length){
+    el.innerHTML = `<div class="warnbox">${issues.map(esc).join("<br>")}</div>`;
+  } else {
+    el.innerHTML = `<p class="sub">✅ 錄音、語音轉文字、紀錄保存都支援，可以直接開始。</p>`;
+  }
 })();
 
 /* --- IndexedDB --- */
@@ -1308,10 +1391,11 @@ $("#airlineList").innerHTML = AIRINFO.map(a=>`
  <div class="card">
    <h2><span class="tag ${a.cls}">${a.code}</span>${esc(a.name)} <span class="sub" style="font-weight:400">${esc(a.target)}</span></h2>
    <p class="sub" style="margin-bottom:8px">${esc(a.base)}</p>
-   <h3>🧭 品牌理念</h3><p style="font-size:13.5px">${esc(a.idea)}</p>
-   <h3>🗺️ 航網與機隊</h3><p style="font-size:13.5px">${esc(a.net)}</p>
-   <h3>📌 面試必背知識點</h3><ul class="tight">${a.must.map(m=>`<li>${esc(m)}</li>`).join("")}</ul>
-   <h3>🎭 公司偏好與面試風格</h3><p style="font-size:13.5px">${esc(a.pref)}</p>
+   <div class="tip" style="margin-bottom:10px">📌 <b>一句話重點：</b>${esc(a.must[0]||"")}</div>
+   <details><summary>🧭 品牌理念</summary><div class="body"><p style="font-size:13.5px">${esc(a.idea)}</p></div></details>
+   <details><summary>🗺️ 航網與機隊</summary><div class="body"><p style="font-size:13.5px">${esc(a.net)}</p></div></details>
+   <details open><summary>📌 面試必背知識點（${a.must.length} 點）</summary><div class="body"><ul class="tight">${a.must.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div></details>
+   <details><summary>🎭 公司偏好與面試風格</summary><div class="body"><p style="font-size:13.5px">${esc(a.pref)}</p></div></details>
    <div class="tip">💜 <b>給 Shelly 的策略：</b>${esc(a.you)}</div>
  </div>`).join("");
 
@@ -1590,7 +1674,7 @@ function renderSrs(){
   const due = srsDueIds();
   const el = $("#srsArea");
   if(!stars.length){ el.innerHTML = `<p class="sub">弱點清單是空的——抽題時按「☆」收藏，會自動排進複習。</p>`; return; }
-  if(!due.length){ el.innerHTML = `<p class="fb good" style="display:block">✅ 今天排程的弱點題都複習完了！（清單共 ${stars.length} 題在排程中）</p>`; return; }
+  if(!due.length){ el.innerHTML = `<p class="fb good" style="display:block">✅ 今天排程的弱點題都複習完了！（清單共 ${stars.length} 題在排程中，還沒到期的明天或之後會自動出現，不用擔心它們不見了）</p>`; return; }
   el.innerHTML = `<p style="font-size:14px;font-weight:700">今天到期 <b style="color:var(--gold-deep)">${due.length}</b> 題（清單共 ${stars.length} 題）</p>
     <button class="btn" id="srsStart">開始複習</button><div id="srsBody"></div>`;
   $("#srsStart").addEventListener("click", ()=>{ srsQueue = srsDueIds(); srsNext(); });
@@ -1675,6 +1759,8 @@ $("#impFile").addEventListener("change", e=>{
       stars = store.get("stars", []);
       if(Array.isArray(data.mockRecs)) for(const rec of data.mockRecs) await mSave(rec);
       $("#bkMsg").textContent = "✅ 匯入完成！所有進度已還原。";
+      store.set("bannerDismissed", true);
+      $("#dataBanner").classList.add("hidden");
       renderDash(); renderStars(); spPaint(); dgStreakPaint(); renderMHistory(); renderBank();
     }catch(err){ $("#bkMsg").textContent = "⚠️ 檔案格式不對，請確認是本站匯出的備份檔。"; }
   };
