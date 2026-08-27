@@ -1,0 +1,87 @@
+:root{
+  --eva:#17643b;
+  --eva-deep:#0d4b2b;
+  --eva-soft:#edf7f1;
+  --eva-line:#cde3d5;
+  --eva-gold:#b38a2d;
+}
+.card.eva-hero{background:linear-gradient(145deg,#0d4b2b,#17643b 62%,#24774b);color:#fff;border:none;box-shadow:0 8px 24px rgba(13,75,43,.18);padding:22px}
+.eva-eyebrow{font-size:12px;letter-spacing:1.5px;font-weight:800;color:#f0d991;text-transform:uppercase}
+.eva-hero h2{font-size:23px;margin:4px 0 2px}
+.eva-hero .section-note{color:rgba(255,255,255,.82);margin-bottom:14px}
+.eva-hero-grid,.eva-actions,.eva-stage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.eva-hero .btn{background:#fff;color:var(--eva-deep);min-height:48px}
+.eva-hero .btn.sec{background:#f6e8b9;border-color:#f6e8b9;color:#59430f}
+.eva-welcome{font-size:13px;color:var(--sub);margin-bottom:10px}
+.eva-stage-card{border:1px solid var(--eva-line);border-top:4px solid var(--eva);background:linear-gradient(180deg,#fff,var(--eva-soft));border-radius:14px;padding:17px}
+.eva-stage-card.final{border-top-color:var(--eva-gold);background:linear-gradient(180deg,#fff,#fbf7ec)}
+.eva-stage-card h2{font-size:18px;margin-bottom:2px}
+.eva-stage-label{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--eva)}
+.eva-stage-card.final .eva-stage-label{color:#8a6d1f}
+.eva-feature-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:12px 0}
+.eva-feature{background:rgba(255,255,255,.8);border:1px solid var(--eva-line);border-radius:9px;padding:7px 9px;font-size:12.5px}
+.eva-screen-head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.eva-back{border:none;background:var(--eva-soft);color:var(--eva-deep);font-family:inherit;font-weight:700;border-radius:9px;padding:8px 11px;cursor:pointer;min-height:40px}
+.eva-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.eva-module{background:#fff;border:1px solid var(--eva-line);border-radius:13px;padding:14px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink);min-height:112px}
+.eva-module:hover{border-color:var(--eva)}
+.eva-module b{display:block;font-size:15px;margin-bottom:4px}
+.eva-module span{display:block;font-size:12px;color:var(--sub);line-height:1.55}
+.eva-priority{display:inline-flex;align-items:center;border-radius:99px;padding:3px 9px;font-size:11px;font-weight:800;margin-bottom:7px}
+.eva-priority.must{background:#fee9e5;color:#a33827}
+.eva-priority.familiar{background:#fff4cf;color:#805f09}
+.eva-priority.improv{background:#e9f1f8;color:#315675}
+.eva-question-card{border-left:5px solid var(--eva);padding-left:16px}
+.eva-question-card h2{font-size:19px;line-height:1.5}
+.eva-answer{background:var(--eva-soft);border:1px solid var(--eva-line);border-radius:11px;padding:13px 14px;font-size:14px;white-space:pre-line}
+.eva-note-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.eva-note{border-radius:10px;padding:10px 12px;font-size:12.5px;background:#f7f8fa;border:1px solid var(--line)}
+.eva-note b{display:block;margin-bottom:3px}
+.eva-note.warn{background:#fff5ed;border-color:#f0d7c4}
+.eva-keywords{display:flex;flex-wrap:wrap;gap:6px}
+.eva-keywords span{background:#fff;border:1px solid var(--eva-line);color:var(--eva-deep);padding:4px 9px;border-radius:99px;font-size:12px;font-weight:700}
+.eva-progress{height:8px;background:#e8ece9;border-radius:99px;overflow:hidden;margin:7px 0}
+.eva-progress>span{display:block;height:100%;background:var(--eva);border-radius:99px}
+.eva-skill-row{padding:9px 0;border-bottom:1px solid var(--line)}
+.eva-skill-row:last-child{border-bottom:none}
+.eva-skill-head{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.eva-countdown{display:grid;place-items:center;min-height:180px;text-align:center;border:2px dashed var(--eva-line);border-radius:14px;background:var(--eva-soft)}
+.eva-countdown strong{font-size:54px;color:var(--eva)}
+.eva-reading{font-size:17px;line-height:1.85;background:#fff;border:2px solid var(--eva);border-radius:13px;padding:17px}
+.eva-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.eva-checks label{display:flex;gap:8px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px;font-size:12.5px}
+.eva-tw-source{font-size:17px;font-weight:700;margin-bottom:7px}
+.eva-tw-reading{font-size:16px;color:var(--eva-deep);background:var(--eva-soft);padding:11px;border-radius:10px;margin:7px 0}
+.eva-options{display:grid;gap:8px;margin:10px 0}
+.eva-option{font:inherit;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 12px;cursor:pointer;min-height:44px}
+.eva-option.on{border-color:var(--eva);background:var(--eva-soft)}
+.eva-option.right{border-color:var(--good);background:#ecf8f2}
+.eva-option.wrong{border-color:var(--bad);background:#fdeeec}
+.eva-math-levels{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px}
+.eva-math-levels .chip{white-space:nowrap}
+.eva-solution{background:#f7fafd;border:1px solid var(--line);border-radius:11px;padding:12px;margin-top:10px}
+.eva-solution ol{padding-left:21px}
+.eva-session-list{display:grid;gap:8px;margin:12px 0}
+.eva-session-step{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:13px;background:#fff}
+.eva-session-step.on{border-color:var(--eva);background:var(--eva-soft);font-weight:700}
+.eva-session-step.done{color:#47705a}
+.eva-manual{display:inline-block;background:#f1f3f5;color:#5c6570;border-radius:6px;padding:2px 7px;font-size:10px;font-weight:800;margin-left:5px}
+.eva-stat-block{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.eva-stat-card{background:#fff;border:1px solid var(--eva-line);border-radius:12px;padding:13px}
+.eva-stat-card h3{margin-top:0}
+nav button[data-t="eva"].on{color:#dcf4e5;border-bottom-color:#5fc889}
+@media(max-width:640px){
+  .eva-hero-grid,.eva-stage-grid,.eva-module-grid,.eva-stat-block{grid-template-columns:1fr}
+  .eva-hero{padding:18px 15px}
+  .eva-hero h2{font-size:21px}
+  .eva-feature-list,.eva-note-grid,.eva-checks{grid-template-columns:1fr}
+  .eva-actions{grid-template-columns:1fr}
+  .eva-module{min-height:96px}
+  .eva-reading{font-size:16px;padding:14px}
+}
+@media(max-width:430px){
+  .eva-stage-card{padding:14px}
+  .eva-feature-list{grid-template-columns:1fr}
+  .eva-screen-head{display:block}
+  .eva-back{margin-bottom:10px}
+}
