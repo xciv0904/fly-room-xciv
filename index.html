@@ -35,6 +35,23 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
 .chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:5px 13px;font-size:13px;cursor:pointer;color:var(--sub);font-weight:600;font-family:inherit}
 .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.quicknav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
+.quicknav button{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:6px 10px;font:600 12px/1.2 inherit;cursor:pointer}
+.quicknav button:hover{border-color:var(--accent);color:var(--accent)}
+.ci-hero{background:linear-gradient(145deg,#183b68,#245c91 66%,#c81432);color:#fff;border:none;box-shadow:0 8px 24px rgba(24,59,104,.2);padding:22px}
+.ci-hero h2{font-size:23px;margin:4px 0 2px}
+.ci-hero .section-note{color:rgba(255,255,255,.86);margin-bottom:12px}
+.ci-hero .quicknav button{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.96);color:#183b68}
+.ci-eyebrow{font-size:12px;letter-spacing:1.5px;font-weight:800;color:#ffd9df;text-transform:uppercase}
+.ci-countdown{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.ci-countdown span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;font-size:13px}
+.ci-countdown b{font-size:20px;color:#fff2bd}
+.ci-phase-card{border:1px solid #d7e2ef;border-top:4px solid #245c91;background:linear-gradient(180deg,#fff,#f1f6fb);border-radius:14px;padding:17px;margin-bottom:14px;box-shadow:var(--shadow)}
+.ci-phase-card.active{border:2px solid var(--ci);border-top-width:5px;box-shadow:0 7px 20px rgba(200,20,50,.12)}
+.ci-phase-card h2{font-size:18px;margin-bottom:2px}
+.ci-phase-label{font-size:11px;font-weight:800;letter-spacing:1px;color:#245c91}
+.ci-phase-card.active .ci-phase-label{color:var(--ci)}
+.ci-phase-card .ci-task{background:rgba(255,255,255,.82);border:1px solid #e0e8f0;border-radius:9px}
 select,input[type=text]{font-family:inherit;font-size:13.5px;padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
 .btn{font-family:inherit;font-size:14.5px;font-weight:700;padding:10px 20px;border-radius:11px;border:none;cursor:pointer;background:var(--accent);color:#fff}
 .btn.sec{background:var(--gold-soft);color:var(--gold-deep);border:1px solid #e8d9a8}
@@ -183,7 +200,7 @@ html.unlocked #gate{display:none}
     <h2 style="margin-bottom:10px">👋 歡迎回來，Shelly</h2>
     <p style="font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:16px">
       第一次用這頁，或好一陣子沒開？建議這樣走：<br>
-      1️⃣ <b>🟢 長榮航空招考衝刺</b>——先分清楚初試與複試，今天只練需要的關卡。<br>
+      1️⃣ <b>🌍 長榮航空招考衝刺</b>——先分清楚初試與複試，今天只練需要的關卡。<br>
       2️⃣ <b>初試</b>練朗讀、台語、適職、倫理與動態筆試；<b>複試</b>才練核心口試與追問。<br>
       3️⃣ 原本的精選50、抽題、模擬、朗讀與弱點清單都保留在導覽列。<br>
       4️⃣ 換裝置前先到「📈統計」匯出備份，進度才會接起來。
@@ -194,28 +211,42 @@ html.unlocked #gate{display:none}
   </div>
 </div>
 <nav id="nav">
-  <button data-t="eva" class="on">🟢 長榮衝刺</button>
-  <button data-t="p50">⭐ 精選50</button>
-  <button data-t="tools">🧰 模板工具</button>
-  <button data-t="stage">🎬 關卡練習</button>
-  <button data-t="practice">🎯 抽題練習</button>
-  <button data-t="daily">⚡ 每日十分</button>
+  <button data-t="eva" class="on">🏠 招考首頁</button>
+  <button data-t="practice">🎯 題庫練習</button>
+  <button data-t="stage">🎬 面試關卡</button>
   <button data-t="mock">🎙️ 模擬面試</button>
-  <button data-t="sprint">📅 衝刺計畫</button>
-  <button data-t="stats">📈 統計</button>
-  <button data-t="bank">📚 題庫瀏覽</button>
-  <button data-t="reading">🎤 朗讀練習</button>
-  <button data-t="review">📋 面試回顧</button>
-  <button data-t="weak">💪 弱點加強</button>
-  <button data-t="safety">🛟 安全知識</button>
-  <button data-t="airlines">🏢 航空公司</button>
+  <button data-t="ciBroadcast">📢 華航廣播</button>
+  <button data-t="tools">🧰 工具進度</button>
+  <button data-t="airlines">📚 資料參考</button>
   <div class="navfade" id="navFade"></div>
 </nav>
 <main>
 
 <!-- ============ 長榮航空招考衝刺 ============ -->
 <section id="tab-eva">
+  <div class="card">
+    <h2>🧭 招考衝刺首頁</h2>
+    <p class="section-note">先選擇要準備的航空公司；不同公司的倒數、訓練重點與進度分開保存。</p>
+    <div class="chips" id="sprintAirNav">
+      <button class="chip on" data-sprint-air="eva">🌍 長榮衝刺</button>
+      <button class="chip" data-sprint-air="ci">🌸 華航衝刺</button>
+    </div>
+  </div>
   <div id="evaApp"></div>
+  <div id="ciSprintPanel" class="hidden">
+    <div class="card ci-hero">
+      <div class="ci-eyebrow">CHINA AIRLINES · RECRUITMENT SPRINT</div>
+      <h2>🌸 華航招考衝刺</h2>
+      <p class="section-note">以 11/7 初試、11/14 複試為主軸。初試先處理英文原文朗讀、現場英翻中、新聞稿與機型唸法；通過後再把重心轉到複試問答與公司認知。</p>
+      <div class="quicknav"><button data-go="ciBroadcast">📢 廣播原文</button><button data-go="stage">🎬 面試關卡</button><button data-go="practice">🎯 抽題練習</button><button data-go="airlines">🏢 華航資料</button></div>
+      <div class="searchrow" style="margin-top:12px">
+        <label style="font-size:13.5px;font-weight:600">初試日期：<input type="date" id="ciInitialDate" value="2026-11-07" style="font-family:inherit;font-size:14px;padding:8px;border:1.5px solid var(--line);border-radius:9px"></label>
+        <label style="font-size:13.5px;font-weight:600">複試日期：<input type="date" id="ciFinalDate" value="2026-11-14" style="font-family:inherit;font-size:14px;padding:8px;border:1.5px solid var(--line);border-radius:9px"></label>
+      </div>
+      <div class="ci-countdown" id="ciSprintCountdown"></div>
+    </div>
+    <div id="ciSprintPlan"></div>
+  </div>
 </section>
 
 <!-- ============ 精選 50 題 ============ -->
@@ -223,6 +254,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>⭐ 精選 50 題</h2>
     <p class="section-note">從 <span id="p50Total"></span> 題題庫濃縮出的必練清單：涵蓋你實戰被問過的題型、三家公司必考題、以及每個心法的代表題。衝刺期只練這 50 題最有效率。</p>
+    <div class="quicknav"><button data-go="practice">🎯 抽題</button><button data-go="daily">⚡ 每日十分</button><button data-go="bank">📚 題庫</button><button data-go="weak">💪 弱點</button></div>
     <p class="sub" style="margin-bottom:2px">選擇航空公司＝切換擬答版本（50 題本身三家共用，不會變少）</p>
     <div class="chips" id="p50Air"></div>
     <div class="searchrow">
@@ -261,6 +293,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>🧰 面試模板與關鍵詞</h2>
     <p class="section-note">四份工具：<b>答題骨架</b>（各題型的回答公式）、<b>關鍵句型庫</b>（中英對照，可直接套用）、<b>關鍵字卡</b>（緊張卡住時只要想起關鍵字）、<b>故事庫對照表</b>（你的真實故事分別能答哪些題）。</p>
+    <div class="quicknav"><button data-go="sprint">📅 衝刺計畫</button><button data-go="stats">📈 統計備份</button><button data-go="review">📋 面試回顧</button></div>
     <div class="chips" id="toolNav">
       <button class="chip on" data-x="frame">🧱 答題骨架</button>
       <button class="chip" data-x="phrase">💬 關鍵句型</button>
@@ -277,6 +310,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>🎬 非問答關卡練習</h2>
     <p class="section-note">面試不是只有問答。這些關卡有些是<b>過不了就直接結束</b>（摸高），有些佔分很重（英文團討、看圖說故事、廣播詞）。你實際遇過的關卡都在這裡。</p>
+    <div class="quicknav"><button data-go="reading">🎤 朗讀</button><button data-go="ciBroadcast">📢 華航廣播</button><button data-go="safety">🛟 安全知識</button></div>
     <div class="chips" id="stageNav">
       <button class="chip on" data-x="gd">💬 英文團討</button>
       <button class="chip" data-x="pic">🖼️ 看圖說故事</button>
@@ -292,6 +326,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>抽題設定</h2>
     <p class="section-note">選定航空公司後，會抽出「該公司專屬題＋所有通用題」，而「為什麼選擇我們」這類公司題會自動帶出該公司的專屬擬答。題庫已去重，不會重複抽到同一題。</p>
+    <div class="quicknav"><button data-go="p50">⭐ 精選 50</button><button data-go="daily">⚡ 每日十分</button><button data-go="bank">📚 題庫瀏覽</button><button data-go="weak">💪 弱點加強</button></div>
     <div class="chips" id="fAirline"></div>
     <div class="searchrow">
       <select id="fCat"><option value="">全部類別</option></select>
@@ -376,7 +411,7 @@ html.unlocked #gate{display:none}
     <p class="sub" id="bkMsg" style="margin-top:8px"></p>
   </div>
   <div class="card" id="evaStatsBridge">
-    <h2>🟢 長榮準備度</h2>
+    <h2>🌍 長榮準備度</h2>
     <p class="section-note">分開查看初試練習次數、動態筆試正確率、複試核心、英文、追問與弱點；不顯示錄取機率。</p>
     <div id="evaStatsMini" class="sub">尚未建立長榮練習資料。</div>
     <button class="btn" id="evaStatsOpen" style="margin-top:10px">查看完整長榮準備度</button>
@@ -397,6 +432,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>🎙️ 模擬面試</h2>
     <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。選定航空公司後，對照擬答會顯示該公司的專屬版本。</p>
+    <div class="quicknav"><button data-go="practice">🎯 題庫練習</button><button data-go="stage">🎬 面試關卡</button><button data-go="review">📋 面試回顧</button></div>
     <div class="tip">🔒 <b>隱私說明：</b>錄音與逐字稿只存在「這台裝置」的瀏覽器裡，不會上傳到任何地方。第一次按下🔴會跳出麥克風權限請求，請允許。</div>
     <div class="chips" id="mAirline"></div>
     <div class="searchrow">
@@ -466,6 +502,16 @@ html.unlocked #gate{display:none}
     <div class="timerbar hidden" id="readBar"><div></div></div>
   </div>
   <div id="readingList"></div>
+</section>
+
+<!-- ============ 華航初試・雜誌與新聞稿廣播 ============ -->
+<section id="tab-ciBroadcast" class="hidden">
+  <div class="card">
+    <h2>📢 華航初試：雜誌／新聞稿廣播詞</h2>
+    <p class="section-note">11/7 初試先練這一頁：機上雜誌會直接出現一段原文，重點是英文朗讀、理解與現場英翻中；新聞稿則要留意日期、數字、航點與事件重點。這裡保留原文練習，不把它改寫成另一種稿子。</p>
+    <div class="tip">🎯 作答目標：先讓最後一排聽懂，再追求聲音好聽。遇到不確定的事實，不要自行補數字、日期或公司政策。</div>
+  </div>
+  <div id="ciBroadcastBody"></div>
 </section>
 
 <!-- ============ 面試回顧 ============ -->
@@ -538,6 +584,74 @@ const PA = [{"t": "歡迎詞（中文）", "zh": "各位貴賓，早安。歡迎
 const PHYSICAL = [{"t": "📏 摸高", "items": ["華航：190cm，不可踮腳、單手", "星宇：210cm，可踮腳、雙手", "長榮：依當年簡章（約 208–210cm）", "練習：每天靠牆測一次，記錄最佳高度", "小技巧：肩膀放鬆下沉再伸展，比聳肩更高；鞋子選有厚度但穩的"]}, {"t": "🚶 台步與儀態", "items": ["華航初試為ㄇ字型走位：定點→轉身→定點→鞠躬", "眼神：看考官眉心，不要飄、不要一直看地板", "手部：自然垂放或輕疊於腹前，不要晃、不要摸頭髮", "轉身：小碎步轉，肩線保持水平", "停頓：每個定點停滿 2 秒再動，急著走完最扣分"]}, {"t": "💄 妝容與髮型", "items": ["髮髻要緊、不可有碎髮；準備髮網、定型液、黑髮夾", "妝：底妝乾淨、眉形清楚、唇色飽和（紅色系最安全）", "指甲：短、乾淨，透明或裸色", "制服覆蓋範圍不可見刺青（阿聯酋特別嚴）", "飾品：僅小耳環、手錶，其餘拿掉"]}, {"t": "🧳 面試日備品", "items": ["證件、成績單、英檢證明、照片（多備幾張）", "備用絲襪 2 雙以上", "止滑貼、OK 繃（新鞋必備）", "口紅、蜜粉、小鏡子、黑髮夾", "水、小點心（等待時間可能很長）", "手機充電器與行動電源"]}];
 
 /* ================= 靜態內容 ================= */
+const CI_BROADCAST_DRILLS = [
+ {source:"2024 秋｜The Blue Aroma of Seattle",title:"Seattle 與咖啡香｜英文原文朗讀／英翻中",text:"There exists an unbreakable bond between Seattle and Starbucks, such that the mere mention of this city brings to mind the aroma of full-bodied coffee. Accompanied by undulating coastline and harbor scenery, this aroma, associated with the color blue, also possesses a hint of fresh seafood. It is a blend that is as unique as Seattle!",translation:"西雅圖與星巴克之間存在著牢不可破的連結，因此只要提到這座城市，就會讓人想起醇厚咖啡的香氣。伴隨著起伏的海岸線與港灣景色，這股與藍色相聯繫的香氣，也帶有一絲新鮮海鮮的氣息。這是一種如同西雅圖本身一樣獨特的融合。",focus:"長句中有 such that、分詞片語與插入資訊；朗讀時不要在 bond、aroma、associated 等字卡住，先抓主幹再補畫面。"},
+ {source:"2024 夏｜The Solitary Sojourns, The Literary Escapades",title:"閱讀與獨旅｜英文原文朗讀／英翻中",text:"Embarking on a solo journey has become an art of spontaneous expression! Immersing oneself in the world of reading, one dives into the vast ocean of words, embarking on an enriching journey guided by the author’s words.",translation:"踏上一段獨自旅行，已經成為一種即興表達的藝術！沉浸在閱讀的世界裡，人們潛入文字的浩瀚海洋，踏上一段由作者筆下文字引領的充實旅程。",focus:"注意 embarking、immersing、enriching 的連續音節，以及 one dives into 的節奏；感嘆號也不要讀得過度誇張。"},
+ {source:"2025 春｜Unmissable Faraway Dream Destinations",title:"遠方目的地與台北轉機｜英文原文朗讀／英翻中",text:"This year, instead of just dreaming, make your New Year’s resolution a reality. Why not break free from the ordinary and explore the extraordinary in 2025.\n\nEven if the dream destination is far away, it’s still worth the journey. Your bucket list doesn’t need to be long, just visiting one destination this year can make all the difference. Whether you prefer a direct route or a scenic detour, why not add a stopover in Taipei? This charming layover offers a refreshing break, whether you’re escaping Southeast Asia’s heat for Europe’s chill or swapping winter for the Southern Hemisphere’s summer. Make your trip more memorable with a quick, exciting detour!\n\nLet’s be real—these flight deals are unbeatable, but why rush to your destination when you can enjoy the freedom of a stopover? This issue of Dynasty spotlights four routes: Brisbane–Taipei–London to explore a city’s green heart as the perfect gateway to a magical outdoor adventure, Bali–Taipei–Frankfurt where a captivating journey from performances blending tradition and mythology to the essence of classical beauty, Ho Chi Minh City–Taipei–Los Angeles to explore immigrant cuisine, and Manila–Taipei–Vancouver to experience indigenous art. Which route will ignite your New Year’s wanderlust? Your ideal destination awaits.",translation:"今年，不要只是做夢，讓你的新年願望成真吧。何不脫離日常，探索 2025 年的非凡之處？\n\n即使夢想中的目的地很遙遠，也值得踏上旅程。你的夢想清單不必很長；今年只要造訪一個目的地，就可能帶來很大的不同。無論你偏好直飛路線或風景優美的繞道，何不在台北加上一段轉機停留？這段迷人的中途停留能帶來清新的休息，不論你是為了躲避東南亞的炎熱、前往涼爽的歐洲，或是把冬季換成南半球的夏天。用一段快速又令人興奮的繞道，讓旅程更值得記住吧！\n\n坦白說，這些航班優惠無可比擬；但既然可以享受轉機停留的自由，何必急著抵達目的地？本期《Dynasty》聚焦四條航線：布里斯本－台北－倫敦，探索城市綠色核心，作為戶外冒險的入口；峇里島－台北－法蘭克福，從融合傳統與神話的表演一路走向古典美的精髓；胡志明市－台北－洛杉磯，探索移民飲食；以及馬尼拉－台北－溫哥華，體驗原住民藝術。哪一條路線會點燃你的新年旅行渴望？理想的目的地正在等著你。",focus:"這段資訊密度高，適合初試：stopover、layover、destinations、四段航線與地名都要清楚。保留原文的長句，不要自行縮短；英翻中時先處理 whether、whether、and 的並列結構。"},
+ {source:"2025 冬｜Healing in the Steam",title:"溫泉與療癒｜英文原文朗讀／英翻中",text:"Whether it’s a steamy bowl of soup on a winter’s night or the rising mist of volcanic springs, hot water has always held a special place in the human quest for comfort. Across cultures and climates, hot springs remain a timeless remedy for both body and soul.",translation:"無論是冬夜裡一碗冒著熱氣的湯，或是火山溫泉升起的蒸氣，熱水在人類追求舒適的過程中，始終占有特殊的位置。跨越不同文化與氣候，溫泉依然是身心永恆的療癒方式。",focus:"第一句是 Whether A or B 的對比結構；steamy、volcanic、comfort、remedy 要練清楚，body and soul 不要逐字切斷。"},
+ {source:"2026 春｜Shirakawa-go Light-up Event",title:"白川鄉點燈活動｜英文原文朗讀／英翻中",text:"A UNESCO World Heritage village in Gifu Prefecture, Shirakawa-go hosts its winter light-up each year, illuminating its steep thatched gassho-zukuri roofs against the snow. The 2026 events take place on January 12, 18, 25, and February 1, best viewed from the Shiroyama Observatory, where the entire glowing village spreads beneath the stars.\n\nThere are 14 weekly flights on Taipei-Nagoya route.",translation:"白川鄉是位於岐阜縣的聯合國教科文組織世界遺產村落，每年舉辦冬季點燈活動，讓陡峭的茅草合掌造屋頂在雪景映襯下發光。2026 年的活動日期為 1 月 12 日、18 日、25 日，以及 2 月 1 日；從城山展望台觀賞最佳，屆時整座發光的村落會在星空下展開。\n\n台北－名古屋航線每週有 14 班航班。",focus:"這是日期、地名、文化專有名詞與航班數字的綜合題。January 12, 18, 25 的停頓要一致，Shiroyama Observatory 不要跳過。"},
+ {source:"2026 春｜Carnevale di Viareggio",title:"義大利維亞雷焦嘉年華｜英文原文朗讀／英翻中",text:"Dating back to 1873, this is one of Italy’s largest carnivals, famous for its massive paper-mâché floats and lively street parades. Originally a lighthearted Shrove Tuesday procession, it has evolved into a national spectacle drawing over half a million visitors. In 2026, six parades will ignite the streets on February 1, 7, 12, 15, 17, and 21.\n\nThere are direct flights from Taipei to Europe, with six major destinations including Rome, Amsterdam, Prague, Vienna, Frankfurt, and London.",translation:"這項活動可追溯至 1873 年，是義大利最大的嘉年華之一，以巨型紙塑花車與熱鬧的街頭遊行聞名。它起初是輕鬆的懺悔星期二遊行，後來發展成吸引超過五十萬名遊客的全國性盛會。2026 年，六場遊行將在 2 月 1 日、7 日、12 日、15 日、17 日與 21 日點亮街道。\n\n台北有直飛歐洲的航班，包含羅馬、阿姆斯特丹、布拉格、維也納、法蘭克福與倫敦等六個主要目的地。",focus:"紙塑花車、懺悔星期二、日期清單與六個城市是重點；six、six major destinations 不要因為連續出現而讀快。"},
+ {source:"2026 夏｜Recalibrate Your World Through a Grand Tour",title:"Grand Tour 與跨文化旅行｜英文原文朗讀／英翻中",text:"Blur the lines between urban pulse and natural wonder. From timeless classics to cutting-edge culture, let history ignite your senses. Embark on a grand tour that defies boundaries and expands your world.\n\nIn 18th-century Europe, the Grand Tour was the definitive rite of passage for young British aristocrats. Leaving their comfort zones for the art of Rome and the majesty of the Alps, they learned to observe, reflect, and broaden their horizons. This journey didn’t just shape their personal worldviews; it propelled British landscape painting into a new era of human and natural connection.\n\nToday, we may not travel solely for art or view the journey as a trial, yet the modern Grand Tour remains. It is hidden in every departure from the familiar. As urban scales, cultural dialects, technological shifts, and the breath of nature intersect, we recalibrate our understanding of the world and ourselves within these multi-dimensional spaces.\n\nPlan your crossing now. In Seattle, hear how innovative thinking thrives alongside forests and coasts. In Vienna, let the orderly beauty of classical music converse with the daily rhythms of a modern city. Step into diverse Vancouver to see a tapestry of inclusive cultures, or in Sapporo, surrender your senses to culinary experiments that blend terroir, the seasons, and the spirit of the artisan.\n\nTravel is your unique signature for seeing the world. Those seemingly distant borders become the starting point for understanding the globe the moment you begin to plan. Your Grand Tour begins with a single step.",translation:"模糊城市脈動與自然奇觀之間的界線。從歷久不衰的經典到前衛文化，讓歷史點燃你的感官。踏上一場超越界線、拓展世界的壯遊。\n\n在 18 世紀的歐洲，Grand Tour 是年輕英國貴族成長過程中的重要歷練。他們離開舒適圈，前往欣賞羅馬的藝術與阿爾卑斯山的壯麗，學習觀察、反思並拓展視野。這趟旅程不只塑造了他們個人的世界觀，也讓英國風景畫進入人與自然連結的新時代。\n\n今天，我們或許不再只是為了藝術而旅行，也不會把旅程視為考驗，但現代版的 Grand Tour 依然存在。它藏在每一次離開熟悉事物的行動裡。當城市尺度、文化語彙、科技變遷與自然氣息交會，我們便在這些多維度的空間中，重新校準對世界與自己的理解。\n\n現在就規劃你的跨越之旅吧。在西雅圖，聽見創新思維如何與森林和海岸共存；在維也納，讓古典音樂井然有序的美，與現代城市的日常節奏對話；走進多元的溫哥華，看見包容文化交織而成的圖樣；或在札幌，讓融合土地風味、四季與工匠精神的料理實驗，滿足你的感官。\n\n旅行是你觀看世界的獨特印記。那些看似遙遠的邊界，在你開始規劃的那一刻，就成為理解世界的起點。你的 Grand Tour，從一步開始。",focus:"這是長篇抽試素材：先練每段第一句與地名段落，再逐步加長。注意 defies boundaries、rite of passage、recalibrate、multi-dimensional。"},
+ {source:"2026 秋｜Seasons Painted in Art",title:"世界是藝術發現的舞台｜英文原文朗讀／英翻中",text:"Whether it’s autumn in the North or spring in the South, the world is a stage for artistic discovery. Uncover ancient Egypt at the Hong Kong Palace Museum’s exhibit or witness the fusion of tradition and modernity at the Edinburgh International Festival. From the rugged artistry of the Calgary Stampede to the floral elegance of Canberra’s Floriade, every corner of the globe offers a unique masterpiece to explore.",translation:"無論北半球是秋天，或南半球是春天，世界都是一座等待藝術探索的舞台。在香港故宮文化博物館的展覽中揭開古埃及的面貌，或在愛丁堡國際藝術節見證傳統與現代的融合。從卡加利牛仔節粗獷的藝術性，到坎培拉 Floriade 花展的花卉優雅，世界各個角落都提供獨特的藝術傑作等待探索。",focus:"Whether A or B 開頭要穩；Hong Kong Palace Museum、Edinburgh International Festival、Calgary Stampede、Canberra’s Floriade 是一串專有名詞。"},
+ {source:"使用者提供的《Dynasty》原文示例",title:"State Library Victoria｜英文原文朗讀／英翻中",text:"Bathed in midday sunlight, this peaceful sanctuary, home to over two million books, is known as \"a cathedral of books.\" The State Library Victoria, established in 1856, attracts morning crowds rivaling those at England's British Library and the Library of Congress in Washington D.C., making it as one of the world's busiest libraries. Inside, the library houses various reading rooms, exhibitions, and galleries. The La Trobe Reading Room, opened in 1913, rises 6 stories high and was the world's largest reinforced concrete building at the time. Renowned for its iconic dome ceiling, radial wooden tables, and classic furnishings, it exudes a sense of enduring elegance.",translation:"沐浴在正午陽光下的這座寧靜殿堂，收藏超過兩百萬本書，被稱為「書籍的大教堂」。維多利亞州立圖書館建於 1856 年，早晨吸引的人潮不亞於英國的大英圖書館及位於華盛頓特區的國會圖書館，使它成為全世界最繁忙的圖書館之一。館內設有各式閱覽室、展覽與畫廊。拉．特羅布閱覽室於 1913 年開放，高達 6 層樓；在當時是全世界最大的鋼筋混凝土建築。它以標誌性的圓頂天花板、放射狀木桌與古典家具聞名，散發歷久彌新的優雅氣息。",focus:"這不是改寫題。先完整朗讀原文，再做英翻中；注意長句中的插入資訊、年份、6 stories、專有名詞與比較結構。"}
+];
+const CI_PDF_DRILLS = CI_BROADCAST_DRILLS.slice(0,8);
+const CI_SOURCE_TRACE = [
+ "Dynasty-2024-Autumn.pdf｜雜誌第 04 頁｜The Blue Aroma of Seattle",
+ "Dynasty-2024-Summer.pdf｜雜誌第 04 頁｜The Solitary Sojourns, The Literary Escapades",
+ "Dynasty-2025-Spring.pdf｜雜誌第 05 頁｜Unmissable Faraway Dream Destinations",
+ "Dynasty-2025-Winter.pdf｜雜誌第 04 頁｜Healing in the Steam: A Soak Around the World",
+ "Dynasty-2026-Spring.pdf｜雜誌第 04 頁｜Shirakawa-go Light-up Event",
+ "Dynasty-2026-Spring.pdf｜雜誌第 04 頁｜Carnevale di Viareggio",
+ "Dynasty-2026-Summer.pdf｜雜誌第 06 頁｜Recalibrate Your World Through a Grand Tour",
+ "Dynasty-2026-Autumn.pdf｜雜誌第 03 頁｜Seasons Painted in Art"
+];
+const CI_NEWS_RELEASES = [
+ {source:"Dynasty-2024-Autumn.pdf｜雜誌第 28 頁｜CAL NEWS",title:"Somebody Feed Phil：華航貴賓室登上 Netflix",text:"Traveling the world isn’t enough, the real adventure is tasting global cuisines! China Airlines teams up with the NETFLIX’s American show Somebody Feed Phil for a groundbreaking collaboration in its seventh season. Host Philip Rosenthal makes a special visit to Taiwan, appearing in China Airlines’ VIP lounge at Taoyuan Airport. There, amidst the lounge’s unique Eastern aesthetic, he savors the classic local flavor of “China Airlines Beef Noodle Soup.”\n\nPhilip flies China Airlines for his first-ever visit to Taiwan, to share the world-renowned “China Airlines Beef Noodle Soup.” The tender, chewy beef melts in his mouth at first bite, paired with a richly aromatic special braised broth, earning Philip’s endless praise. He is also impressed by China Airlines’ comfortable cabin amenities and excellent in-flight service.\n\nChina Airlines serves six major North American destinations: Los Angeles, San Francisco, Ontario, Seattle, New York, and Vancouver. Complemented by nearly 400 weekly flights across Northeast and Southeast Asia.",translation:"環遊世界還不夠，品嚐全球美食才是真正的冒險！華航與 Netflix 美國節目《Somebody Feed Phil》合作，在第七季推出特別企劃。主持人 Philip Rosenthal 首次造訪台灣，來到桃園機場的華航貴賓室，品嚐華航牛肉麵，也體驗客艙設備與機上服務。華航服務六個北美主要目的地：洛杉磯、舊金山、安大略、西雅圖、紐約與溫哥華，並以每週近 400 班的東北亞與東南亞航班網絡支援旅客。",focus:"節目名、人物名、貴賓室、食物名稱與六個北美城市；先抓新聞主旨，再處理長句中的分詞片語。"},
+ {source:"Dynasty-2025-Autumn.pdf｜雜誌第 28 頁｜CAL NEWS",title:"A350-1000 與 777X 客貨機訂單",text:"China Airlines (CAL) had signed a formal order with Airbus for ten A350-1000 widebody aircraft with deliveries in 2029. Additionally, CAL will begin upgrading the cabins aboard its existing fleet of A350-900 aircraft in 2027. The upgraded aircraft will join the new A350-1000 aircraft to form CAL’s new flagship fleet of A350s with their distinctive Asian aesthetics.\n\nCAL also formally placed an order with Boeing for ten 777-9 widebody aircraft and four 777-8F freighters, with an option to acquire nine more. Delivery is expected to commence in 2030. CAL will be the first Taiwanese airline to introduce the 777X model. The combination of passenger and cargo aircraft will enhance the competitiveness of the airline’s global network and offer exceptional aviation services.\n\nSustainable corporate development is a top priority for CAL. As the 777-9 aircraft and 777-8F freighters offer outstanding fuel efficiency and environmental friendliness with fuel consumption and carbon emissions reduced by up to 25%. The move will also help the carrier realize its goal of net zero emissions by 2050. CAL will continue to provide air travel services that are more efficient, environmentally friendly, and innovative.",translation:"華航已與 Airbus 正式簽署 10 架 A350-1000 廣體客機訂單，預計 2029 年交機；也將從 2027 年起升級現有 A350-900 客機的客艙。華航另向 Boeing 訂購 10 架 777-9 廣體客機與 4 架 777-8F 貨機，並保留增購 9 架的選擇權，預計 2030 年開始交機。777-9 與 777-8F 具備燃油效率與環境友善優勢，燃油消耗與碳排放最多可降低 25%；華航也持續朝 2050 淨零排放目標前進。",focus:"這題就是機型唸法的核心素材：A350-1000、A350-900、777-9、777-8F、777X。不要看到數字就逐字照中文念。"},
+ {source:"Dynasty-2025-Winter.pdf｜雜誌第 28 頁｜CAL NEWS",title:"華航與 Southwest Airlines 聯票合作",text:"China Airlines (CAL) has announced to launch Interline Tickets with Southwest Airlines. Tickets are now officially on sale and offering travelers with seamless connecting flights starting January 2026. CAL President Kevin Chen (3rd from left) and Southwest Airlines Vice Chairman of the Board, President & CEO Bob Jordan (3rd from right) signed a memorandum of understanding at Southwest Airlines headquarters in Dallas.\n\nCAL offers travelers non-stop flights to five West Coast gateway cities in the US. From there, travelers can catch connecting Southwest Airlines flights to other cities throughout US. Interline tickets (one itinerary) can now be booked through the CAL web starting January 19, 2026 along with domestic legs on Southwest Airlines.\n\nNow, CAL operates more than 40 flights a week to and from New York, Los Angeles, Ontario, San Francisco, Seattle, and Phoenix in the United States, as well as Vancouver in Canada, while integration with extensive regional networks will provide nearly 500 flights each week for transit travelers traveling between Asia and North America.",translation:"華航宣布與 Southwest Airlines 推出聯票合作。聯票已正式開售，從 2026 年 1 月起提供旅客更順暢的轉接航班。華航目前提供飛往美國五個西岸門戶城市的直飛航班，旅客可在當地轉搭 Southwest 航班前往其他城市。自 2026 年 1 月 19 日起，旅客可透過華航網站預訂包含 Southwest 美國國內航段的一站式聯程機票。華航目前每週往返紐約、洛杉磯、安大略、舊金山、西雅圖、鳳凰城與加拿大溫哥華的航班超過 40 班，並透過區域航網提供亞洲與北美間旅客每週近 500 班的轉機選擇。",focus:"新聞稿常考日期、地名、數字與 one itinerary。Interline Tickets 不要翻成單純的轉機票，要理解成聯程／聯票合作。"},
+ {source:"Dynasty-2026-Spring.pdf｜雜誌第 31 頁｜CAL NEWS",title:"Zootopia 2 主題彩繪機",text:"China Airlines (CAL) introduced Taiwan’s first Disney-themed aircraft, decorating with “Zootopia 2,” by Walt Disney Animation Studios.\n\nThe Zootopia 2 themed livery plane featured on CAL’s long-range 777. The fuselage is decorated with heroes Judy Hopps and Nick Wilde, as well as Gary De’Snake and Nibbles Maplestick. The Zootopia 2 themed livery plane will initially be based out of Taipei (Taoyuan) and assigned to the Los Angeles, Ontario, Bangkok, Tokyo, and Osaka routes.\n\nA dedicated web page for the Zootopia 2 themed livery plane has been launched on the CAL website. The page offers a wealth of content including the liveried aircraft, latest events, behind-the-scenes videos, cabin amenities, and special offers on key routes. Passengers can use this page as a one-stop hub on the plane updates, as well as booking inquiries and reservations. CAL Zootopia 2 themed livery plane website: https://zootopia2livery.china-airlines.com/en/",translation:"華航推出全台首架迪士尼彩繪機，以華特迪士尼動畫工作室的電影《動物方城市 2》為主題。這架彩繪機以華航長程機隊的 777 執飛，機身繪有 Judy Hopps、Nick Wilde、Gary De’Snake 與 Nibbles Maplestick 等角色，初期將以台北（桃園）為基地，飛往洛杉磯、安大略、曼谷、東京與大阪。華航也同步推出專屬網站，提供彩繪機、活動、幕後影片、客艙用品與航線優惠等資訊。",focus:"這是你截圖的原文。long-range 777 讀作 long-range Triple Seven；CAL 讀 C-A-L；Zootopia、角色名與五個航點要清楚。"},
+ {source:"Dynasty-2026-Autumn.pdf｜雜誌第 32 頁｜CAL NEWS",title:"Google Find Hub 行李追蹤功能",text:"China Airlines (CAL) has officially announced its support for Google’s Find Hub, becoming the first airline in Taiwan to offer travelers comprehensive luggage tracking options.\n\nLeading the industry, CAL supports both Apple AirTag and Google’s Find Hub, extending tracking to Android™ users. By using compatible smart tags, travelers can leverage Google’s global network to monitor checked bags and generate secure links to share location with the airline, accelerating efficient luggage recovery.\n\nAs one of Find Hub’s inaugural global partners, CAL integrates the “share item location” feature with existing systems for tracking. To ensure privacy, shared links automatically deactivate upon luggage recovery or expire after seven days.\n\nCAL is committed to digital innovation, offering traveler-focused services like the CAL AI Customer Service Agent, China Airlines App, Dynasty Sky Reading, iFoundU and other functions to create a smarter, more convenient journey.",translation:"華航正式宣布支援 Google Find Hub，成為台灣第一家提供完整行李追蹤選項的航空公司。華航同時支援 Apple AirTag 與 Google Find Hub，將行李追蹤延伸至 Android 使用者。旅客可利用相容的智慧標籤監控託運行李，並產生安全連結與華航分享位置，加速找回行李。為確保隱私，分享物品位置的連結會在行李找回後自動失效，或於七天後到期。華航持續推動數位創新，提供 AI 客服、華航 App、Dynasty Sky Reading、iFoundU 等服務。",focus:"這題適合練科技新聞稿：Find Hub、AirTag、Android、share item location 要清楚；七天是 seven days，不要漏掉時間限制。"}
+];
+const CI_AIRCRAFT_PRONUNCIATION = [
+ {model:"Boeing 737",say:"Boeing seven-three-seven",alt:"Boeing seven-thirty-seven",note:"正式清楚可逐位念；seven-thirty-seven 是常見口語化說法。"},
+ {model:"Boeing 777",say:"Boeing Triple Seven",alt:"不要主動念成 seven-seven-seven",note:"在面試廣播與一般航空口語中，Triple Seven 最自然；新聞稿的 777、long-range 777 都可這樣處理。"},
+ {model:"Boeing 787",say:"Boeing seven-eight-seven",alt:"Dreamliner",note:"787 可逐位念；若說 Dreamliner，要確定上下文是在講機型。"},
+ {model:"Boeing 777-300ER",say:"Boeing Triple Seven three hundred E-R",alt:"",note:"777 先用 Triple Seven，再把 300ER 念成 three hundred E-R。"},
+ {model:"Boeing 777-9",say:"Boeing Triple Seven nine",alt:"",note:"不要把 777-9 念成 seven-seven-seven dash nine。"},
+ {model:"Boeing 777-8F",say:"Boeing Triple Seven eight F",alt:"",note:"F 是 freighter 的型號代號，字母單獨清楚念 E-F。"},
+ {model:"Airbus A320",say:"Airbus A-three-twenty",alt:"",note:"A 先念字母 A，再念 three-twenty。"},
+ {model:"Airbus A321neo",say:"Airbus A-three-twenty-one neo",alt:"",note:"neo 直接念成一個完整音，不拆成 N-E-O；廣播時要讓 A321 與 neo 兩部分都清楚。"},
+ {model:"Airbus A330",say:"Airbus A-three-thirty",alt:"",note:"A330 是 A-three-thirty，不要逐位念 A-three-three-zero。"},
+ {model:"Airbus A350",say:"Airbus A-three-fifty",alt:"",note:"A350 是 A-three-fifty；A350-1000 可念 A-three-fifty one thousand。"}
+];
+const CI_EXTERNAL_BROADCASTS = [
+ {title:"Welcome Speech 歡迎詞",text:`Good morning (afternoon, evening)! Ladies and gentlemen, welcome aboard (Comma航空公司) flight (0018) from (臺北) to (舊金山). Our flight will take 12 hours and 15 minutes. To be safe, passengers are not allowed to use mobile phone, remote controlled toys and other electronic devices throughout the flight, and the laptop computers are not allowed to use during take-off and landing. We will take off immediately. Now the cabin attendants are going to have a security check. Please be seated, fasten your seat belt and make sure your seat back is straight up, your tray table is closed and your carry-on items are securely stowed in the overhead bin or under the seat in front of you. This is a non-smoking flight, please do not smoke on board. We hope you enjoy the flight! Thank you!`,translation:"早安／午安／晚安，各位旅客您好，歡迎搭乘（航空公司）0018 航班，從（台北）前往（舊金山）。預計飛行 12 小時 15 分鐘。為了安全，飛行全程不得使用手機、遙控玩具及其他電子裝置；起飛與降落時也不得使用筆記型電腦。請坐妥、繫好安全帶，確認椅背豎直、小桌板收妥，並將手提行李放入上方置物櫃或前方座椅下方。本航班全程禁菸，祝您旅途愉快。",focus:"welcome aboard、flight number、take-off and landing、fasten your seat belt、securely stowed。"},
+ {title:"After Take-off 起飛後",text:`Ladies and gentlemen, the Captain has turned off the Fasten Seat Belt sign, and you may now move around the cabin. However we always recommend to keep your seat belt fastened while you’re seated. In a few moments, we will be serving you meal with tea, coffee and other soft drinks. Welcome to make your choice. Please put down the table in front of you. For the convenience of the passenger behind you, please return your seat back to the upright position during the meal service. Thank you!`,translation:"各位旅客您好，機長已關閉安全帶指示燈，現在您可以在客艙內走動。不過，坐在座位上時，我們仍建議您繫好安全帶。稍後我們將提供餐點、茶、咖啡及其他軟性飲料，歡迎您選擇。需要用餐時請放下前方小桌板；用餐期間為方便後方旅客，請將椅背調回直立位置。",focus:"turned off the Fasten Seat Belt sign、move around the cabin、while you’re seated、upright position。"},
+ {title:"Turbulence 顛簸",text:`Ladies and gentlemen, we are now encountering some turbulence. Please return to your seats and fasten your seat belt. Lavatory is not to be used. When you are using lavatory, please hold the handle tightly. During turbulence, we will stop the cabin service. Thank you!`,translation:"各位旅客請注意，我們正遇到不穩定氣流，請返回座位並繫好安全帶。洗手間暫停使用；正在使用洗手間的旅客，請緊握扶手。顛簸期間我們將暫停客艙服務，謝謝。",focus:"turbulence、return to your seats、lavatory、hold the handle tightly、stop the cabin service。"},
+ {title:"Before Landing 降落前",text:`Ladies and Gentlemen, This is Captain speaking. We expect to land at Osaka in 15 minutes. The estimated time of arrival will be at 14:15. The local time now is 13:55 and the ground temperature is 20 degree centigrade. Please fasten your seat belt. We would like to thank you for flying with us. We do hope you have enjoyed your flight, thank you.`,translation:"各位旅客您好，這是機長廣播。我們預計 15 分鐘後降落大阪，預計抵達時間為 14:15。目前當地時間為 13:55，地面溫度為攝氏 20 度。請繫好安全帶準備降落。感謝您搭乘本班機，希望您享受這趟旅程。",focus:"estimated time of arrival、local time、ground temperature；時間與溫度是考官很容易追問的資訊。"},
+ {title:"After Landing 降落後",text:`Ladies and gentlemen, welcome to HNL Airport. For your safety and comfort, please remain seated and keep your mobile phones power off until the airplane has come to a complete stop. Please be sure to take all your belongings when you disembark. Your checked baggage may be claimed in the terminal building. Thank you for joining us on this trip and we are looking forward to seeing you on board again in the near future. Have a nice stay!`,translation:"各位旅客您好，歡迎抵達 HNL 機場。為了您的安全與舒適，飛機完全停止前請留在座位上，並關閉手機電源。下機時請確認帶走所有隨身物品；託運行李請至航廈領取。感謝您搭乘本次航班，期待不久後再次與您相見，祝您旅途愉快。",focus:"remain seated、come to a complete stop、disembark、checked baggage、terminal building。"}
+];
+const CI_EXTERNAL_SOURCE = "EllenCC Club，〈空服員招考初試「朗讀(包括-廣播詞及文章)」在朗讀之後，當心主考官會這樣問！〉，https://club.ellenccworld.com/?p=3342";
+const CI_EXTERNAL_FOLLOWUPS = [
+ {q:"剛剛這篇廣播詞是在什麼時候會聽到？",a:"先回答情境：Welcome Speech 是起飛前／登機後，After Take-off 是起飛後，Turbulence 是遇到顛簸時，Before Landing 是降落前，After Landing 是抵達後。"},
+ {q:"turbulence、destination、prohibited 是什麼意思？",a:"考官可能抽問專業字彙；不要只靠順讀。turbulence 是顛簸／亂流，destination 是目的地，prohibited 是禁止的。"}
+];
+const CI_NEWS_DRILLS = [
+ {title:"航點／航班異動",frame:"宣布內容 → 生效日期 → 航班或旅客影響 → 以最新公告為準",q:"如果新聞稿只說『將新增航點』，你可以直接說每週幾班、哪種機型嗎？",a:"不可以。除非新聞稿或正式航班資訊明確寫出，否則只說已公告的內容；不確定的數字要保留。"},
+ {title:"新機／服務上線",frame:"是正式啟用還是計畫 → 旅客能得到什麼 → 使用限制或適用範圍",q:"把『預計引進』說成『已經投入服務』，問題在哪裡？",a:"會改變事實的時間狀態，造成旅客誤解。廣播詞要精確區分預計、宣布、開始營運與目前提供。"},
+ {title:"永續／公益新聞",frame:"具體行動 → 對旅客或環境的影響 → 不誇大成果",q:"面對永續新聞，你要避免哪種說法？",a:"避免把單一計畫直接說成『完全零碳』或替公司做未經證實的效果保證；用公告中的具體行動回答。"},
+ {title:"異常／延誤公告",frame:"現況 → 原因（已確認才說） → 旅客現在要做什麼 → 下一次更新",q:"原因還沒確認時，能不能用推測語氣補充？",a:"不要猜。可以說目前正在確認，並告知旅客下一次更新時間或查詢管道。"}
+];
+const CI_BROADCAST_RULES = [
+ "先判斷題材：雜誌偏畫面與文化；新聞稿偏事實、時間、數字與影響。",
+ "廣播骨架：稱呼／主題 → 兩到三個關鍵資訊 → 旅客要做的事 → 收束。不要把文章整段照念。",
+ "專有名詞、地名、航點、航班號、日期、時間、溫度與距離要刻意放慢；數字前後留一點空白。",
+ "逗點停半拍、句號停一拍；每句只保留一個主重點。不要從頭到尾同一個音高，也不要句尾飄掉。",
+ "安全與規範要用清楚的動詞：請返回座位、請繫妥安全帶、請依指示；親切不等於含糊。",
+ "不知道就不猜：使用『目前預計』『已公告』『請依最新公告』，不要自行補航班、機型、班次或成果。",
+ "初試評的是可理解度與臨場整理，不是播音腔。卡住時先停半秒，回到主旨，不要一直道歉或重來。"
+];
 const AIRLINES = ["華航","星宇","長榮","國泰","阿聯酋","通用"];
 const TAGC = {華航:"hl",星宇:"sj",長榮:"br",國泰:"cx",阿聯酋:"ek",通用:"gn"};
 
@@ -967,17 +1081,27 @@ document.addEventListener("click", e=>{
 });
 
 /* ================= 分頁 ================= */
-$("#nav").addEventListener("click", e=>{
-  const b = e.target.closest("button"); if(!b) return;
-  $$("#nav button").forEach(x=>x.classList.toggle("on",x===b));
+function showTab(t){
+  const target = $("#tab-"+t); if(!target) return;
+  const navT = {p50:"practice",daily:"practice",bank:"practice",weak:"practice",reading:"stage",safety:"stage",review:"tools",sprint:"tools",stats:"tools"}[t] || t;
+  $$("#nav button").forEach(x=>x.classList.toggle("on",x.dataset.t===navT));
   $$("main > section").forEach(s=>s.classList.add("hidden"));
-  $("#tab-"+b.dataset.t).classList.remove("hidden");
-  if(b.dataset.t==="weak") renderStars();
-  if(b.dataset.t==="mock") renderMHistory();
-  if(b.dataset.t==="daily") dgStreakPaint();
-  if(b.dataset.t==="sprint") spPaint();
-  if(b.dataset.t==="stats") renderDash();
-  if(b.dataset.t==="p50") p50Paint();
+  target.classList.remove("hidden");
+  if(t==="weak") renderStars();
+  if(t==="mock") renderMHistory();
+  if(t==="daily") dgStreakPaint();
+  if(t==="sprint") spPaint();
+  if(t==="stats") renderDash();
+  if(t==="p50") p50Paint();
+  if(t==="eva") setSprintAir("eva");
+}
+$("#nav").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-t]"); if(!b) return;
+  showTab(b.dataset.t);
+});
+document.addEventListener("click", e=>{
+  const b = e.target.closest("button[data-go]"); if(!b) return;
+  showTab(b.dataset.go);
 });
 /* nav 可橫向捲動提示：捲到底就淡出漸層 */
 (function(){
@@ -1166,6 +1290,25 @@ $("#readTimerBtn").addEventListener("click", ()=>{
     if(left<0){ clearInterval(readTimer); $("#readTstate").innerHTML="⏰ <b style='color:var(--bad)'>時間到</b>"; return; }
     paint(); },1000);
 });
+
+/* ================= 華航初試・雜誌與新聞稿廣播 ================= */
+function renderCIBroadcast(){
+  const el = $("#ciBroadcastBody");
+  if(!el) return;
+  el.innerHTML = `<div class="card"><h2>一、這一關的正確練法</h2><p class="section-note">機上雜誌廣播詞會直接給一段原文，重點是陌生英文的完整朗讀與理解，不是把文章改寫成另一種廣播稿。</p><ul class="tight"><li>第一遍：原文朗讀，不停下、不自行換字、不把長句拆成短句重寫。</li><li>第二遍：現場英翻中，先抓主幹，再處理插入資訊、年份、數字與專有名詞。</li><li>第三遍：回頭修正節奏、重音與句尾，不追求播音腔。</li></ul></div>`+
+    `<div class="card"><h2>二、英文原文朗讀／英翻中</h2><p class="section-note">已從你提供的 2024–2026《Dynasty》PDF 精選多段英文原文，並保留原文句子；中文只作翻譯核對，不取代現場理解。</p>${CI_PDF_DRILLS.map((d,i)=>`<details open><summary>${i+1}. <span class="tag cat">原文素材</span>${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(CI_SOURCE_TRACE[i])}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ci-${i}">🔊 聽原文示範</button></div><details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>三、PDF 新聞稿原文</h2><p class="section-note">這些是 PDF 裡的 CAL NEWS 原文，不是自行改寫的練習題。先讀英文，再看中文核對；每篇都保留來源，方便回到原頁。</p>${CI_NEWS_RELEASES.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(d.source)}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="news-${i}">🔊 聽新聞稿原文</button></div><details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>四、外部參考：五段機上廣播</h2><p class="section-note">這五段來自外部面試教材，以原文為底供朗讀與英翻中練習；括號欄位與少數排版瑕疵已整理，部分句子也不一定是華航現行標準用語，請不要把它當成官方稿。來源：${esc(CI_EXTERNAL_SOURCE)}</p>${CI_EXTERNAL_BROADCASTS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ext-${i}">🔊 聽原文示範</button></div><details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>五、這類廣播讀完後的追問</h2><p class="section-note">來源同上。朗讀後可能被問「這段是在什麼時候播放？」或抽問專業字彙，所以不能只練聲音，還要知道每段的情境與意思。</p>${CI_EXTERNAL_FOLLOWUPS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.q)}</summary><div class="body"><div class="ansbox"><b>參考回答：</b>${esc(d.a)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>六、機型廣播與唸法</h2><p class="section-note">數字不是看到什麼就逐字念什麼；初試以清楚、自然、航空口語常見的方式為主。特別記住：Boeing 777 是 <b>Triple Seven</b>。</p><div class="grid2">${CI_AIRCRAFT_PRONUNCIATION.map(x=>`<details><summary><b>${esc(x.model)}</b> → ${esc(x.say)}</summary><div class="body">${x.alt?`<p><b>另一種常聽說法：</b>${esc(x.alt)}</p>`:""}<p class="tip">${esc(x.note)}</p></div></details>`).join("")}</div></div>`+
+    `<div class="card"><h2>七、廣播詞要注意的地方</h2><ul class="tight">${CI_BROADCAST_RULES.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`+
+    `<div class="card"><h2>八、新聞稿型內容：只核對，不猜測</h2><p class="section-note">新聞稿可能考同樣的英文理解能力，但不要把新聞稿改寫成另一篇文章。先找出「誰宣布、何時生效、影響什麼、哪些仍待確認」。</p>${CI_NEWS_DRILLS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><div class="flow">${d.frame.split("→").map((x,j)=>(j?"<em>→</em>":"")+`<span>${esc(x.trim())}</span>`).join("")}</div><p style="margin-top:8px"><b>追問：</b>${esc(d.q)}</p><div class="ansbox"><b>練習答案：</b>${esc(d.a)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>九、初試 10 分鐘練法</h2><div class="flow"><span>看原文</span><em>→</em><span>朗讀一次</span><em>→</em><span>英翻中</span><em>→</em><span>回聽修正</span></div><ul class="tight"><li>先練完整度：不要看到不會的字就停住。</li><li>再練理解：每句先找主詞、動詞、受詞，再補形容與背景。</li><li>最後練聲音：地名、年份、數字、航線與機型要清楚，句尾不要飄。</li></ul><div class="tip">📌 若考官臨時換段落，最重要的是保留原文資訊，不要為了講得漂亮而自行增加內容。</div></div>`;
+  CI_PDF_DRILLS.forEach((d,i)=>{ SAYS[`ci-${i}`]={t:d.text,l:"en-US"}; });
+  CI_NEWS_RELEASES.forEach((d,i)=>{ SAYS[`news-${i}`]={t:d.text,l:"en-US"}; });
+  CI_EXTERNAL_BROADCASTS.forEach((d,i)=>{ SAYS[`ext-${i}`]={t:d.text,l:"en-US"}; });
+}
+renderCIBroadcast();
 
 /* ================= 面試回顧 ================= */
 $("#reviewList").innerHTML = REVIEWS.map(r=>`
@@ -1730,7 +1873,65 @@ function dgFinish(){
   dgStreakPaint();
 }
 
-/* ================= 衝刺計畫 ================= */
+/* ================= 華航招考衝刺 ================= */
+const CI_SPRINT = [
+ {w:"現在～初試前｜建立原文反應",d:"先把 11/7 初試會用到的能力練熟",items:[
+  "華航廣播頁：每天完整朗讀 1 段英文原文，不能改寫句子",
+  "每段朗讀後用中文說出情境：Welcome、起飛後、顛簸、降落前、降落後",
+  "Dynasty 原文與 CAL NEWS：每篇抓主旨、日期、數字、機型與航點",
+  "機型唸法：Boeing 777＝Triple Seven；A321neo 的 neo 直接念完整音",
+  "初試關卡：190cm 摸高、ㄇ字型台步、中文自介與中英短文朗讀各錄音一次"
+ ]},
+ {w:"初試前 7 天｜速度與理解",d:"每天一組限時練習，降低看到陌生英文時的停頓",items:[
+  "隨機抽一段 Dynasty 原文，先朗讀，再現場英翻中，不查字典",
+  "新聞稿練習：把人事時地物講清楚，不自行補航班、日期或公司政策",
+  "朗讀後追問：這段什麼時候播放？turbulence、destination、prohibited 是什麼？",
+  "廣播聲音：逗點半拍、句號一拍，地名／數字／時間／溫度刻意放慢",
+  "完整跑一次初試流程，錄影檢查眼神、站姿、轉身與句尾"
+ ]},
+ {w:"初試當週｜穩定輸出",d:"11/1～11/6：只修正弱點，不再大量增加新素材",items:[
+  "每天 10 分鐘：英文原文 1 段＋新聞稿 1 段＋機型唸法 5 分鐘",
+  "錯字或不熟單字只整理成關鍵字卡，練習時仍要把原文讀完",
+  "準備證件、英檢證明、照片、絲襪、鞋子與髮妝用品",
+  "前一天不熬夜；只做熟悉素材與一次短朗讀，保留聲音狀態"
+ ]},
+ {w:"初試後～複試前｜轉入口試",d:"11/8～11/13：從朗讀模式切換成互動問答",items:[
+  "華航 30 秒中英文自介各練一版，回答要和初試資料一致",
+  "練『為什麼華航』『做了哪些準備』『最適合的特質』與追問鏈",
+  "複習華航新聞、航網、服務文化與穿山甲保育，不背成百科全書",
+  "每天一場錄音模擬：自介 → 追問 → 客訴／團隊情境 → 收束"
+ ]},
+ {w:"複試日｜穩定、真實、可合作",d:"11/14：把準備好的內容說成自然對話",items:[
+  "先聽完問題再回答；不知道的事不要猜，明確說出確認方式",
+  "用真實的凱悅經驗回答服務、客訴與團隊題，不堆形容詞",
+  "回答華航動機時，連結你的公共行政訓練、服務經驗與台灣文化認同",
+  "記得安全優先、尊重流程、和團隊同步，這是每一題的底層邏輯"
+ ]}
+];
+function dayDiff(target){ return Math.ceil((new Date(target+"T09:00:00")-new Date())/864e5); }
+function ciSprintPaint(){
+  const init=$("#ciInitialDate"); const fin=$("#ciFinalDate"); if(!init||!fin) return;
+  const dates=store.get("ciSprintDates",{}); if(dates.initial) init.value=dates.initial; if(dates.final) fin.value=dates.final;
+  const di=dayDiff(init.value), df=dayDiff(fin.value);
+  let active=di>=0?(di>14?0:di>7?1:2):(df>=0?3:4);
+  $("#ciSprintCountdown").innerHTML = di>0 ? `<span>🛫 距離初試 <b>${di}</b> 天</span><em>→</em><span>複試 ${df>0?`還有 <b>${df}</b> 天`:"已到"}</span>` : di===0 ? `<span>🌟 今天初試</span><em>→</em><span>複試 ${df>0?`還有 <b>${df}</b> 天`:""}</span>` : `<span>✅ 初試完成</span><em>→</em><span>${df>0?`距離複試 <b>${df}</b> 天`:(df===0?"今天複試":"請更新日期")}</span>`;
+  const saved=store.get("ciSprintChecks",{});
+  $("#ciSprintPlan").innerHTML=CI_SPRINT.map((wk,wi)=>`<div class="ci-phase-card ${active===wi?"active":""}"><div class="ci-phase-label">PHASE ${String(wi+1).padStart(2,"0")} ${active===wi?"· CURRENT":""}</div><h2>${esc(wk.w)} ${active===wi?'<span class="tag" style="background:#fdecef;color:var(--ci)">👉 目前階段</span>':''}<br><span class="sub" style="font-weight:400">${esc(wk.d)}</span></h2>${wk.items.map((it,ii)=>{const k=`w${wi}i${ii}`,on=saved[k];return `<label class="ci-task" style="display:flex;gap:10px;align-items:flex-start;padding:9px 10px;margin-top:7px;font-size:13.5px;cursor:pointer"><input type="checkbox" data-ci-k="${k}" ${on?"checked":""} style="margin-top:3px;width:17px;height:17px;accent-color:var(--ci)"><span ${on?'style="color:var(--sub);text-decoration:line-through"':''}>${esc(it)}</span></label>`}).join("")}</div>`).join("");
+}
+function setSprintAir(air){
+  const ci=air==="ci";
+  $("#evaApp").classList.toggle("hidden",ci);
+  $("#ciSprintPanel").classList.toggle("hidden",!ci);
+  $$("#sprintAirNav button").forEach(b=>b.classList.toggle("on",b.dataset.sprintAir===air));
+  if(ci) ciSprintPaint();
+}
+$("#sprintAirNav").addEventListener("click",e=>{const b=e.target.closest("button[data-sprint-air]");if(b)setSprintAir(b.dataset.sprintAir)});
+$("#ciInitialDate").addEventListener("change",e=>{const d=store.get("ciSprintDates",{});d.initial=e.target.value;store.set("ciSprintDates",d);ciSprintPaint()});
+$("#ciFinalDate").addEventListener("change",e=>{const d=store.get("ciSprintDates",{});d.final=e.target.value;store.set("ciSprintDates",d);ciSprintPaint()});
+$("#ciSprintPlan").addEventListener("change",e=>{const cb=e.target.closest("input[data-ci-k]");if(!cb)return;const d=store.get("ciSprintChecks",{});d[cb.dataset.ciK]=cb.checked;store.set("ciSprintChecks",d);ciSprintPaint()});
+ciSprintPaint();
+
+/* ================= 通用衝刺計畫 ================= */
 const SPRINT = [
  {w:"第 1 週｜盤點與地基", d:"D-30 ～ D-22", items:[
   "讀完「🏢航空公司」六張卡，能不看稿說出每家 3 個必背知識點",

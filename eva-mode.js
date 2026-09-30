@@ -19,7 +19,7 @@
     const p=practice(), done=(p.sessions||[]).filter(x=>x.date===todayStr()).length;
     app.innerHTML=`<div class="eva-welcome">👋 Shelly，今天只做下一個最需要的練習，不必把整個題庫讀完。</div>
       <div class="card eva-hero">
-        <div class="eva-eyebrow">NEXT TARGET · INITIAL SCREENING</div><h2>🟢 長榮航空招考衝刺</h2>
+        <div class="eva-eyebrow">NEXT TARGET · INITIAL SCREENING</div><h2>🌍 長榮航空招考衝刺</h2>
         <p class="section-note">下一關：初試｜針對目前備考流程集中準備</p>
         <div class="eva-hero-grid">
           ${navButton("initial","初試準備")}${navButton("final","複試準備")}
