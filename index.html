@@ -52,6 +52,20 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .ci-phase-label{font-size:11px;font-weight:800;letter-spacing:1px;color:#245c91}
 .ci-phase-card.active .ci-phase-label{color:var(--ci)}
 .ci-phase-card .ci-task{background:rgba(255,255,255,.82);border:1px solid #e0e8f0;border-radius:9px}
+.ci-welcome{font-size:13px;color:var(--sub);margin:12px 0 10px}
+.ci-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 14px}
+.ci-module{background:#fff;border:1px solid #d7e2ef;border-top:4px solid #245c91;border-radius:13px;padding:15px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink);min-height:126px}
+.ci-module:hover{border-color:var(--ci);box-shadow:0 5px 14px rgba(200,20,50,.1)}
+.ci-module b{display:block;font-size:15px;margin-bottom:5px}
+.ci-module span{display:block;font-size:12px;color:var(--sub);line-height:1.55}
+.ci-module small{display:block;color:var(--ci);font-weight:800;font-size:11px;margin-top:10px}
+.ci-eval-note{display:flex;gap:10px;align-items:flex-start;background:#fff7f8;border:1px solid #f0cbd2;border-radius:11px;padding:11px 13px;font-size:12.5px;color:#7e3342}
+.ci-eval-note b{white-space:nowrap;color:var(--ci)}
+.ci-progress{background:#fff;border:1px solid #d7e2ef;border-radius:12px;padding:13px 15px;margin-top:12px}
+.ci-progress h3{margin:0 0 6px;color:#245c91}
+.ci-progress-row{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f5;padding:6px 0;font-size:13px}
+.ci-progress-row span{font-weight:800;color:var(--ci)}
+@media(max-width:640px){.ci-module-grid{grid-template-columns:1fr}.ci-eval-note{display:block}.ci-eval-note b{display:block;margin-bottom:3px}}
 select,input[type=text]{font-family:inherit;font-size:13.5px;padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
 .btn{font-family:inherit;font-size:14.5px;font-weight:700;padding:10px 20px;border-radius:11px;border:none;cursor:pointer;background:var(--accent);color:#fff}
 .btn.sec{background:var(--gold-soft);color:var(--gold-deep);border:1px solid #e8d9a8}
@@ -245,6 +259,7 @@ html.unlocked #gate{display:none}
       </div>
       <div class="ci-countdown" id="ciSprintCountdown"></div>
     </div>
+    <div id="ciApp"></div>
     <div id="ciSprintPlan"></div>
   </div>
 </section>
@@ -2252,7 +2267,7 @@ $("#stageNav").addEventListener("click", e=>{
 stageRender("gd");
 
 /* ================= 備份匯出／匯入 ================= */
-const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress"];
+const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks"];
 $("#expBtn").addEventListener("click", async ()=>{
   const data = {_v:2, _date:new Date().toISOString()};
   BK_KEYS.forEach(k=> data[k] = store.get(k, null));
@@ -2284,5 +2299,6 @@ $("#impFile").addEventListener("change", e=>{
 });
 </script>
 <script src="eva-mode.js"></script>
+<script src="ci-mode.js"></script>
 </body>
 </html>
