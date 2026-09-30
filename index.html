@@ -42,6 +42,16 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .ci-hero h2{font-size:23px;margin:4px 0 2px}
 .ci-hero .section-note{color:rgba(255,255,255,.86);margin-bottom:12px}
 .ci-hero .quicknav button{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.96);color:#183b68}
+.air-hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.air-hero-actions .btn{min-height:50px;background:#fff;color:#183b68;border:0;font-size:15px}
+.air-hero-actions .btn.sec{background:#f6e8b9;color:#59430f}
+.air-date-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.air-date-row label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:rgba(255,255,255,.92)}
+.air-date-row input{font-family:inherit;font-size:14px;padding:8px 10px;border:1.5px solid rgba(255,255,255,.55);border-radius:9px;background:rgba(255,255,255,.96);color:var(--ink)}
+.air-countdown{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.air-countdown span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;font-size:13px}
+.air-countdown b{font-size:20px;color:#fff2bd}
+@media(max-width:560px){.air-hero-actions{grid-template-columns:1fr}.air-date-row{display:grid;grid-template-columns:1fr}.air-date-row label{justify-content:space-between}.air-date-row input{width:150px}}
 .ci-eyebrow{font-size:12px;letter-spacing:1.5px;font-weight:800;color:#ffd9df;text-transform:uppercase}
 .ci-countdown{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
 .ci-countdown span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;font-size:13px}
@@ -65,6 +75,49 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .ci-progress h3{margin:0 0 6px;color:#245c91}
 .ci-progress-row{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f5;padding:6px 0;font-size:13px}
 .ci-progress-row span{font-weight:800;color:var(--ci)}
+.ci-dashboard{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);gap:12px;margin-top:12px}
+.ci-phase-card{margin:0;position:relative;overflow:hidden}
+.ci-phase-card::after{content:"✈";position:absolute;right:18px;top:14px;font-size:52px;line-height:1;color:#dce8f3;transform:rotate(-12deg)}
+.ci-phase-top{display:flex;align-items:center;gap:8px;margin-bottom:7px;position:relative;z-index:1}
+.ci-phase-status{margin-left:auto;border-radius:99px;padding:4px 9px;background:#e8f6ef;color:#16734a;font-size:11px;font-weight:800}
+.ci-phase-card.active .ci-phase-status{background:#fdecef;color:var(--ci)}
+.ci-task-list{display:grid;gap:7px;margin-top:12px;position:relative;z-index:1}
+.ci-task{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:12.5px}
+.ci-task::before{content:"○";color:#245c91;font-size:16px}
+.ci-task.done::before{content:"✓";color:var(--good);font-weight:800}
+.ci-next-card{background:linear-gradient(145deg,#fff8f8,#fff);border:1px solid #f0cbd2;border-radius:14px;padding:17px;box-shadow:var(--shadow)}
+.ci-next-card h3{margin:0 0 4px;color:var(--ci);font-size:15px}
+.ci-next-card p{font-size:13px;color:var(--sub);margin-bottom:12px}
+.ci-next-card .btn{width:100%;background:var(--ci);box-shadow:0 5px 12px rgba(200,20,50,.18)}
+.ci-route{margin-top:12px;border:1px solid #d7e2ef;border-radius:14px;background:#fff;box-shadow:var(--shadow);overflow:hidden}
+.ci-route-head{padding:17px 18px;background:linear-gradient(135deg,#183b68,#245c91);color:#fff}
+.ci-route-head .ci-phase-label{color:#dcecff}
+.ci-route-head h2{margin:4px 0 2px;font-size:20px}
+.ci-route-head p{font-size:13px;color:rgba(255,255,255,.84)}
+.ci-route-body{padding:17px 18px}
+.ci-route-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 16px}
+.ci-route-step{border:1px solid #e0e8f0;border-radius:10px;padding:10px;font-size:12.5px;background:#f8fbfe}
+.ci-route-step b{display:block;color:#245c91;margin-bottom:3px}
+.ci-initial-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0 16px}
+.ci-initial-list>div{border:1px solid #e0e8f0;border-left:4px solid #245c91;border-radius:10px;padding:11px 12px;background:#f8fbfe}
+.ci-initial-list b{display:block;color:#245c91;font-size:13.5px;margin-bottom:3px}
+.ci-initial-list span{display:block;color:var(--sub);font-size:12.5px;line-height:1.55}
+.ci-stage-list{display:grid;gap:9px;margin:2px 0 16px}
+.ci-stage-item{display:grid;grid-template-columns:42px 1fr 22px;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);background:#fff;border:1px solid #d7e2ef;border-radius:11px;padding:12px;cursor:pointer}
+.ci-stage-item:hover{border-color:var(--ci);background:#fff8f8;box-shadow:0 4px 12px rgba(200,20,50,.08)}
+.ci-stage-num{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#eef4fa;color:#245c91;font-weight:800;font-size:12px}
+.ci-stage-item b,.ci-stage-item small{display:block}.ci-stage-item b{font-size:14px;margin-bottom:2px}.ci-stage-item small{font-size:12.5px;color:var(--sub);line-height:1.5}.ci-stage-item strong{color:var(--ci);font-size:20px}
+.ci-route-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:560px){.ci-route-steps,.ci-initial-list{grid-template-columns:1fr}.ci-route-actions .btn{flex:1 1 100%}}
+.ci-progress-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.ci-progress-head h3{margin:0;color:#245c91}
+.ci-progress-head span{font-size:12px;color:var(--sub)}
+.ci-progress-track{height:8px;background:#edf1f5;border-radius:99px;overflow:hidden;margin-bottom:11px}
+.ci-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#245c91,var(--ci));border-radius:inherit;transition:width .3s ease}
+.ci-module-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+.ci-module{min-height:148px;display:flex;flex-direction:column;align-items:flex-start}
+.ci-module small{margin-top:auto}
+@media(max-width:760px){.ci-dashboard{grid-template-columns:1fr}.ci-module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.ci-module-grid{grid-template-columns:1fr}.ci-eval-note{display:block}.ci-eval-note b{display:block;margin-bottom:3px}}
 select,input[type=text]{font-family:inherit;font-size:13.5px;padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
 .btn{font-family:inherit;font-size:14.5px;font-weight:700;padding:10px 20px;border-radius:11px;border:none;cursor:pointer;background:var(--accent);color:#fff}
@@ -251,13 +304,16 @@ html.unlocked #gate{display:none}
     <div class="card ci-hero">
       <div class="ci-eyebrow">CHINA AIRLINES · RECRUITMENT SPRINT</div>
       <h2>🌸 華航招考衝刺</h2>
-      <p class="section-note">以 11/7 初試、11/14 複試為主軸。初試先處理英文原文朗讀、現場英翻中、新聞稿與機型唸法；通過後再把重心轉到複試問答與公司認知。</p>
-      <div class="quicknav"><button data-go="ciBroadcast">📢 廣播原文</button><button data-go="stage">🎬 面試關卡</button><button data-go="practice">🎯 抽題練習</button><button data-go="airlines">🏢 華航資料</button></div>
-      <div class="searchrow" style="margin-top:12px">
-        <label style="font-size:13.5px;font-weight:600">初試日期：<input type="date" id="ciInitialDate" value="2026-11-07" style="font-family:inherit;font-size:14px;padding:8px;border:1.5px solid var(--line);border-radius:9px"></label>
-        <label style="font-size:13.5px;font-weight:600">複試日期：<input type="date" id="ciFinalDate" value="2026-11-14" style="font-family:inherit;font-size:14px;padding:8px;border:1.5px solid var(--line);border-radius:9px"></label>
+      <p class="section-note">下一關：初試｜先完成華航初試基本功，再進入廣播與複試問答。</p>
+      <div class="air-hero-actions">
+        <button class="btn" data-ci-route="initial">初試準備</button><button class="btn" data-ci-route="final">複試準備</button>
+        <button class="btn sec" data-ci-route="today">⚡ 今日華航訓練</button><button class="btn sec" data-ci-route="final">🎙 華航全真模擬</button>
       </div>
-      <div class="ci-countdown" id="ciSprintCountdown"></div>
+      <div class="air-date-row">
+        <label>初試日期：<input type="date" id="ciInitialDate" value="2026-11-07"></label>
+        <label>複試日期：<input type="date" id="ciFinalDate" value="2026-11-14"></label>
+      </div>
+      <div class="air-countdown" id="ciSprintCountdown"></div>
     </div>
     <div id="ciApp"></div>
     <div id="ciSprintPlan"></div>
@@ -686,10 +742,10 @@ const READINGS = [
 ];
 
 const REVIEWS = [
- {air:"華航", flow:["書面資料審查","190cm 摸高（不踮腳・單手）","ㄇ字型台步儀態","中文問答＋自介","中英短文朗讀","→ 複試：拍照","電腦適性測驗（10分鐘120題）","團體面試＋自介"],
+ {air:"華航", flow:["繳交書面資料","190cm 摸高（不踮腳・單手）","ㄇ字型台步儀態","唸廣播詞／英文原文","→ 初試結束","複試：一對多面談","英文自我介紹・情境判斷・時事應對・個人特質"],
   good:["「制服是榮譽的勳章，不是炫耀的資本」語感成熟，展現品牌意識","向上確認的本能正確，符合航空業標準作業程序","服務業背景故事豐富，每題都有實際案例支撐","一年凱悅資歷已成為最強素材：動機題改用「飯店一年＝職前訓練」的敘事（穿山甲降級為彩繪機題的彩蛋）"],
   fix:["⚠️ 優先修正：「人為疏失說得籠統」→ 改為「在授權範圍內誠實溝通」，避免被認為傾向隱瞞","⚠️ 動機題已改版：不再用穿山甲當主答案，改用一年飯店實戰經驗（見下方實戰題目回顧）；穿山甲留給彩繪機／公益題當彩蛋","30 秒英文自介保持流暢自然，錄音自聽確認節奏"],
-  extra:{title:"複試核心提醒", body:"複試考官在觀察「一致性」——答案是否和初試一樣穩定真實。不要刻意改變風格，把邏輯補得更完整。適性測驗每題約 5 秒內直覺作答，不確定就跳過。"},
+  extra:{title:"複試核心提醒", body:"複試是一對多面談，考官會同時觀察你的回答內容、眼神、音量、反應與一致性。英文自介、情境判斷、時事應對與個人特質都要用具體經驗支撐，不要只背形容詞。"},
   qa:[
    {asked:1, q:"英文自我介紹（30 秒・全組）",
     better:"Hi, my name is Shelly. I have a background in hotel front desk service, where I developed a strong sense of attentiveness and guest communication. I've also lived in Canada and studied in Korea, which shaped my appreciation for multicultural environments. I'm passionate about delivering meaningful service on a larger stage — and I believe China Airlines is exactly that stage.",
@@ -1895,7 +1951,7 @@ const CI_SPRINT = [
   "每段朗讀後用中文說出情境：Welcome、起飛後、顛簸、降落前、降落後",
   "Dynasty 原文與 CAL NEWS：每篇抓主旨、日期、數字、機型與航點",
   "機型唸法：Boeing 777＝Triple Seven；A321neo 的 neo 直接念完整音",
-  "初試關卡：190cm 摸高、ㄇ字型台步、中文自介與中英短文朗讀各錄音一次"
+  "初試關卡：繳資料、190cm 摸高、ㄇ字型台步與廣播詞朗讀；不安排中文問答練習"
  ]},
  {w:"初試前 7 天｜速度與理解",d:"每天一組限時練習，降低看到陌生英文時的停頓",items:[
   "隨機抽一段 Dynasty 原文，先朗讀，再現場英翻中，不查字典",

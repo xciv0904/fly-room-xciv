@@ -10,7 +10,7 @@
   function markModule(k,n){ const p=practice(); p.modules[k]=(p.modules[k]||0)+(n||1); savePractice(p); }
   function addUnique(k,v){ const p=practice(); p[k]=Array.isArray(p[k])?p[k]:[]; if(!p[k].includes(v)) p[k].push(v); savePractice(p); }
   function paintStatsMini(){ const el=document.getElementById("evaStatsMini");if(!el)return;const p=practice(),math=Object.values(p.math||{}).reduce((a,s)=>({ok:a.ok+(s.ok||0),total:a.total+(s.total||0)}),{ok:0,total:0});el.textContent=`初試練習 ${Object.values(p.modules||{}).reduce((a,b)=>a+b,0)} 次${math.total?`・筆試 ${math.ok}/${math.total}`:""}｜複試核心 ${(p.core||[]).length} 題・追問 ${p.followups||0} 層`; }
-  function go(view){ EVA.view=view; render(); window.scrollTo({top:0,behavior:"smooth"}); }
+  function go(view){ EVA.view=view; render(); if(view==="home")paintEvaCountdown(); window.scrollTo({top:0,behavior:"smooth"}); }
   function navButton(view,label,cls){ return `<button class="btn ${cls||""}" data-eva-go="${view}">${label}</button>`; }
   function screenHead(title,sub){ const inSession=EVA.sessionSubflow&&EVA.session&&EVA.session.i<EVA.session.steps.length; return `<div class="card"><div class="eva-screen-head"><button class="eva-back" data-eva-go="${inSession?"session":"home"}">← ${inSession?"返回本次訓練":"長榮首頁"}</button><div style="flex:1"><div class="eva-eyebrow" style="color:var(--eva)">EVA AIR</div><h2>${esc(title)}</h2><p class="section-note">${esc(sub||"")}</p></div></div></div>`; }
   function moduleCard(view,icon,title,desc){ return `<button class="eva-module" data-eva-go="${view}"><b>${icon} ${title}</b><span>${desc}</span></button>`; }
@@ -25,6 +25,11 @@
           ${navButton("initial","初試準備")}${navButton("final","複試準備")}
           ${navButton("today","⚡ 今日長榮訓練","sec")}${navButton("mock","🎙 長榮全真模擬","sec")}
         </div>
+        <div class="air-date-row">
+          <label>初試日期：<input type="date" id="evaInitialDate" value="2026-10-17"></label>
+          <label>複試日期：<input type="date" id="evaFinalDate" value="2026-11-21"></label>
+        </div>
+        <div class="air-countdown" id="evaSprintCountdown"></div>
       </div>
       <div class="card"><h2>今日建議</h2><p class="section-note">${done?"今天已完成一套長榮訓練；若還有精神，只補弱點即可。":"先做 20–25 分鐘今日訓練，完成後再決定是否加練。"}</p>
         <div class="eva-actions">${navButton("today",done?"查看今天紀錄":"開始今日訓練")}${navButton("stats","查看長榮準備度","ghost")}</div></div>
@@ -33,6 +38,13 @@
         <div class="eva-stage-card final"><div class="eva-stage-label">② FINAL INTERVIEW</div><h2>複試</h2><p class="sub">口試與追問集中在這裡，不與初試筆試混在一起。</p><div class="eva-feature-list">${["🖼 看圖說故事","🇬🇧 英文抽問題","👤 履歷個人題","✈️ Why EVA","👥 行為面試","⚠️ 壓力追問","📰 本週時事","📚 84-1 注意事項"].map(x=>`<div class="eva-feature">${x}</div>`).join("")}</div>${navButton("final","進入複試訓練")}</div>
       </div>
       <details class="card"><summary>其他練習工具</summary><div class="body"><p class="sub">精選50、模板、抽題、每日十分鐘、原模擬面試、題庫、朗讀、回顧、弱點、安全知識與其他航空公司資料都保留在上方導覽列。</p></div></details>`;
+  }
+  function paintEvaCountdown(){
+    const init=document.getElementById("evaInitialDate"),fin=document.getElementById("evaFinalDate"),out=document.getElementById("evaSprintCountdown");
+    if(!init||!fin||!out)return;
+    const dates=store.get("evaSprintDates",{});if(dates.initial)init.value=dates.initial;if(dates.final)fin.value=dates.final;
+    const di=dayDiff(init.value),df=dayDiff(fin.value);
+    out.innerHTML=di>0?`<span>🛫 距離初試 <b>${di}</b> 天</span><em>→</em><span>複試 ${df>0?`還有 <b>${df}</b> 天`:"已到"}</span>`:di===0?`<span>🌟 今天初試</span><em>→</em><span>複試 ${df>0?`還有 <b>${df}</b> 天`:""}</span>`:`<span>✅ 初試完成</span><em>→</em><span>${df>0?`距離複試 <b>${df}</b> 天`:(df===0?"今天複試":"請更新日期")}</span>`;
   }
 
   function renderInitial(){ app.innerHTML=screenHead("長榮初試訓練","初試專注陌生文章、台語、判斷與筆試技能，不大量抽 Why EVA。")+
@@ -163,6 +175,10 @@
 
   function render(){ if(EVA.view==="home")renderHome();else if(EVA.view==="initial")renderInitial();else if(EVA.view==="final")renderFinal();else if(EVA.view==="reading")renderReading();else if(EVA.view==="taiwanese")renderTaiwanese(false);else if(EVA.view==="sjt")renderSjt();else if(EVA.view==="ethics")renderEthics();else if(EVA.view==="paper")renderPaper();else if(EVA.view==="physical")renderPhysical();else if(EVA.view==="core")renderCore();else if(EVA.view==="followup")renderFollowup();else if(EVA.view==="picture")renderPicture();else if(EVA.view==="current")renderCurrent();else if(EVA.view==="notice841")renderNotice841();else if(EVA.view==="today")startSession("today");else if(EVA.view==="mock")renderMock();else if(EVA.view==="session")renderSession();else if(EVA.view==="stats")renderStats(); }
 
+  app.addEventListener("change",e=>{
+    if(e.target.id!=="evaInitialDate"&&e.target.id!=="evaFinalDate")return;
+    const d=store.get("evaSprintDates",{});d[e.target.id==="evaInitialDate"?"initial":"final"]=e.target.value;store.set("evaSprintDates",d);paintEvaCountdown();
+  });
   app.addEventListener("click",e=>{
     const goBtn=e.target.closest("[data-eva-go]");if(goBtn){EVA.core=null;go(goBtn.dataset.evaGo);return}
     if(e.target.id==="evaReadStart"){startReading();return}
@@ -194,11 +210,12 @@
     if(e.target.id==="evaMockSave"){saveMockTask();return}
   });
 
-  window.addEventListener("eva-home",()=>{EVA.view="home";render()});
+  window.addEventListener("eva-home",()=>{EVA.view="home";render();paintEvaCountdown()});
   document.addEventListener("click",e=>{
     if(e.target.closest('#nav button[data-t="stats"]')) setTimeout(paintStatsMini,0);
     if(e.target.closest("#evaStatsOpen")){document.querySelector('#nav button[data-t="eva"]').click();EVA.view="stats";render();}
   });
   paintStatsMini();
   render();
+  paintEvaCountdown();
 })();
