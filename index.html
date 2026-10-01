@@ -1877,7 +1877,7 @@ function mShowResult(transcript){
   if(M.queue){
     /* 一鏡到底：自動存檔、續往下一題 */
     mSave({ ts: Date.now(), air: M.q.airline, q: M.q.q_zh || M.q.q_en, lang,
-            dur: M.dur, transcript, fb: fb.map(x=>x[1]), audio: M.blob });
+            dur: M.dur, transcript, fb: fb.map(x=>x[1]), ciReview, answerReview, audio: M.blob });
     M.panel.push({ q: M.q.q_zh || M.q.q_en, dur: M.dur, warn: fb.filter(x=>x[0]==="warn").length });
     const last = M.qi >= M.queue.length - 1;
     h += `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
@@ -1903,13 +1903,17 @@ function mShowResult(transcript){
   $("#mRean").addEventListener("click", ()=>{
     const t = $("#mTrans").value.trim();
     $("#mFb").innerHTML = fbHtml(analyze(t, M.dur, lang, M.q));
+    if(M.q && M.q.cat!=="華航初試・廣播朗讀"){ const cmp=$("#answerCompare"); if(cmp) cmp.innerHTML = answerComparisonHtml(answerComparison(t,M.q,lang)); }
+    if(M.q && M.q.cat==="華航初試・廣播朗讀"){ const ciCmp=$("#ciReview"); if(ciCmp) ciCmp.innerHTML = ciBroadcastReviewHtml(ciBroadcastReview(t,M.q)); }
   });
   $("#mRetry").addEventListener("click", ()=>{ $("#mResult").innerHTML=""; $("#mTimer").textContent="按下 🔴 重新錄音"; });
   $("#mSaveBtn").addEventListener("click", async ()=>{
     const t = $("#mTrans").value.trim();
+    const savedCiReview = M.q && M.q.cat==="華航初試・廣播朗讀" ? ciBroadcastReview(t,M.q) : null;
+    const savedAnswerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(t,M.q,lang) : null;
     await mSave({ ts: Date.now(), air: M.q.airline, q: M.q.q_zh || M.q.q_en, lang,
                   dur: M.dur, transcript: t, fb: analyze(t, M.dur, lang, M.q).map(x=>x[1]),
-                  audio: M.blob });
+                  ciReview: savedCiReview, answerReview: savedAnswerReview, audio: M.blob });
     $("#mSaveBtn").textContent = "✅ 已儲存"; $("#mSaveBtn").disabled = true;
     renderMHistory();
   });
@@ -1935,6 +1939,8 @@ async function renderMHistory(){
   $("#mHistory").innerHTML = list.map(r=>{
     const d = new Date(r.ts);
     const when = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+    const legacyCi = !r.ciReview && r.air==="華航" && r.transcript && r.q ? Object.values(CI_RECORDING_PROMPTS).find(x=>r.q.includes(x.title)) : null;
+    const savedCiReview = r.ciReview || (legacyCi ? ciBroadcastReview(r.transcript,{q_en:legacyCi.text,cat:"華航初試・廣播朗讀"}) : null);
     return `<div class="hist" data-id="${r.id}">
       <b><span class="tag ${TAGC[r.air]||"cat"}">${r.air}</span>${esc(r.q)}</b>
       <div class="sub" style="margin:4px 0">${when} · ${r.dur} 秒 · ${r.lang==="en"?"英文":"中文"}</div>
@@ -1942,6 +1948,8 @@ async function renderMHistory(){
       <details><summary>逐字稿與建議</summary><div class="body">
         ${r.transcript?`<p style="margin-bottom:6px">${esc(r.transcript)}</p>`:`<p class="sub">（無逐字稿）</p>`}
         ${(r.fb||[]).map(f=>`<div class="fb ${f.startsWith("🎀 有")||f.startsWith("🧹 幾")||f.includes("理想")||f.includes("穩定")||f.includes("讚")||f.includes("清楚")||f.includes("清晰")||f.includes("說服力")?"good":"warn"}">${esc(f)}</div>`).join("")}
+        ${r.answerReview?answerComparisonHtml(r.answerReview):""}
+        ${savedCiReview?`<details class="saved-ci-review" open><summary>🔎 原文比對與逐句檢查</summary><div class="body">${ciBroadcastReviewHtml(savedCiReview)}</div></details>`:""}
       </div></details>
       <div style="display:flex;gap:8px;margin-top:6px">
         <button class="btn sec mPlay">▶ 回聽</button>
