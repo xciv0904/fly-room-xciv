@@ -190,6 +190,7 @@ details.qa summary{font-weight:600}
 .pronounce-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
 .pronounce-row:last-child{border-bottom:0}
 .pronounce-row b{display:block;font-size:16px;color:var(--navy)}
+.pronounce-meaning{display:block;color:var(--sub);font-size:14px;margin-top:2px}
 .pronounce-row .sub{display:block;font-size:12px;margin-top:3px}
 .pronounce-row .chips{justify-content:flex-end}
 .ci-keyword .ci-save-word{margin-left:5px;padding:2px 6px;font-size:11px;background:#fff}
@@ -1258,13 +1259,18 @@ function sayBtn(text, lang, label){
   SAYS[id] = {t: text, l: lang};
   return `<button class="chip say" data-sid="${id}">${label}</button>`;
 }
+const PRONUNCIATION_ZH = {
+  seattle:"西雅圖",starbucks:"星巴克",leicester:"英國萊斯特",coastline:"海岸線",harboring:"擁有／坐落於",aroma:"香氣",seafood:"海鮮",blend:"混合／融合",unique:"獨特的",serves:"提供服務／飛往",destinations:"目的地",ontario:"安大略",flights:"航班",complemented:"由……補充／搭配",northeast:"東北部",southeast:"東南部",asia:"亞洲",captain:"機長",ground:"地勤／地面作業",authorized:"獲授權的",turbulence:"亂流／顛簸",passenger:"旅客",passengers:"旅客",announcement:"廣播",boarding:"登機",departure:"出發／離站",arrival:"抵達",destination:"目的地",itinerary:"行程／旅程",beef:"牛肉",noodle:"麵條",soup:"湯",comfortable:"舒適的",excellent:"優良的",service:"服務"
+};
 let pronunciationWords = store.get("pronunciationWords",[]);
-function savePronunciationWord(word, source="華航廣播"){
+function pronunciationZh(word){ return PRONUNCIATION_ZH[(word||"").toLowerCase()]||""; }
+function savePronunciationWord(word, source="華航廣播", zh=""){
   const clean=(word||"").trim().toLowerCase();
   if(!clean) return false;
   const found=pronunciationWords.find(x=>x.word===clean);
-  if(found){ found.hits=(found.hits||0)+1; found.source=found.source||source; }
-  else pronunciationWords.unshift({word:clean,source,addedAt:Date.now(),practice:0,hits:1});
+  const meaning=(zh||pronunciationZh(clean)).trim();
+  if(found){ found.hits=(found.hits||0)+1; found.source=found.source||source; if(meaning) found.zh=meaning; }
+  else pronunciationWords.unshift({word:clean,zh:meaning,source,addedAt:Date.now(),practice:0,hits:1});
   store.set("pronunciationWords",pronunciationWords);
   return true;
 }
@@ -1274,10 +1280,10 @@ function removePronunciationWord(word){
 }
 function pronunciationRender(){
   const el=$("#toolBody");
-  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">把廣播逐句檢查中出現的疑似漏讀、地名、機型或不熟單字存下來。按「Listen」聽瀏覽器的英文示範，再自己重讀；熟悉後即可移除。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="輸入想練的英文單字或片語…"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><p class="sub">目前收藏 ${pronunciationWords.length} 個 · 發音示範是練習輔助，仍要以航空原文與自己的回聽為準。</p></div>`+
-    (pronunciationWords.length?`<div class="card"><h3>📚 待練清單</h3>${pronunciationWords.map((x,i)=>`<div class="pronounce-row"><div><b>${esc(x.word)}</b><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}</span><button class="chip pronounce-practice" data-word="${esc(x.word)}">✓ 已練一次</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`).join("")}</div>`:`<div class="card"><p class="sub">目前還沒有單字。從華航廣播的逐句檢查按「＋加入發音字庫」，或在上方手動輸入。</p></div>`);
+  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">把廣播逐句檢查中出現的疑似漏讀、地名、機型或不熟單字存下來。按「Listen」聽瀏覽器的英文示範，再自己重讀；熟悉後即可移除。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（可選填）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><p class="sub">目前收藏 ${pronunciationWords.length} 個 · 發音示範是練習輔助，仍要以航空原文與自己的回聽為準。</p></div>`+
+    (pronunciationWords.length?`<div class="card"><h3>📚 待練清單</h3>${pronunciationWords.map((x,i)=>`<div class="pronounce-row"><div><b>${esc(x.word)}</b><strong class="pronounce-meaning">${esc(x.zh||"中文意思待補充")}</strong><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}</span><button class="chip pronounce-practice" data-word="${esc(x.word)}">✓ 已練一次</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`).join("")}</div>`:`<div class="card"><p class="sub">目前還沒有單字。從華航廣播的逐句檢查按「＋加入發音字庫」，或在上方手動輸入。</p></div>`);
   const add=$("#pronounceAddBtn");
-  if(add) add.addEventListener("click",()=>{const input=$("#pronounceInput");if(savePronunciationWord(input.value,"手動加入")){input.value="";pronunciationRender();}});
+  if(add) add.addEventListener("click",()=>{const input=$("#pronounceInput"),meaning=$("#pronounceMeaning");if(savePronunciationWord(input.value,"手動加入",meaning.value)){input.value="";meaning.value="";pronunciationRender();}});
 }
 function pronunciationSaveBtn(word){
   return `<button class="chip ci-save-word" data-word="${esc(word)}">＋加入發音字庫</button>`;
