@@ -211,6 +211,25 @@ textarea{width:100%;font-family:inherit;font-size:14px;padding:9px 11px;border:1
 .fb{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;margin:6px 0;padding:8px 11px;border-radius:9px}
 .fb.good{background:#ecf8f2;color:#14603f}
 .fb.warn{background:#fdf3ec;color:#8a4b12}
+.fb.bad{background:#fff0f0;color:#9c2635}
+.answer-compare{margin-top:12px;padding:12px;border:1px solid #d7e2ef;border-radius:11px;background:#fbfdff}
+.answer-compare h3{margin:0 0 8px;color:var(--navy)}
+.compare-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.compare-pill{display:inline-block;border-radius:7px;padding:4px 8px;font-size:12px;font-weight:700}
+.compare-pill.hit{background:#e8f7ef;color:#14603f}
+.compare-pill.miss{background:#fff0f0;color:#9c2635}
+.ci-broadcast-review{margin-top:12px;padding:12px;border:1px solid #d7e2ef;border-radius:11px;background:#fbfdff}
+.ci-broadcast-review h3{margin:0 0 8px;color:var(--navy)}
+.ci-broadcast-review h4{margin:12px 0 6px;color:var(--navy);font-size:14px}
+.ci-keywords{display:flex;flex-wrap:wrap;gap:5px}
+.ci-keyword{display:inline-block;border-radius:7px;padding:4px 8px;font-size:12px;font-weight:700}
+.ci-keyword.hit{background:#e8f7ef;color:#14603f}
+.ci-keyword.miss{background:#fff0f0;color:#9c2635}
+.ci-sentence-row{padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.ci-sentence-row>div:first-child{display:flex;gap:10px;align-items:center}
+.ci-original{margin-top:4px;color:var(--sub);line-height:1.55}
+.ci-fix{margin-top:5px;padding:6px 8px;border-radius:7px;background:#fff6e9;color:#8a4b12}
+.ci-goodline{margin-top:5px;padding:6px 8px;border-radius:7px;background:#ecf8f2;color:#14603f}
 .hist{border:1px solid var(--line);border-radius:11px;padding:10px 13px;margin-bottom:8px;font-size:13.5px}
 .hm{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;margin:8px 0}
 .hm div{aspect-ratio:1;border-radius:3px;background:#ece9df}
@@ -537,7 +556,7 @@ html.unlocked #gate{display:none}
 <section id="tab-mock" class="hidden">
   <div class="card">
     <h2>🎙️ 模擬面試</h2>
-    <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。選定航空公司後，對照擬答會顯示該公司的專屬版本。</p>
+    <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。選定航空公司後，會優先抽該公司的題目；通用題只在該類別沒有公司題時補進來。</p>
     <div class="quicknav"><button data-go="practice">🎯 題庫練習</button><button data-go="stage">🎬 面試關卡</button><button data-go="review">📋 面試回顧</button></div>
     <div class="tip">🔒 <b>隱私說明：</b>錄音與逐字稿只存在「這台裝置」的瀏覽器裡，不會上傳到任何地方。第一次按下🔴會跳出麥克風權限請求，請允許。</div>
     <div class="chips" id="mAirline"></div>
@@ -1587,7 +1606,9 @@ $("#mSkip").addEventListener("click", mDraw);
 function mDraw(){
   mStopAll();
   const lang = $("#mLang").value, cat = $("#mCat").value;
-  const p = DATA.filter(d=>hasAir(d,M.air)&&(!cat||d.cat===cat)&&(lang==="zh"?d.q_zh:d.q_en));
+  const pool = DATA.filter(d=>hasAir(d,M.air)&&(!cat||d.cat===cat)&&(lang==="zh"?d.q_zh:d.q_en));
+  const companyPool = M.air && M.air!=="通用" ? pool.filter(d=>airsOf(d).includes(M.air)&&!airsOf(d).includes("通用")) : pool;
+  const p = companyPool.length ? companyPool : pool;
   if(!p.length){ alert("這個範圍沒有題目，換個條件試試"); return; }
   if($("#mMode").value === "panel"){
     const intro = {airline: M.air||"綜合", cat:"自我介紹", id:-1,
@@ -1602,14 +1623,49 @@ function mDraw(){
 function mRenderQ(){
   const lang = $("#mLang").value;
   $("#mCard").classList.remove("hidden");
+  const sourceTag = M.air && M.air!=="通用" ? `<span class="tag ${airsOf(M.q).includes("通用")?"gn":"cat"}">${airsOf(M.q).includes("通用")?"通用加強":"公司題優先"}</span>` : "";
   $("#mMeta").innerHTML = (M.queue?`<span class="tag" style="background:var(--gold-soft);color:var(--gold-deep)">🎬 第 ${M.qi+1} / ${M.queue.length} 題</span>`:"") +
-    airTags(M.q) + `<span class="tag cat">${M.q.cat}</span>`;
+    airTags(M.q) + sourceTag + `<span class="tag cat">${M.q.cat}</span>`;
   $("#mBody").innerHTML = (lang==="zh"&&M.q.q_zh?`<div class="qtext">${esc(M.q.q_zh)}</div>`:"") +
                           (lang==="en"&&M.q.q_en?`<div class="qtext en">${esc(M.q.q_en)}</div>`:"") +
                           (lang==="en"&&!M.q.q_en?`<div class="qtext">${esc(M.q.q_zh)}<span class="sub">（請用英文回答）</span></div>`:"");
   $("#mResult").innerHTML = ""; $("#mLive").textContent = ""; $("#mTimer").textContent = "按下 🔴 開始錄音，回答完按 ⏹";
   $("#mRec").disabled = false; $("#mStop").disabled = true;
   $("#mCard").scrollIntoView({behavior:"smooth"});
+}
+
+/* Chrome / Edge 的語音辨識長錄音常在約 45–60 秒自動結束；錄音本身不中斷，這裡只重啟轉文字。 */
+function startMRecognition(){
+  if(!M.recActive || !SR) return;
+  const r = new SR();
+  M.rec = r;
+  r.lang = $("#mLang").value==="en" ? "en-US" : "zh-TW";
+  r.continuous = true; r.interimResults = true;
+  r.onresult = e=>{
+    let interim = "";
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal){
+        const piece=e.results[i][0].transcript.trim();
+        if(piece) M.finalT += (M.finalT?" ":"")+piece;
+      } else interim += e.results[i][0].transcript;
+    }
+    M.interimT = interim;
+    $("#mLive").textContent = "📝 " + (M.finalT + (interim?" "+interim:"" )).slice(-120);
+  };
+  r.onerror = e=>{
+    if(!M.recActive) return;
+    if(e.error==="not-allowed" || e.error==="service-not-allowed"){
+      M.recActive=false;
+      $("#mLive").textContent="⚠️ 語音辨識權限中斷；錄音仍會保存，可在下方手動補上逐字稿。";
+    }
+  };
+  r.onend = ()=>{
+    if(!M.recActive) return;
+    setTimeout(()=>startMRecognition(),180);
+  };
+  try{ r.start(); }catch(e){
+    setTimeout(()=>{if(M.recActive) startMRecognition()},400);
+  }
 }
 
 /* --- 錄音 --- */
@@ -1636,23 +1692,8 @@ $("#mRec").addEventListener("click", async ()=>{
   $("#mRec").disabled = true; $("#mStop").disabled = false; $("#mResult").innerHTML = "";
   /* 語音轉文字 */
   if(SR){
-    try{
-      M.rec = new SR();
-      M.rec.lang = $("#mLang").value==="en" ? "en-US" : "zh-TW";
-      M.rec.continuous = true; M.rec.interimResults = true;
-      M.rec.onresult = e=>{
-        let interim = "";
-        for(let i=e.resultIndex;i<e.results.length;i++){
-          if(e.results[i].isFinal) M.finalT += e.results[i][0].transcript;
-          else interim += e.results[i][0].transcript;
-        }
-        M.interimT = interim;
-        $("#mLive").textContent = "📝 " + (M.finalT + interim).slice(-120);
-      };
-      M.rec.onend = ()=>{ if(M.recActive){ try{ M.rec.start(); }catch(e){} } };
-      M.recActive = true;
-      M.rec.start();
-    }catch(e){ M.rec = null; }
+    M.recActive = true;
+    startMRecognition();
   }
 });
 $("#mStop").addEventListener("click", ()=>{
@@ -1682,6 +1723,51 @@ function mFinish(){
 
 /* --- 分析 --- */
 function count(t, re){ return (t.match(re)||[]).length; }
+function ciTokens(text){
+  return (text||"").toLowerCase().replace(/[’']/g,"'").match(/[a-z]+(?:'[a-z]+)?|\d+(?:[-/]\d+)*/g)||[];
+}
+function ciTokenLabel(token){ return token.replace(/^[.,!?;:]+|[.,!?;:]+$/g,""); }
+function ciKeyTerms(text){
+  const stop=new Set("about after again against also because before being between could every from have into just more other should their there these those through very when where which while with would your they this that than then them were will been being much some such only over under what what’s whose our into just from have has had does did for and the you are was not but can its all one two three four five six seven eight nine ten".split(/\s+/));
+  const raw=(text||"").match(/[A-Za-z]+(?:['’-][A-Za-z]+)?|\d+(?:[-/]\d+)*/g)||[];
+  const out=[];
+  raw.forEach((x,i)=>{
+    const k=x.toLowerCase().replace(/[’']/g,"'");
+    const proper=/^[A-Z][a-z]{2,}/.test(x) && i>0;
+    const numeric=/\d/.test(x);
+    const useful=x.length>=7 && !stop.has(k);
+    if((proper||numeric||useful) && !out.some(y=>y.key===k)) out.push({key:k,label:x});
+  });
+  return out.slice(0,14);
+}
+function ciLcs(expected, actual){
+  const n=expected.length,m=actual.length,dp=Array.from({length:n+1},()=>Array(m+1).fill(0));
+  for(let i=1;i<=n;i++) for(let j=1;j<=m;j++) dp[i][j]=expected[i-1]===actual[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);
+  const matched=new Set(), missing=[]; let i=n,j=m;
+  while(i&&j){ if(expected[i-1]===actual[j-1]){matched.add(i-1);i--;j--;} else if(dp[i-1][j]>=dp[i][j-1]) i--; else j--; }
+  expected.forEach((x,k)=>{if(!matched.has(k))missing.push(x)});
+  return {score:n?Math.round(matched.size/n*100):0,missing};
+}
+function ciBroadcastReview(transcript,item){
+  const original=(item&&item.q_en)||"";
+  const expected=ciTokens(original), actual=ciTokens(transcript);
+  const all=ciLcs(expected,actual), terms=ciKeyTerms(original);
+  const lower=new Set(actual);
+  const keyRows=terms.map(x=>({label:x.label,ok:lower.has(x.key)}));
+  const sentences=original.split(/(?<=[.!?])\s+/).map(x=>x.trim()).filter(Boolean).map((sentence,i)=>{
+    const words=ciTokens(sentence), hit=words.filter(w=>lower.has(w)), miss=words.filter(w=>w.length>3&&!lower.has(w)).slice(0,5);
+    return {i:i+1,source:sentence,hit:hit.length,total:words.length,missing:miss};
+  });
+  return {original,similarity:all.score,missing:all.missing.slice(0,18),keyRows,sentences};
+}
+function ciBroadcastReviewHtml(review){
+  if(!review||!review.original) return "";
+  const score=review.similarity;
+  const status=score>=85?"good":score>=65?"warn":"bad";
+  const keys=review.keyRows.map(x=>`<span class="ci-keyword ${x.ok?"hit":"miss"}">${x.ok?"✓":"!"} ${esc(x.label)}</span>`).join("");
+  const rows=review.sentences.map(x=>`<div class="ci-sentence-row"><div><b>第 ${x.i} 句</b><span class="sub">命中 ${x.hit}/${x.total} 個詞</span></div><div class="ci-original">原文：${esc(x.source)}</div>${x.missing.length?`<div class="ci-fix">🔧 疑似漏讀／辨識不到：${esc(x.missing.join(", "))}。請單獨重讀這一句，確認連音與句尾。</div>`:`<div class="ci-goodline">✅ 這句的主要詞彙都有被辨識到。</div>`}</div>`).join("");
+  return `<div class="ci-broadcast-review"><h3>🔎 原文比對與逐句修正</h3><div class="fb ${status}">📄 原文詞彙命中率約 ${score}%（這是語音辨識比對，不等於正式發音評分）。</div><h4>關鍵字檢查</h4><div class="ci-keywords">${keys||"<span class='sub'>這段沒有可自動擷取的專有名詞或數字。</span>"}</div>${review.missing.length?`<div class="ci-fix" style="margin-top:8px">⚠️ 建議優先重讀：${esc(review.missing.join(", "))}</div>`:"<div class='ci-goodline' style='margin-top:8px'>✅ 沒有偵測到明顯漏讀的主要詞彙。</div>"}<h4>逐句檢查</h4>${rows}</div>`;
+}
 function analyze(t, dur, lang, item){
   const fb = [];
   if(dur < 15) fb.push(["warn","⏱ 回答只有 "+dur+" 秒——偏短。試著用「觀點 → 故事 → 收束句」把內容撐到 30 秒以上。"]);
@@ -1741,15 +1827,48 @@ function analyze(t, dur, lang, item){
   return fb;
 }
 function fbHtml(fb){ return fb.map(([k,txt])=>`<div class="fb ${k}">${esc(txt)}</div>`).join(""); }
+function answerComparison(transcript,item,lang){
+  if(!item || !item.a_zh && !item.a_en) return null;
+  const text=(transcript||"").toLowerCase();
+  const ref=lang==="zh"?(item.a_zh||""):(item.a_en||"");
+  if(!ref) return null;
+  const zh=lang==="zh";
+  const rules=zh?[
+    {label:"資訊確認／授權內容與後續更新",ref:/機長|地勤|確認|最新狀況|授權|公告|資訊同步|回報|追蹤|更新/,hit:/機長|地勤|確認|最新|授權|公告|資訊|回報|追蹤|更新/},
+    {label:"具體行動／主動協助",ref:/主動|巡艙|提供|協助|飲水|茶水|點心|替代|補償|方案|安排/,hit:/主動|巡艙|提供|協助|飲水|茶水|點心|替代|補償|方案|安排/},
+    {label:"安撫情緒／同理旅客",ref:/情緒|同理|安撫|安心|焦慮|擔心|穩定|理解/,hit:/情緒|同理|安撫|安心|焦慮|擔心|穩定|理解/},
+    {label:"具體經驗或結果",ref:/曾|一次|旅客|客人|飯店|最後|結果|學到|體會|讓我/,hit:/曾|一次|旅客|客人|飯店|最後|結果|學到|體會|讓我/}
+  ]:[
+    {label:"Information alignment／authorized update",ref:/captain|ground|confirm|latest|authorized|accurate|update|information|follow up|follow-up/,hit:/captain|ground|confirm|latest|authorized|accurate|update|information|follow up|follow-up/},
+    {label:"Proactive action／practical support",ref:/proactive|check|offer|water|snack|solution|alternative|support|assist|arrange/,hit:/proactive|check|offer|water|snack|solution|alternative|support|assist|arrange/},
+    {label:"Emotional reassurance／empathy",ref:/emotion|empathy|anxious|calm|reassure|understand|patien|concern/,hit:/emotion|empathy|anxious|calm|reassure|understand|patien|concern/},
+    {label:"Specific example or takeaway",ref:/once|experience|guest|hotel|learned|taught|realized|result|showed/,hit:/once|experience|guest|hotel|learned|taught|realized|result|showed/}
+  ];
+  const expected=rules.filter(r=>r.ref.test(ref));
+  const covered=expected.filter(r=>r.hit.test(text)), missing=expected.filter(r=>!r.hit.test(text));
+  const structure=zh?/第一|第二|第三|首先|接著|最後|一方面|另一方面/.test(transcript):/\b(first|second|third|finally|to sum up|in conclusion)\b/i.test(transcript);
+  const labels=covered.map(x=>x.label), missingLabels=missing.map(x=>x.label);
+  const summary=covered.length?`你的回答有答到${labels.slice(0,2).join("、")}${labels.length>2?"等重點":""}。`:`目前還沒有明確對應到參考答案的核心處理方式。`;
+  const gap=missingLabels.length?`相較參考答案，少了「${missingLabels.join("」、「")}」。`:"核心方向大致都有涵蓋，接下來主要修正表達順序。";
+  const suggestion=structure?"建議保留現在的順序，再把每一段的動作說得更具體。":"建議用三段式重組：第一步處理資訊，第二步提出具體行動，最後安撫旅客並收束；不需要逐字背誦。";
+  return {expected,covered,missing,structure,summary:summary+gap+suggestion};
+}
+function answerComparisonHtml(c){
+  if(!c) return "";
+  const items=c.expected.map(x=>`<span class="compare-pill ${c.covered.includes(x)?"hit":"miss"}">${c.covered.includes(x)?"✓":"!"} ${esc(x.label)}</span>`).join("");
+  return `<div class="answer-compare"><h3>🧭 你的回答和擬答差在哪裡？</h3><div class="compare-pills">${items||"<span class='sub'>這題沒有足夠的參考答案可比對。</span>"}</div><div class="tip">${esc(c.summary)}</div><p class="sub" style="margin:7px 0 0">這是「核心觀念覆蓋」提示，不是逐字相似度，也不會因為你用自己的方式回答就扣分。</p></div>`;
+}
 
 function mShowResult(transcript){
   const lang = $("#mLang").value;
   const fb = analyze(transcript, M.dur, lang, M.q);
+  const ciReview = M.q && M.q.cat==="華航初試・廣播朗讀" ? ciBroadcastReview(transcript,M.q) : null;
+  const answerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(transcript,M.q,lang) : null;
   let h = "";
   if(M.blob && typeof URL!=="undefined") h += `<audio controls src="${URL.createObjectURL(M.blob)}"></audio>`;
   h += `<h3>📝 逐字稿（可修正後重新分析）</h3><textarea id="mTrans">${esc(transcript)}</textarea>
         <button class="btn sec" id="mRean" style="margin-top:6px">重新分析</button>
-        <h3>💡 分析與建議</h3><div id="mFb">${fbHtml(fb)}</div>`;
+        <h3>💡 分析與建議</h3><div id="mFb">${fbHtml(fb)}</div>${answerReview?`<div id="answerCompare">${answerComparisonHtml(answerReview)}</div>`:""}${ciReview?`<div id="ciReview">${ciBroadcastReviewHtml(ciReview)}</div>`:""}`;
   const d = M.q;
   if(d.a_zh || d.a_en){
     h += `<details style="margin-top:10px"><summary>對照你的擬答</summary><div class="body">
@@ -1768,6 +1887,8 @@ function mShowResult(transcript){
     $("#mRean").addEventListener("click", ()=>{
       const t = $("#mTrans").value.trim();
       $("#mFb").innerHTML = fbHtml(analyze(t, M.dur, lang, M.q));
+      if(M.q && M.q.cat!=="華航初試・廣播朗讀"){ const cmp=$("#answerCompare"); if(cmp) cmp.innerHTML = answerComparisonHtml(answerComparison(t,M.q,lang)); }
+      if(M.q && M.q.cat==="華航初試・廣播朗讀"){ const ciCmp=$("#ciReview"); if(ciCmp) ciCmp.innerHTML = ciBroadcastReviewHtml(ciBroadcastReview(t,M.q)); }
     });
     $("#mPanelNext").addEventListener("click", ()=>{
       if(last){ mPanelSummary(); } else { M.qi++; M.q = M.queue[M.qi]; mRenderQ(); }
