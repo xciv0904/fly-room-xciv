@@ -107,6 +107,29 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .ci-stage-item:hover{border-color:var(--ci);background:#fff8f8;box-shadow:0 4px 12px rgba(200,20,50,.08)}
 .ci-stage-num{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#eef4fa;color:#245c91;font-weight:800;font-size:12px}
 .ci-stage-item b,.ci-stage-item small{display:block}.ci-stage-item b{font-size:14px;margin-bottom:2px}.ci-stage-item small{font-size:12.5px;color:var(--sub);line-height:1.5}.ci-stage-item strong{color:var(--ci);font-size:20px}
+.ci-eva-shell{margin-top:0}
+.ci-route .ci-route-head{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px 18px 18px;box-shadow:var(--shadow)}
+.ci-route .ci-route-head .ci-phase-label{color:#245c91;font-size:12px}
+.ci-route .ci-route-head h2{color:var(--ink);font-size:23px;margin:9px 0 8px}
+.ci-route .ci-route-head p{color:var(--sub);font-size:15px;line-height:1.75;margin:0}
+.ci-eva-back{display:inline-block;border:0;background:#eef4fa;color:#183b68;font:700 15px/1.2 inherit;border-radius:9px;padding:12px 16px;cursor:pointer;min-height:44px;margin-bottom:15px}
+.ci-route .ci-route-body{padding:14px 0 0}
+.ci-route .ci-stage-list{gap:10px}
+.ci-route .ci-stage-item{grid-template-columns:1fr;border:1.5px solid #d7e2ef;border-radius:14px;padding:18px 16px;min-height:112px;background:#fff}
+.ci-route .ci-stage-item:hover{border-color:#245c91;background:#f1f6fb;box-shadow:none}
+.ci-route .ci-stage-num{display:none}
+.ci-route .ci-stage-item span:nth-child(2){display:block}
+.ci-route .ci-stage-item b{font-size:17px;color:var(--ink);margin-bottom:5px}
+.ci-route .ci-stage-item small{font-size:14px;line-height:1.65;color:var(--sub)}
+.ci-route .ci-stage-item strong{display:none}
+.ci-route .ci-route-actions{margin-top:10px}
+.ci-route .ci-route-actions .btn.ghost{width:100%;background:#fff;border:1.5px solid #d7e2ef;color:var(--sub);min-height:48px}
+.ci-today-card{margin-top:14px}
+.ci-home-stage{border-top-color:#245c91;background:linear-gradient(180deg,#fff,#f1f6fb)}
+.ci-home-stage.final{border-top-color:var(--ci);background:linear-gradient(180deg,#fff,#fff5f6)}
+.ci-home-stage .eva-stage-label{color:#245c91}.ci-home-stage.final .eva-stage-label{color:var(--ci)}
+.ci-home-stage .eva-feature{border-color:#d7e2ef}.ci-home-stage.final .eva-feature{border-color:#f0cbd2}
+.ci-primary{background:#245c91;color:#fff}.ci-home-stage.final .ci-primary{background:var(--ci)}
 .ci-route-actions{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:560px){.ci-route-steps,.ci-initial-list{grid-template-columns:1fr}.ci-route-actions .btn{flex:1 1 100%}}
 .ci-progress-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
@@ -151,6 +174,17 @@ details.qa summary{font-weight:600}
 .stat{font-size:12px;color:var(--sub);margin-top:6px}
 .readblock{white-space:pre-wrap;font-size:14.5px;background:#f7fafd;border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-top:8px}
 .readblock.en{color:#33475c}
+.story-card{border-top:3px solid #c9e3d5}
+.story-summary{color:var(--sub);font-size:13.5px;margin:8px 0 12px}
+.story-answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.story-answer{min-width:0}
+.story-label{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--navy);text-transform:uppercase}
+.story-answer .chips{margin-top:6px}
+@media(max-width:720px){.story-answer-grid{grid-template-columns:1fr}}
+.company-q{padding:10px 0 14px;border-bottom:1px solid var(--line)}
+.company-q:last-child{border-bottom:0;padding-bottom:0}
+.company-q h3{font-size:15px;margin:0 0 5px;color:var(--navy)}
+.company-q .en-q{margin-top:14px;color:var(--sub);font-weight:700}
 .pill{display:inline-block;background:var(--gold-soft);color:var(--gold-deep);font-size:12px;font-weight:700;border-radius:7px;padding:2px 9px;margin:2px 4px 2px 0}
 .star.on{color:var(--gold)}
 ul.tight{padding-left:20px;font-size:13.5px}
@@ -443,6 +477,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>⚡ 每日十分鐘快速複習</h2>
     <p class="section-note">12 個小關卡一氣呵成：快問快答 ×4 → 安全測驗 ×3 → 記憶力 ×1 → 關鍵字閃卡 ×3 → 金句收束 ×1。卡住的題目會自動進弱點清單。</p>
+    <div class="quicknav"><button data-go="practice">🎯 抽題練習</button><button data-go="p50">⭐ 精選 50</button><button data-go="bank">📚 題庫瀏覽</button><button data-go="weak">💪 弱點加強</button></div>
     <p id="dgStreak" style="font-size:14px;font-weight:700"></p>
     <button class="btn" id="dgStart">🚀 開始今天的十分鐘</button>
   </div>
@@ -548,6 +583,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>題庫瀏覽</h2>
     <p class="section-note">已合併重複題目，同一題只會出現一次。選擇航空公司後，公司性強的題目會自動帶出該公司的專屬擬答；其他家的版本可在擬答下方展開對照。</p>
+    <div class="quicknav"><button data-go="practice">🎯 抽題練習</button><button data-go="p50">⭐ 精選 50</button><button data-go="daily">⚡ 每日十分鐘</button><button data-go="weak">💪 弱點加強</button></div>
     <div class="chips" id="bAirline"></div>
     <div class="searchrow">
       <input type="text" id="bSearch" placeholder="🔍 搜尋題目或擬答關鍵字…" style="flex:1;min-width:200px">
@@ -595,6 +631,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>⭐ 我的弱點清單</h2>
     <p class="section-note">抽題練習時按「☆ 加入弱點清單」的題目會存在這裡（存在瀏覽器，不會消失）。</p>
+    <div class="quicknav"><button data-go="practice">🎯 抽題練習</button><button data-go="p50">⭐ 精選 50</button><button data-go="daily">⚡ 每日十分鐘</button><button data-go="bank">📚 題庫瀏覽</button></div>
     <div id="starList"><p class="sub">目前沒有收藏的題目。</p></div>
   </div>
   <div class="card">
@@ -647,6 +684,20 @@ const FRAMES = [{"icon": "🙋", "name": "自我介紹（30 秒／1 分鐘／2 �
 const KEYCARDS = [{"t": "🙋 自我介紹", "k": "姓名 · 凱悅一年 · 中英韓三語 · 學姊 · 帶進機艙"}, {"t": "🎯 動機題", "k": "租車事件 · 參與別人的旅程 · 飯店＝職前訓練 · 公司具體事實"}, {"t": "🛎️ 服務情境", "k": "同理安撫 · 確認需求 · 權限內替代方案 · 後續關注"}, {"t": "⚔️ 衝突題", "k": "先聽完 · 不對立 · 顧感受 · 依規範 · 報座艙長"}, {"t": "🛟 安全題", "k": "安全優先於服務 · 通報座艙長 · 依 SOP · 不單獨硬扛"}, {"t": "⭐ STAR", "k": "情境 · 任務 · 行動（最長）· 結果＋我學到"}, {"t": "🏢 公司題", "k": "成立年 · 樞紐 · 聯盟 · 品牌識別 · 最新航點 · 扣回自己"}, {"t": "💪 優點題", "k": "快速學習 · 細心 · 可靠（各配一個故事）"}, {"t": "🔧 缺點題", "k": "自我要求高 · 曾過度自我檢討 · 轉成改善計畫 · 安全知識補起來"}, {"t": "📅 職涯題", "k": "長期投入 · 資深組員 · 帶新人 · 學姊 · 不是過渡"}, {"t": "🌙 作息題", "k": "凱悅早中晚班輪過 · 睡眠紀律 · 皮拉提斯 · 把休息當專業"}, {"t": "🌏 跨文化", "k": "加拿大直接 · 韓國語境 · 不預設立場 · 站在對方位置"}, {"t": "🔚 收尾問題", "k": "訓練最重視什麼能力 · 政策在客艙怎麼落實"}, {"t": "😰 腦中空白時", "k": "「這是很好的問題，讓我想一下」→ 深呼吸 → 想關鍵字 → 開口"}];
 const PHRASES = [{"g": "開場 Opening", "rows": [["謝謝您的問題。", "Thank you for the question."], ["我想用三點來回答。", "I'd like to answer this in three parts."], ["這讓我想到我在飯店的一個實際經驗。", "That reminds me of something that actually happened at the hotel."], ["簡單來說，我的答案是⋯", "In short, my answer would be…"]]}, {"g": "結構 Structure", "rows": [["第一⋯第二⋯最後⋯", "First… Second… Finally…"], ["最重要的是⋯", "Most importantly…"], ["除此之外，我還會⋯", "Beyond that, I would also…"], ["如果要排優先順序，我會把安全放在第一位。", "If I had to prioritise, I'd put safety first."]]}, {"g": "收束句 Takeaway（最重要，別漏）", "rows": [["那次經驗讓我學到⋯", "That experience taught me that…"], ["這件事讓我更確定，我想成為讓旅客安心的人。", "It confirmed that I want to be someone passengers feel safe with."], ["我把這個習慣一直帶到現在。", "I've carried that habit with me ever since."], ["這也是我認為服務真正的意義。", "That, to me, is what service really means."]]}, {"g": "緩衝句 Buying time（腦中空白時）", "rows": [["這是很好的問題，讓我想一下。", "That's a great question — let me think for a second."], ["我可以先確認一下您的意思嗎？", "May I just check what you mean by that?"], ["我想從我實際的經驗來回答。", "Let me answer that from my own experience."], ["如果我理解正確的話，您想問的是⋯", "If I understand correctly, you're asking about…"]]}, {"g": "團體討論 Group discussion", "rows": [["我想接著這個想法補充。", "May I build on that point?"], ["我很同意，另外我想補充一點。", "I agree — and I'd like to add one thing."], ["不好意思，我剛剛還沒說完。", "Sorry, I hadn't quite finished my thought."], ["我們是不是可以先聽聽還沒發言的夥伴？", "Shall we hear from someone who hasn't spoken yet?"], ["我幫大家整理一下目前的共識。", "Let me summarise where we've agreed so far."], ["時間快到了，我建議我們先做決定。", "We're running short on time — I suggest we decide now."]]}, {"g": "客艙服務 Cabin service", "rows": [["先生／小姐，非常抱歉造成您的不便。", "Sir / Madam, I'm very sorry for the inconvenience."], ["我馬上為您處理。", "I'll take care of that right away."], ["請問還有什麼需要我協助的嗎？", "Is there anything else I can help you with?"], ["為了您的安全，請繫好安全帶。", "For your safety, please fasten your seatbelt."], ["我先幫您確認，稍後回來告訴您。", "Let me check on that and come back to you shortly."], ["很抱歉，這部分我需要再確認，不方便直接臆測。", "I'm sorry — I'd need to confirm that rather than speculate."]]}, {"g": "堅定但親切 Firm but warm", "rows": [["我理解您的心情，同時也請您體諒⋯", "I understand how you feel, and I'd also ask for your understanding…"], ["基於安全規定，這部分我沒有辦法配合，但我可以⋯", "Under safety regulations I'm not able to do that, but I can…"], ["謝謝您的體諒與配合。", "Thank you for your understanding and cooperation."], ["我沒有辦法提供私人聯絡方式，但這是我們的服務專線。", "I'm not able to share personal contact details, but here's our service line."]]}];
 const STORIES = [{"n": "🚗 哥倫比亞旅客・租車／線上報到", "s": "旅客面對中文介面卡住，我主動翻譯協助完成，他隔天回來道謝。", "use": "動機題（為什麼想當空服員）· 超出職責 · 跨文化 · 最有成就感的事 · 語言能力"}, {"n": "🤰 孕婦旅客・靠枕", "s": "她什麼都沒說，我從站姿看出不舒服，主動準備靠枕並換近電梯房間，她在評論特別提到。", "use": "細心／觀察力 · 預判式服務 · 優質服務的定義 · 三個詞（細心）· 星宇預判文化"}, {"n": "🍪 餅乾屑・房務下班", "s": "房務已下班，我沒用過吸塵器仍自己上樓摸索清乾淨，並留紙條交接。", "use": "超出職責 · 想辦法解決 · 不找藉口 · 抗壓 · 工作上的挑戰"}, {"n": "😭 崩潰大哭的旅客", "s": "她早上錯過班機，房間問題是最後一根稻草。我先讓她說完，再把沙發改加床。", "use": "情緒崩潰旅客 · 客訴處理 · 同理心 · 先處理心情再處理事情"}, {"n": "🍺 醉酒韓國旅客・要私人電話", "s": "我冷靜拒絕、改給服務專線，並提醒導遊留意。界線守住但沒鬧大。", "use": "不舒服的旅客 · 界線設定 · 醉酒旅客 · 親切但堅定 · 韓文能力"}, {"n": "🏨 連假尖峰・房務進度落後", "s": "我穩住排隊旅客、與房務即時確認房況、提議彈性調房並給延遲退房補償。", "use": "高壓工作 · 團隊合作 · 多工排序 · STAR 題 · 危機處理"}, {"n": "❌ 房型登打錯誤・會員升等漏確認", "s": "我直接道歉、立刻更正、加上補償，之後自製檢查清單，錯誤不再發生。", "use": "犯錯經驗 · 誠實面對 · 制度化改善 · 缺點題延伸 · 負面回饋"}, {"n": "💬 高卡會員・禮遇未完整說明", "s": "旅客趕時間我沒說明權益，禮物還給錯人。我不找藉口，坐下來逐項補說明。", "use": "客訴 · 說明不完整 · 從錯誤學習 · 服務一致性"}, {"n": "🇰🇷 韓國交換一學期", "s": "從零建立生活，學會讀語境與非語言訊息，考到 TOPIK 4 級。", "use": "跨文化 · 語言能力 · 獨立適應 · 外站生活 · 離家能力"}, {"n": "🇨🇦 加拿大 Selkirk 研修", "s": "體會直接溝通的文化，學會不因對方直接就覺得沒禮貌。", "use": "跨文化 · 國際觀 · 溝通彈性 · 團討英文"}, {"n": "🎨 新莊文化藝術中心實習", "s": "負責展覽開幕場地佈置與人力調度，跨單位協調。", "use": "統籌能力 · 團隊中的重要角色 · 細節確認 · 公行系連結"}, {"n": "👩‍🏫 「學姊」這個稱呼", "s": "同事叫我學姊不是因為年資，是因為交給我的事不需要再確認第二次。", "use": "自介收尾 · 可靠 · 別人怎麼形容你 · 為什麼錄取你"}];
+const STORY_BILINGUAL = [
+  {zh:"一位哥倫比亞旅客因為租車與線上報到介面是中文而卡住。我主動觀察到他的困難，協助翻譯並一步一步完成流程。隔天他特地回來道謝，讓我感受到服務不只是完成職責，而是在旅客需要時多走一步。",en:"A Colombian guest was stuck because the car-rental and online check-in information was only in Chinese. I noticed his difficulty, translated the key steps, and helped him complete the process. He came back the next day to thank me, which showed me that good service means taking an extra step when someone needs help."},
+  {zh:"我注意到一位孕婦旅客站得不太舒服，雖然她沒有開口，我仍先準備靠枕，並協助安排靠近電梯的房間。她後來在評論中特別提到這件事。這讓我理解，好的服務常常發生在客人提出需求以前。",en:"I noticed that a pregnant guest was standing uncomfortably. She did not ask for help, but I prepared a cushion and helped arrange a room near the elevator. She later mentioned it in her review. It taught me that excellent service often begins before a guest has to ask."},
+  {zh:"房務同事已經下班後，一位旅客反映房內有餅乾屑。我沒有使用吸塵器的經驗，但先自己上樓摸索，把房間整理乾淨，再留下紙條交接。這次經驗讓我學到，遇到問題時，先想辦法處理比找理由更重要。",en:"After housekeeping had finished for the day, a guest reported crumbs in the room. I had never used the vacuum before, but I went upstairs, worked it out, cleaned the room, and left a handover note. I learned that when a problem appears, finding a way forward matters more than making excuses."},
+  {zh:"一位旅客早上錯過班機，入住後又遇到房間問題，情緒終於崩潰大哭。我先讓她把話說完，不急著解釋，再確認她當下最需要的是休息，於是把沙發整理成床。先安定情緒，再處理事情，最後她才有辦法冷靜下來。",en:"A guest had missed her flight that morning, and a problem with the room became the last straw. I let her finish speaking instead of rushing to explain. After understanding that she mainly needed rest, I converted the sofa into a bed. I learned to calm the emotion first, then solve the practical problem."},
+  {zh:"一位喝醉的韓國旅客向我索取私人電話。我保持禮貌但清楚地拒絕，改提供飯店服務專線，並提醒導遊協助留意他的狀況。這樣既守住專業界線，也避免讓情況升高。",en:"A Korean guest who had been drinking asked for my personal phone number. I stayed polite but set a clear boundary, offered the hotel's service line instead, and alerted the tour guide to keep an eye on him. This allowed me to remain professional without escalating the situation."},
+  {zh:"連假尖峰時房務進度落後，櫃檯前排了很多等待入住的旅客。我先穩住現場情緒，同時與房務即時確認房況，再提出彈性調房與延遲退房等方案。這次經驗讓我學會在高壓下排序事情，讓旅客知道我們正在處理。",en:"During a holiday peak, housekeeping fell behind and many guests were waiting to check in. I first kept the waiting guests calm, checked room status with housekeeping, and proposed flexible room changes and late check-out options. It taught me how to prioritise under pressure while keeping guests informed."},
+  {zh:"我曾經輸入錯誤房型，也漏確認會員升等權益。我直接向旅客道歉、立刻更正並提出補償，事後把容易遺漏的項目整理成檢查清單。這次經驗讓我明白，承認錯誤之後，更重要的是建立方法，避免同樣的事情再次發生。",en:"I once entered the wrong room type and failed to confirm a member's upgrade benefit. I apologised, corrected the mistake, and offered appropriate compensation. Afterwards, I created a checklist for the items most likely to be missed. I learned that after admitting a mistake, the next step is to build a system that prevents it from happening again."},
+  {zh:"有位高卡會員因為趕時間，我沒有完整說明他的權益，後來又把禮物交給了錯的人。我沒有找藉口，而是坐下來逐項補充說明並確認需求。這提醒我，服務不只要完成動作，也要確保對方真的理解並感受到被重視。",en:"A high-tier member was in a hurry, so I did not fully explain his benefits, and I later gave an amenity to the wrong guest. I did not make excuses. I sat down with him, explained each benefit, and confirmed what he needed. It reminded me that service is not only about completing a task; it is also about making sure the guest feels informed and valued."},
+  {zh:"我在韓國交換一學期，剛開始要從零建立生活與人際關係。過程中我學會觀察語境、表情和非語言訊息，也通過 TOPIK 4 級。這段經驗讓我更能適應陌生環境，也更懂得用對方舒服的方式溝通。",en:"I spent a semester on exchange in Korea and had to build a new daily life and social circle from scratch. I learned to read context, facial expressions, and non-verbal signals, and I also passed TOPIK Level 4. The experience made me more adaptable and taught me to communicate in a way that feels comfortable for the other person."},
+  {zh:"在加拿大 Selkirk 研修時，我發現當地人常用直接的方式溝通，但直接不等於沒有禮貌。我開始先理解對方的溝通文化，再判斷內容，而不是只從語氣下結論。這讓我在國際服務環境中更有彈性。",en:"During my study program at Selkirk in Canada, I learned that people often communicate more directly, but directness does not mean rudeness. I began to understand the cultural context before judging the tone. That experience made me more flexible in international service situations."},
+  {zh:"在新莊文化藝術中心實習時，我負責展覽開幕的場地佈置與人力調度，需要和不同單位確認細節、即時調整安排。這段經驗培養了我的統籌能力，也讓我理解團隊合作的重點是讓每個人知道下一步。",en:"During my internship at the Xinzhuang Culture and Arts Center, I helped coordinate the venue setup and staff for an exhibition opening. I had to confirm details with different departments and adjust the plan in real time. It strengthened my coordination skills and taught me that teamwork works best when everyone knows the next step."},
+  {zh:"同事叫我「學姊」不是因為我年資最久，而是因為交給我的事情通常不需要再確認第二次。我會先記住標準、主動確認細節，並在完成後回報。對我來說，可靠不是一句形容詞，而是別人願意放心把事情交給我。",en:"My colleagues call me Senior Sister, not because I have the most seniority, but because tasks given to me usually do not need to be checked twice. I remember the standards, confirm details proactively, and report back when the work is done. To me, reliability is not just an adjective; it is what makes people comfortable trusting you with responsibility."}
+];
 
 
 const GD = [{"t": "Your flight is delayed 5 hours. You have limited meal vouchers and 200 passengers. How does the crew prioritise?", "zh": "航班延誤五小時，餐券數量有限但有 200 位旅客，機組要如何排優先順序？", "key": "公平原則 · 弱勢優先（孕婦/幼童/長者/醫療需求）· 資訊透明 · 不承諾做不到的事", "tip": "這類題不要急著給答案，先建立「判斷原則」再套用。說出原則的人通常被視為 leader。"}, {"t": "Rank these qualities for cabin crew: safety awareness, empathy, teamwork, language ability, appearance.", "zh": "請將這些空服員特質排序：安全意識、同理心、團隊合作、語言能力、外表儀態。", "key": "安全第一（不可妥協）· 團隊次之（安全靠團隊執行）· 同理心 · 語言 · 儀態", "tip": "排序題的重點是「理由」不是順序。先說評分標準（例如：以旅客安全風險排序），再排。"}, {"t": "A passenger is filming crew during a service dispute. What should the crew do, and what should the airline do?", "zh": "旅客在服務糾紛中全程錄影，機組該怎麼做？公司又該怎麼做？", "key": "保持專業（假設全程被錄）· 不搶手機 · 依規範處理 · 落地回報 · 公司層級再處理", "tip": "這題容易走偏成「該不該制止拍攝」。把重點拉回「無論有沒有被拍，做法都一樣」。"}, {"t": "Your airline wants to improve the experience for families with young children. Propose three ideas.", "zh": "公司想改善帶幼童家庭的搭機體驗，請提出三個構想。", "key": "登機前預告流程 · 兒童包/安撫物品 · 優先安排鄰近洗手間 · 組員主動巡視", "tip": "發想題要收斂：三個構想分別對應「登機前／飛行中／下機後」，結構會很清楚。"}, {"t": "Is it more important for cabin crew to follow rules exactly, or to use personal judgement?", "zh": "空服員該嚴格遵守規定，還是運用個人判斷？", "key": "安全事項＝零彈性 · 服務事項＝規範內彈性 · 先遵守後建議 · 有疑慮就通報", "tip": "二選一題不要真的只選一邊。用「分類」破題：哪些情況屬 A、哪些屬 B。"}, {"t": "Your team must choose one passenger to upgrade. Who, and why?", "zh": "團隊必須從旅客中選一位升等，你們會選誰？為什麼？", "key": "公司規範優先（會員/常客制度）· 特殊需求（醫療/行動不便）· 不以個人喜好決定", "tip": "陷阱題：不要憑同情心決定。先問「公司有沒有既定規則」，展現制度意識。"}, {"t": "What should an airline do when a viral complaint spreads on social media?", "zh": "當客訴在社群上瘋傳，航空公司該怎麼處理？", "key": "快速回應 · 先同理不辯解 · 私下聯繫當事人 · 對外說明改善作為 · 內部檢討流程", "tip": "別停在公關層面，一定要講到「內部流程改善」，才顯示你理解根因。"}, {"t": "Should airlines allow passengers to choose the gender of the crew serving them? Discuss.", "zh": "航空公司是否應允許旅客指定服務組員的性別？請討論。", "key": "尊重特定文化/宗教需求 · 但不能構成歧視 · 以公司政策為準 · 個案彈性處理", "tip": "敏感題要平衡：先承認需求的正當性，再指出界線，最後回到公司政策。"}, {"t": "Design a 3-minute safety briefing that passengers will actually watch. What would you change?", "zh": "設計一段旅客真的會看的三分鐘安全示範，你會改什麼？", "key": "故事化/在地元素 · 幽默但不失專業 · 重點前置 · 視覺化 · 多語字幕", "tip": "可以連結長榮 Hello Kitty 或華航彩繪機的品牌資產，展現你做過功課。"}, {"t": "A crew member is consistently late for briefings. How should the team handle it?", "zh": "有組員一再遲到簡報，團隊該怎麼處理？", "key": "先私下了解原因 · 影響安全就必須回報 · 對事不對人 · 不當眾指責", "tip": "展現你懂「同事關係」與「安全職責」的分界，這正是考官想聽的成熟度。"}];
@@ -1028,6 +1079,45 @@ const AIRINFO = [
   you:"你的優勢組合＝凱悅國際連鎖＋韓國獨立交換生活（證明能離家）＋英韓雙語。準備全英文 STAR 故事集，並把「為什麼能適應杜拜」講成故事：在韓國從零建立生活的經驗。"}
 ];
 
+const COMPANY_QA = {
+  CI: [
+    {q:"為什麼想加入華航？",qe:"Why do you want to join China Airlines?",a:"我想加入華航，是因為我認同它把台灣的文化與專業服務帶到世界的角色。凱悅櫃檯一年的經驗，讓我養成觀察需求、處理突發狀況與跨文化溝通的能力；我希望把這些實戰經驗帶進華航，讓旅客在陌生的旅途中感受到安心。",ae:"I want to join China Airlines because I identify with its role in bringing Taiwan's culture and professional service to the world. My year at a Hyatt front desk taught me to anticipate needs, handle unexpected situations, and communicate across cultures. I hope to bring that experience to China Airlines and help passengers feel at ease during an unfamiliar journey."},
+    {q:"你對華航有哪些了解？",qe:"What do you know about China Airlines?",a:"華航成立於 1959 年，以桃園為主要樞紐，是天合聯盟成員。它除了經營客運，也有很強的貨運與國際航網，近年持續發展新航點、機隊與永續計畫。我特別注意到華航透過彩繪機與穿山甲保育等內容，把台灣特色帶進品牌溝通。",ae:"China Airlines was founded in 1959, is based in Taoyuan, and is a member of SkyTeam. Besides passenger services, it has a strong cargo business and an international network. I have also noticed how the airline uses new routes, fleet development, sustainability initiatives, and Taiwan-themed aircraft to bring Taiwan's identity into its brand."},
+    {q:"你如何把自己的經驗連結到華航？",qe:"How does your experience fit China Airlines?",a:"我在飯店服務過不同國家的旅客，曾協助哥倫比亞旅客完成中文介面的線上報到，也處理過客訴與高壓尖峰。我理解華航複試重視親切、穩定與品牌一致性，因此我會在遵守規範的前提下，用清楚而有溫度的方式服務旅客。",ae:"I have served guests from many countries and once helped a Colombian guest complete an online check-in in a Chinese interface. I have also handled complaints and busy peak periods. I understand that China Airlines values warmth, composure, and brand consistency, so I would serve passengers clearly and warmly while following all procedures."}
+  ],
+  BR: [
+    {q:"為什麼選擇長榮航空？",qe:"Why do you want to join EVA Air?",a:"我欣賞長榮把飛安、制度與服務品質放在同一個核心。我的公共行政訓練讓我重視規範與流程，凱悅飯店的經驗則讓我熟悉標準化服務。我希望在長榮這樣重視紀律與團隊合作的環境中，把基本功做紮實並長期發展。",ae:"I admire how EVA Air places safety, systems, and service quality at the centre of its operation. My public administration background made me comfortable with rules and procedures, while my Hyatt experience taught me standardised service. I hope to build a strong foundation and grow long-term in an airline that values discipline and teamwork."},
+    {q:"你對長榮航空有哪些了解？",qe:"What do you know about EVA Air?",a:"長榮航空成立於 1989 年，1991 年首航，總部與主要樞紐都在桃園，並於 2013 年加入星空聯盟。它以嚴謹的飛安管理、親切周到的服務、皇璽桂冠艙與 Hello Kitty 彩繪機建立鮮明品牌印象。",ae:"EVA Air was established in 1989 and began operations in 1991. It is based in Taoyuan and joined Star Alliance in 2013. The airline is known for rigorous safety management, attentive service, its Royal Laurel Class, and its distinctive Hello Kitty aircraft."},
+    {q:"長榮的服務特色和你有什麼連結？",qe:"How do EVA Air's service values connect with you?",a:"長榮強調安全、親切與周到，我在飯店工作時也習慣先確認標準，再依旅客狀況調整服務。例如我曾在孕婦旅客開口前觀察到她不舒服，主動準備靠枕。這種預判需求但不逾越規範的服務方式，是我想帶進長榮的特質。",ae:"EVA Air's focus on safety, warmth, and thoughtful service connects closely with my hotel experience. For example, I noticed a pregnant guest was uncomfortable before she asked and proactively prepared a cushion. I want to bring that same ability to anticipate needs while respecting procedures to EVA Air."}
+  ],
+  IT: [
+    {q:"為什麼想加入台灣虎航？",qe:"Why do you want to join Tigerair Taiwan?",a:"我喜歡台灣虎航年輕、有效率又親切的品牌個性。它的日韓航網與廉航模式需要快速、清楚且有活力的服務，而我有韓國交換與飯店第一線經驗，能理解不同旅客需求，也能在忙碌節奏中保持反應。",ae:"I like Tigerair Taiwan's young, efficient, and approachable brand personality. Its strong Japan and Korea network requires service that is fast, clear, and energetic. My exchange experience in Korea and hotel front desk background help me understand different passengers and stay responsive in a busy environment."},
+    {q:"你對台灣虎航有哪些了解？",qe:"What do you know about Tigerair Taiwan?",a:"台灣虎航成立於 2014 年，是華航集團旗下的台灣本土廉價航空，主要以桃園與高雄為樞紐，航網以日本、韓國與亞洲短程航線為主。它和傳統航空的差異，在於點對點、高周轉與部分服務加購。",ae:"Tigerair Taiwan was established in 2014 and is Taiwan's local low-cost carrier under the China Airlines Group. It is based in Taoyuan and Kaohsiung, with a strong network in Japan, Korea, and other short-haul Asian markets. Its model focuses on point-to-point travel, efficient turnaround, and optional add-on services."},
+    {q:"華航與虎航的品牌定位有什麼不同？",qe:"How are China Airlines and Tigerair Taiwan positioned differently?",a:"我會把它們看成互補，而不是單純競爭。華航提供完整的國際航網與全服務體驗；虎航則以短程、效率與價格彈性滿足旅客。若加入虎航，我會用更直接、活潑但仍清楚可靠的方式服務旅客。",ae:"I see them as complementary rather than simply competing. China Airlines offers a full-service international network, while Tigerair focuses on short-haul travel, efficiency, and price flexibility. If I joined Tigerair, I would provide service that is more direct and energetic while remaining clear and reliable."}
+  ],
+  JX: [
+    {q:"為什麼想加入星宇航空？",qe:"Why do you want to join STARLUX Airlines?",a:"我認同星宇把飛行視為完整體驗的精品航空定位，從客艙細節、服務流程到品牌呈現都很一致。我在凱悅接待國際旅客時，培養了對細節與情緒的觀察力，也希望把這份細緻延伸到機艙服務。",ae:"I identify with STARLUX's positioning as a premium airline that treats flying as a complete experience. Its cabin details, service flow, and brand presentation are highly consistent. At Hyatt, I developed a strong eye for detail and guests' emotions, and I hope to bring that attentiveness into the cabin."},
+    {q:"你對星宇航空有哪些了解？",qe:"What do you know about STARLUX Airlines?",a:"星宇航空由張國煒於 2018 年創立，2020 年首航，以桃園為樞紐，目前尚未加入航空聯盟。它強調精品航空、細節與預判式服務，也透過機上雜誌《kiânn》呈現台灣文化。",ae:"STARLUX Airlines was founded by Kuo-Wei Chang in 2018 and began operations in 2020. It is based in Taoyuan and has not joined an airline alliance. The brand focuses on premium travel, attention to detail, anticipatory service, and Taiwanese culture, including through its in-flight magazine, kiânn."},
+    {q:"你如何證明自己適合星宇的服務風格？",qe:"Why are you a good fit for STARLUX's service style?",a:"我習慣在旅客開口前觀察需求，也能在忙碌或突發狀況中維持穩定。例如我曾主動協助孕婦旅客，也曾在房務下班後自己處理房內清潔問題。我認為細節不是做得複雜，而是讓旅客感受到被看見。",ae:"I am used to noticing a guest's needs before they ask, while staying composed during busy or unexpected situations. I proactively helped a pregnant guest and once handled a room-cleaning issue after housekeeping had left. To me, attention to detail is not about making things complicated; it is about making people feel seen."}
+  ],
+  CX: [
+    {q:"為什麼想加入國泰航空？",qe:"Why do you want to join Cathay Pacific?",a:"我欣賞國泰把安全、以人為本與多元文化放在一起。我的加拿大研修、韓國交換與飯店國際旅客服務經驗，讓我習慣在不同文化之間調整溝通方式。我希望把這份文化敏感度帶進國泰的國際團隊。",ae:"I admire how Cathay combines safety, a people-first approach, and a multicultural environment. My study experience in Canada, exchange semester in Korea, and hotel work with international guests taught me to adapt my communication across cultures. I hope to bring that cultural awareness to Cathay's international team."},
+    {q:"你對國泰航空有哪些了解？",qe:"What do you know about Cathay Pacific?",a:"國泰航空成立於 1946 年，以香港為樞紐，是寰宇一家的成員，品牌主張包含 Move Beyond 與 Life Well Travelled。它的航網涵蓋亞洲、歐洲、北美與其他地區，也很重視多元共融與國際化機組。",ae:"Cathay Pacific was founded in 1946 and is based in Hong Kong. It is a member of oneworld, with brand ideas including Move Beyond and Life Well Travelled. Its network covers Asia, Europe, North America, and beyond, and it places strong emphasis on diversity and an international crew."},
+    {q:"國泰為什麼適合你的背景？",qe:"Why does Cathay fit your background?",a:"我有加拿大與韓國的跨文化經驗，也在飯店接待過許多國際旅客，能理解不同文化對語氣、距離與服務的期待。我不會只把英文流利當成優勢，而是會先觀察、聆聽，再用對方容易接受的方式溝通。",ae:"My experiences in Canada and Korea, together with serving international guests in a hotel, helped me understand different expectations around tone, personal space, and service. I do not see English fluency as the only strength; I observe and listen first, then communicate in a way the other person can receive comfortably."}
+  ],
+  EK: [
+    {q:"為什麼想加入阿聯酋航空？",qe:"Why do you want to join Emirates?",a:"我想加入阿聯酋，是因為它提供真正國際化的工作環境，組員來自許多不同國家。我有加拿大與韓國的生活經驗，也在凱悅服務各國旅客，已經知道自己喜歡在多元文化中工作，並願意接受外站與離家生活。",ae:"I want to join Emirates because it offers a truly international working environment, with crew from many different countries. My experiences in Canada and Korea, together with serving guests from around the world at Hyatt, showed me that I enjoy multicultural environments and am ready for the challenge of living abroad."},
+    {q:"你對阿聯酋航空有哪些了解？",qe:"What do you know about Emirates?",a:"阿聯酋航空成立於 1985 年，以杜拜為樞紐，主要機隊包括 A380 與 777，並以全球航網、豪華客艙與多元國籍組員聞名。這份工作不只需要服務能力，也需要獨立、彈性與適應長期外站生活。",ae:"Emirates was founded in 1985 and is based in Dubai. Its main fleet includes the A380 and 777, and it is known for its global network, premium cabins, and multinational crew. The role requires more than service skills; it also requires independence, flexibility, and the ability to adapt to life abroad."},
+    {q:"你如何證明自己能適應杜拜與外站生活？",qe:"How would you adapt to living in Dubai and being away from home?",a:"我曾在韓國交換一學期，從零建立生活、適應不同語言與文化，也在加拿大研修過。這些經驗讓我知道，適應不是假裝自己不會想家，而是建立日常、主動認識環境，並在需要時尋求團隊支持。",ae:"I spent a semester on exchange in Korea, building a daily life from scratch while adapting to a different language and culture, and I also studied in Canada. I learned that adapting does not mean never missing home. It means creating a routine, learning the environment proactively, and seeking support from the team when needed."}
+  ]
+};
+
+const STORY_LIBRARY = [
+  {n:"🌎 哥倫比亞旅客・線上報到",s:"她因中文介面與不熟悉手機操作而卡住，我仔細核對資料並協助翻譯給她看，順利完成線上報到。",use:"跨文化服務 · 語言能力 · 細心核對 · 協助年長旅客 · 溝通耐心",zh:"一位哥倫比亞籍旅客因為線上辦理報到的介面是中文，加上年紀較大、不太熟悉手機操作而卡住。我先耐心協助她仔細核對資料，再把畫面上的資訊翻譯給她看，陪她一步一步完成手續。這段經驗讓我理解，面對不熟悉科技或語言的旅客，耐心、清楚和確認細節都很重要。",en:"A Colombian guest became stuck while checking in online because the interface was in Chinese, and she was not very familiar with using a smartphone. I patiently checked her information with her and translated the instructions on the screen. By guiding her step by step, we completed the process together. This experience taught me that when guests face a language or technology barrier, patience, clarity, and careful checking are essential."},
+  {n:"🚗 加拿大旅客・連假租車",s:"他找不到台北車站租車位置，我主動確認車況；發現車輛租完後，改找飯店附近的公司並協助預約，隔天他回來道謝。",use:"動機題（為什麼想當空服員）· 超出職責 · 主動服務 · 問題解決 · 最有成就感的事",zh:"一位加拿大籍旅客原本想去台北車站租車，卻不知道具體位置。我不只協助他找到租車地點，還因為正值連假，主動打電話詢問是否還有車可以租。發現車輛都租完後，我馬上改找飯店附近的租車公司，並協助他完成預約。隔天他特地回來道謝，說自己度過了一段很愉快的旅程。這讓我感受到，服務的價值是陪旅客把問題真正解決，而不是只提供一個地址。",en:"A Canadian guest wanted to rent a car near Taipei Main Station but did not know the exact location. I helped him find the rental office and, because it was a holiday period, I proactively called to check whether any cars were still available. When I found out they were fully booked, I immediately searched for a rental company near the hotel and helped him make a reservation. He came back the next day to thank me and said he had enjoyed a wonderful trip. This showed me that meaningful service means staying with a guest until the problem is truly solved, rather than simply giving directions."},
+  ...STORIES.slice(1).map((s,i)=>({...s,zh:(STORY_BILINGUAL[i+1]||{}).zh||s.s,en:(STORY_BILINGUAL[i+1]||{}).en||""}))
+];
+
 /* ================= 工具 ================= */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -1363,13 +1453,18 @@ $("#readTimerBtn").addEventListener("click", ()=>{
 });
 
 /* ================= 華航初試・雜誌與新聞稿廣播 ================= */
+const CI_RECORDING_PROMPTS = {};
+function ciRecordingBtn(key,text,title){
+  CI_RECORDING_PROMPTS[key]={text,title};
+  return `<button class="btn sec ci-record-read" data-ci-record="${key}" style="margin-top:7px">🔴 錄音＋回聽檢討</button>`;
+}
 function renderCIBroadcast(){
   const el = $("#ciBroadcastBody");
   if(!el) return;
   el.innerHTML = `<div class="card"><h2>一、這一關的正確練法</h2><p class="section-note">機上雜誌廣播詞會直接給一段原文，重點是陌生英文的完整朗讀與理解，不是把文章改寫成另一種廣播稿。</p><ul class="tight"><li>第一遍：原文朗讀，不停下、不自行換字、不把長句拆成短句重寫。</li><li>第二遍：現場英翻中，先抓主幹，再處理插入資訊、年份、數字與專有名詞。</li><li>第三遍：回頭修正節奏、重音與句尾，不追求播音腔。</li></ul></div>`+
-    `<div class="card"><h2>二、英文原文朗讀／英翻中</h2><p class="section-note">已從你提供的 2024–2026《Dynasty》PDF 精選多段英文原文，並保留原文句子；中文只作翻譯核對，不取代現場理解。</p>${CI_PDF_DRILLS.map((d,i)=>`<details open><summary>${i+1}. <span class="tag cat">原文素材</span>${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(CI_SOURCE_TRACE[i])}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ci-${i}">🔊 聽原文示範</button></div><details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
-    `<div class="card"><h2>三、PDF 新聞稿原文</h2><p class="section-note">這些是 PDF 裡的 CAL NEWS 原文，不是自行改寫的練習題。先讀英文，再看中文核對；每篇都保留來源，方便回到原頁。</p>${CI_NEWS_RELEASES.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(d.source)}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="news-${i}">🔊 聽新聞稿原文</button></div><details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
-    `<div class="card"><h2>四、外部參考：五段機上廣播</h2><p class="section-note">這五段來自外部面試教材，以原文為底供朗讀與英翻中練習；括號欄位與少數排版瑕疵已整理，部分句子也不一定是華航現行標準用語，請不要把它當成官方稿。來源：${esc(CI_EXTERNAL_SOURCE)}</p>${CI_EXTERNAL_BROADCASTS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ext-${i}">🔊 聽原文示範</button></div><details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>二、英文原文朗讀／英翻中</h2><p class="section-note">已從你提供的 2024–2026《Dynasty》PDF 精選多段英文原文，並保留原文句子；中文只作翻譯核對，不取代現場理解。每段都可以直接錄音，完成後會進入回聽與分析。</p>${CI_PDF_DRILLS.map((d,i)=>`<details open><summary>${i+1}. <span class="tag cat">原文素材</span>${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(CI_SOURCE_TRACE[i])}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ci-${i}">🔊 聽原文示範</button></div>${ciRecordingBtn("ci-pdf-"+i,d.text,d.title)}<details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>三、PDF 新聞稿原文</h2><p class="section-note">這些是 PDF 裡的 CAL NEWS 原文，不是自行改寫的練習題。先讀英文，再看中文核對；每篇都保留來源，方便回到原頁。</p>${CI_NEWS_RELEASES.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(d.source)}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="news-${i}">🔊 聽新聞稿原文</button></div>${ciRecordingBtn("ci-news-"+i,d.text,d.title)}<details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>四、外部參考：五段機上廣播</h2><p class="section-note">這五段來自外部面試教材，以原文為底供朗讀與英翻中練習；括號欄位與少數排版瑕疵已整理，部分句子也不一定是華航現行標準用語，請不要把它當成官方稿。來源：${esc(CI_EXTERNAL_SOURCE)}</p>${CI_EXTERNAL_BROADCASTS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ext-${i}">🔊 聽原文示範</button></div>${ciRecordingBtn("ci-ext-"+i,d.text,d.title)}<details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
     `<div class="card"><h2>五、這類廣播讀完後的追問</h2><p class="section-note">來源同上。朗讀後可能被問「這段是在什麼時候播放？」或抽問專業字彙，所以不能只練聲音，還要知道每段的情境與意思。</p>${CI_EXTERNAL_FOLLOWUPS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.q)}</summary><div class="body"><div class="ansbox"><b>參考回答：</b>${esc(d.a)}</div></div></details>`).join("")}</div>`+
     `<div class="card"><h2>六、機型廣播與唸法</h2><p class="section-note">數字不是看到什麼就逐字念什麼；初試以清楚、自然、航空口語常見的方式為主。特別記住：Boeing 777 是 <b>Triple Seven</b>。</p><div class="grid2">${CI_AIRCRAFT_PRONUNCIATION.map(x=>`<details><summary><b>${esc(x.model)}</b> → ${esc(x.say)}</summary><div class="body">${x.alt?`<p><b>另一種常聽說法：</b>${esc(x.alt)}</p>`:""}<p class="tip">${esc(x.note)}</p></div></details>`).join("")}</div></div>`+
     `<div class="card"><h2>七、廣播詞要注意的地方</h2><ul class="tight">${CI_BROADCAST_RULES.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`+
@@ -1380,6 +1475,15 @@ function renderCIBroadcast(){
   CI_EXTERNAL_BROADCASTS.forEach((d,i)=>{ SAYS[`ext-${i}`]={t:d.text,l:"en-US"}; });
 }
 renderCIBroadcast();
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-ci-record]");if(!b)return;
+  const item=CI_RECORDING_PROMPTS[b.dataset.ciRecord];if(!item)return;
+  showTab("mock");
+  M.air="華航";M.queue=null;M.q={id:-900-b.dataset.ciRecord.length,airline:"華航",cat:"華航初試・廣播朗讀",q_zh:"請朗讀以下華航廣播詞："+item.title,q_en:item.text,a_zh:"",a_en:"",tip:"讀完後請回聽錄音，檢查語速、停頓、數字／機型與句尾穩定度。"};
+  $("#mLang").value="en";$("#mMode").value="single";mRenderQ();
+  $("#mBody").insertAdjacentHTML("beforeend",`<div class="tip" style="margin-top:10px">🎧 讀完按停止，下面會出現錄音、逐字稿與分析建議。若逐字稿不完整，可以手動修正後重新分析。</div><button class="btn ghost" id="ciRecordBack" style="margin-top:8px">← 回華航廣播頁</button>`);
+  $("#ciRecordBack").addEventListener("click",()=>{showTab("ciBroadcast");renderCIBroadcast();});
+});
 
 /* ================= 面試回顧 ================= */
 $("#reviewList").innerHTML = REVIEWS.map(r=>`
@@ -1588,6 +1692,19 @@ function analyze(t, dur, lang, item){
     fb.push(["warn","📝 沒有取得逐字稿（瀏覽器不支援或沒連網）。可回聽錄音後，把內容打進下方文字框再按「重新分析」。"]);
     return fb;
   }
+  if(item && item.cat==="華航初試・廣播朗讀"){
+    const words=t.trim().split(/\s+/).filter(Boolean).length;
+    const wpm=Math.round(words/dur*60);
+    if(wpm>165) fb.push(["warn","🗣 約 "+wpm+" 字／分鐘——廣播偏快。先把數字、機型與航點放慢，穩定比速度重要。"]);
+    else if(wpm<85) fb.push(["warn","🗣 約 "+wpm+" 字／分鐘——可能停頓較多或卡詞，先分段再讀一次。"]);
+    else fb.push(["good","🗣 約 "+wpm+" 字／分鐘，落在可理解的練習範圍。"]);
+    const fillers=[["um",/\bum+\b/gi,1],["uh",/\buh+\b/gi,1],["like",/\blike\b/gi,2],["you know",/\byou know\b/gi,1]];
+    const hits=fillers.map(([w,re,th])=>[w,count(t,re),th]).filter(([,c,th])=>c>th);
+    if(hits.length)fb.push(["warn","🧹 廣播中的填充詞偏多："+hits.map(([w,c])=>`「${w}」×${c}`).join("、")+"。用停頓取代填充詞。"]);
+    else fb.push(["good","🧹 填充詞控制得不錯，聲音比較乾淨。"]);
+    fb.push(["good","📌 請回聽確認四件事：發音清楚、逗點有半拍停頓、數字／機型沒有吞音、句尾沒有上飄。"]);
+    return fb;
+  }
   if(lang==="zh"){
     const len = t.replace(/[\s，。！？、,.!?]/g,"").length;
     const rate = Math.round(len/dur*60);
@@ -1762,6 +1879,10 @@ $("#airlineList").innerHTML = AIRINFO.map(a=>`
    <details open><summary>📌 面試必背知識點（${a.must.length} 點）</summary><div class="body"><ul class="tight">${a.must.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div></details>
    <details><summary>🎭 公司偏好與面試風格</summary><div class="body"><p style="font-size:13.5px">${esc(a.pref)}</p></div></details>
    <div class="tip">💜 <b>給 Shelly 的策略：</b>${esc(a.you)}</div>
+   ${COMPANY_QA[a.code]?`<details class="company-qa"><summary>🎯 公司認知題｜中文＋英文擬答（${COMPANY_QA[a.code].length} 題）</summary><div class="body">
+     <p class="section-note">這一區專門練「你了解我們公司嗎？」類型的題目。先用自己的話回答，再展開參考答案；不要只背公司資料，要把資料連回你的經驗。</p>
+     ${COMPANY_QA[a.code].map((q,i)=>`<div class="company-q"><h3>${i+1}. ${esc(q.q)}</h3><div class="readblock">${esc(q.a)}</div><div class="chips">${sayBtn(q.a,"zh-TW","🔊 聽中文")}</div><h3 class="en-q">${esc(q.qe)}</h3><div class="readblock en">${esc(q.ae)}</div><div class="chips">${sayBtn(q.ae,"en-US","🔊 Listen")}</div></div>`).join("")}
+   </div></details>`:""}
  </div>`).join("");
 
 /* ===== 記憶力測驗 ===== */
@@ -2268,13 +2389,20 @@ function toolRender(x){
         ${c.k.split("·").map(k=>`<span class="pill">${esc(k.trim())}</span>`).join("")}
       </div>`).join("")}</div>`;
   } else {
-    el.innerHTML = `<div class="card"><h2>📖 我的故事庫</h2>
-      <p class="section-note">你的真實故事就是最強的素材。同一個故事可以答很多題——先記住故事，再看它能套到哪些題型。</p></div>`+
-      STORIES.map(s=>`<div class="card"><h2>${esc(s.n)}</h2>
-        <p style="font-size:13.5px">${esc(s.s)}</p>
+    el.innerHTML = `<div class="card"><h2>📖 我的故事庫｜中英文回答</h2>
+      <p class="section-note">故事庫不是只用來背稿：先用中文確認事件順序，再用英文練成 45–60 秒的面試回答。每個故事都可以依照題目換一個切入點。</p>
+      <div class="flow"><span>Situation 情境</span><em>→</em><span>Action 行動</span><em>→</em><span>Result 結果</span><em>→</em><span>Takeaway 收穫</span></div>
+      <div class="tip">💡 建議用法：先遮住英文，用中文講一次；再按「Listen」聽英文節奏，最後不看文字自己錄一遍。題目變了，只要替換開頭與收尾，不必重背整篇。</div>
+    </div>`+
+      STORY_LIBRARY.map((s,i)=>{ const b={zh:s.zh||s.s,en:s.en||""}; return `<div class="card story-card"><h2>${esc(s.n)}</h2>
+        <p class="story-summary">${esc(s.s)}</p>
         <h3>可以拿來答這些題</h3>
         <div>${s.use.split("·").map(u=>`<span class="pill">${esc(u.trim())}</span>`).join("")}</div>
-      </div>`).join("");
+        <div class="story-answer-grid">
+          <div class="story-answer"><div class="story-label">中文回答</div><div class="readblock">${esc(b.zh)}</div><div class="chips">${sayBtn(b.zh,"zh-TW","🔊 聽中文")}</div></div>
+          <div class="story-answer"><div class="story-label">English answer</div><div class="readblock en">${esc(b.en)}</div><div class="chips">${sayBtn(b.en,"en-US","🔊 Listen")}</div></div>
+        </div>
+      </div>`;}).join("");
   }
 }
 $("#toolNav").addEventListener("click", e=>{
