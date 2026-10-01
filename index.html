@@ -185,6 +185,16 @@ details.qa summary{font-weight:600}
 .company-q:last-child{border-bottom:0;padding-bottom:0}
 .company-q h3{font-size:15px;margin:0 0 5px;color:var(--navy)}
 .company-q .en-q{margin-top:14px;color:var(--sub);font-weight:700}
+.pronounce-add{display:flex;gap:8px;align-items:center;margin:10px 0}
+.pronounce-add input{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit}
+.pronounce-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.pronounce-row:last-child{border-bottom:0}
+.pronounce-row b{display:block;font-size:16px;color:var(--navy)}
+.pronounce-row .sub{display:block;font-size:12px;margin-top:3px}
+.pronounce-row .chips{justify-content:flex-end}
+.ci-keyword .ci-save-word{margin-left:5px;padding:2px 6px;font-size:11px;background:#fff}
+.ci-fix .ci-save-word{margin-left:4px;padding:2px 6px;font-size:11px;background:#fff}
+@media(max-width:640px){.pronounce-add{align-items:stretch;flex-direction:column}.pronounce-row{align-items:flex-start;flex-direction:column}.pronounce-row .chips{justify-content:flex-start}}
 .pill{display:inline-block;background:var(--gold-soft);color:var(--gold-deep);font-size:12px;font-weight:700;border-radius:7px;padding:2px 9px;margin:2px 4px 2px 0}
 .star.on{color:var(--gold)}
 ul.tight{padding-left:20px;font-size:13.5px}
@@ -423,6 +433,7 @@ html.unlocked #gate{display:none}
       <button class="chip" data-x="phrase">💬 關鍵句型</button>
       <button class="chip" data-x="card">🗂️ 關鍵字卡</button>
       <button class="chip" data-x="story">📖 故事庫</button>
+      <button class="chip" data-x="pronounce">🗣 發音字庫</button>
     </div>
   </div>
   <div id="toolBody"></div>
@@ -1247,6 +1258,30 @@ function sayBtn(text, lang, label){
   SAYS[id] = {t: text, l: lang};
   return `<button class="chip say" data-sid="${id}">${label}</button>`;
 }
+let pronunciationWords = store.get("pronunciationWords",[]);
+function savePronunciationWord(word, source="華航廣播"){
+  const clean=(word||"").trim().toLowerCase();
+  if(!clean) return false;
+  const found=pronunciationWords.find(x=>x.word===clean);
+  if(found){ found.hits=(found.hits||0)+1; found.source=found.source||source; }
+  else pronunciationWords.unshift({word:clean,source,addedAt:Date.now(),practice:0,hits:1});
+  store.set("pronunciationWords",pronunciationWords);
+  return true;
+}
+function removePronunciationWord(word){
+  pronunciationWords=pronunciationWords.filter(x=>x.word!==word);
+  store.set("pronunciationWords",pronunciationWords);
+}
+function pronunciationRender(){
+  const el=$("#toolBody");
+  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">把廣播逐句檢查中出現的疑似漏讀、地名、機型或不熟單字存下來。按「Listen」聽瀏覽器的英文示範，再自己重讀；熟悉後即可移除。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="輸入想練的英文單字或片語…"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><p class="sub">目前收藏 ${pronunciationWords.length} 個 · 發音示範是練習輔助，仍要以航空原文與自己的回聽為準。</p></div>`+
+    (pronunciationWords.length?`<div class="card"><h3>📚 待練清單</h3>${pronunciationWords.map((x,i)=>`<div class="pronounce-row"><div><b>${esc(x.word)}</b><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}</span><button class="chip pronounce-practice" data-word="${esc(x.word)}">✓ 已練一次</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`).join("")}</div>`:`<div class="card"><p class="sub">目前還沒有單字。從華航廣播的逐句檢查按「＋加入發音字庫」，或在上方手動輸入。</p></div>`);
+  const add=$("#pronounceAddBtn");
+  if(add) add.addEventListener("click",()=>{const input=$("#pronounceInput");if(savePronunciationWord(input.value,"手動加入")){input.value="";pronunciationRender();}});
+}
+function pronunciationSaveBtn(word){
+  return `<button class="chip ci-save-word" data-word="${esc(word)}">＋加入發音字庫</button>`;
+}
 document.addEventListener("click", e=>{
   const b = e.target.closest(".say"); if(!b) return;
   e.preventDefault(); e.stopPropagation();
@@ -1258,6 +1293,22 @@ document.addEventListener("click", e=>{
     u.lang = s.l; u.rate = 0.92;
     speechSynthesis.speak(u);
   }catch(err){}
+});
+document.addEventListener("click", e=>{
+  const save=e.target.closest(".ci-save-word");
+  if(save){
+    savePronunciationWord(save.dataset.word,"華航廣播");
+    save.textContent="✅ 已加入字庫"; save.disabled=true;
+    return;
+  }
+  const practice=e.target.closest(".pronounce-practice");
+  if(practice){
+    const item=pronunciationWords.find(x=>x.word===practice.dataset.word);
+    if(item){item.practice=(item.practice||0)+1;store.set("pronunciationWords",pronunciationWords);practice.textContent=`✓ 已練 ${item.practice} 次`;}
+    return;
+  }
+  const remove=e.target.closest(".pronounce-remove");
+  if(remove){removePronunciationWord(remove.dataset.word);pronunciationRender();}
 });
 
 /* ================= 分頁 ================= */
@@ -1764,8 +1815,8 @@ function ciBroadcastReviewHtml(review){
   if(!review||!review.original) return "";
   const score=review.similarity;
   const status=score>=85?"good":score>=65?"warn":"bad";
-  const keys=review.keyRows.map(x=>`<span class="ci-keyword ${x.ok?"hit":"miss"}">${x.ok?"✓":"!"} ${esc(x.label)}</span>`).join("");
-  const rows=review.sentences.map(x=>`<div class="ci-sentence-row"><div><b>第 ${x.i} 句</b><span class="sub">命中 ${x.hit}/${x.total} 個詞</span></div><div class="ci-original">原文：${esc(x.source)}</div>${x.missing.length?`<div class="ci-fix">🔧 疑似漏讀／辨識不到：${esc(x.missing.join(", "))}。請單獨重讀這一句，確認連音與句尾。</div>`:`<div class="ci-goodline">✅ 這句的主要詞彙都有被辨識到。</div>`}</div>`).join("");
+  const keys=review.keyRows.map(x=>`<span class="ci-keyword ${x.ok?"hit":"miss"}">${x.ok?"✓":"!"} ${esc(x.label)}${x.ok?"":pronunciationSaveBtn(x.label)}</span>`).join("");
+  const rows=review.sentences.map(x=>`<div class="ci-sentence-row"><div><b>第 ${x.i} 句</b><span class="sub">命中 ${x.hit}/${x.total} 個詞</span></div><div class="ci-original">原文：${esc(x.source)}</div>${x.missing.length?`<div class="ci-fix">🔧 疑似漏讀／辨識不到：${x.missing.map(w=>`${esc(w)} ${pronunciationSaveBtn(w)}`).join("、")}。請單獨重讀這一句，確認連音與句尾。</div>`:`<div class="ci-goodline">✅ 這句的主要詞彙都有被辨識到。</div>`}</div>`).join("");
   return `<div class="ci-broadcast-review"><h3>🔎 原文比對與逐句修正</h3><div class="fb ${status}">📄 原文詞彙命中率約 ${score}%（這是語音辨識比對，不等於正式發音評分）。</div><h4>關鍵字檢查</h4><div class="ci-keywords">${keys||"<span class='sub'>這段沒有可自動擷取的專有名詞或數字。</span>"}</div>${review.missing.length?`<div class="ci-fix" style="margin-top:8px">⚠️ 建議優先重讀：${esc(review.missing.join(", "))}</div>`:"<div class='ci-goodline' style='margin-top:8px'>✅ 沒有偵測到明顯漏讀的主要詞彙。</div>"}<h4>逐句檢查</h4>${rows}</div>`;
 }
 function analyze(t, dur, lang, item){
@@ -2509,7 +2560,9 @@ function toolRender(x){
           <div style="font-size:13.5px;color:#33475c;margin-top:2px">${esc(r[1])}</div>
           <div class="chips" style="margin-top:4px">${sayBtn(r[0],"zh-TW","🔊 中")}${sayBtn(r[1],"en-US","🔊 EN")}</div>
         </div>`).join("")}
-      </div>`).join("");
+        </div>`).join("");
+  } else if(x==="pronounce"){
+    pronunciationRender();
   } else if(x==="card"){
     el.innerHTML = `<div class="card"><h2>🗂️ 關鍵字卡</h2>
       <p class="section-note">緊張到腦中空白時，不要想整段答案——只要想起這幾個關鍵字，就能把話接下去。</p>
