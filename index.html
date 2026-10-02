@@ -27,6 +27,10 @@ header p{font-size:12.5px;opacity:.85;margin-top:3px}
 nav{display:flex;gap:4px;background:linear-gradient(130deg,#0b1e3a,#16345c 55%,#274b7e);padding:0 12px;overflow-x:auto;position:sticky;top:0;z-index:50}
 nav button{flex:0 0 auto;background:transparent;border:none;color:rgba(255,255,255,.72);font-size:14.5px;font-weight:600;padding:11px 14px;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
 nav button.on{color:#f2d98c;border-bottom-color:var(--gold)}
+.contextbar{max-width:960px;margin:0 auto;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--sub);font-size:12.5px}
+.contextbar strong{color:var(--ink);font-weight:700}
+.context-back{border:0;background:transparent;color:var(--accent);font:700 12.5px/1.2 inherit;cursor:pointer;padding:6px 0}
+.context-back[hidden]{display:none}
 main{max-width:860px;margin:0 auto;padding:18px 14px 80px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:14px}
 h2{font-size:16.5px;margin-bottom:8px}
@@ -38,6 +42,15 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .quicknav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
 .quicknav button{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:6px 10px;font:600 12px/1.2 inherit;cursor:pointer}
 .quicknav button:hover{border-color:var(--accent);color:var(--accent)}
+.ux-focus{border:1px solid #d7e2ef;border-left:5px solid var(--ci);background:linear-gradient(145deg,#fff,#f7faff);box-shadow:0 8px 22px rgba(22,52,92,.1)}
+.ux-focus-label{font-size:11px;letter-spacing:1.2px;font-weight:800;color:var(--ci)}
+.ux-focus h2{font-size:21px;margin:5px 0 3px}
+.ux-focus-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.ux-focus-actions .btn:first-child{min-width:210px;background:var(--ci)}
+.more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.more-card{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:13px;background:#fff;padding:15px;color:var(--ink);font:inherit;cursor:pointer;min-height:104px}
+.more-card:hover,.more-card:focus-visible{border-color:var(--accent);box-shadow:var(--shadow)}
+.more-card b{display:block;font-size:15px;margin-bottom:4px}.more-card span{display:block;color:var(--sub);font-size:12.5px}
 .ci-hero{background:linear-gradient(145deg,#183b68,#245c91 66%,#c81432);color:#fff;border:none;box-shadow:0 8px 24px rgba(24,59,104,.2);padding:22px}
 .ci-hero h2{font-size:23px;margin:4px 0 2px}
 .ci-hero .section-note{color:rgba(255,255,255,.86);margin-bottom:12px}
@@ -137,6 +150,11 @@ h3{font-size:14.5px;margin:12px 0 6px}
 .ci-progress-head span{font-size:12px;color:var(--sub)}
 .ci-progress-track{height:8px;background:#edf1f5;border-radius:99px;overflow:hidden;margin-bottom:11px}
 .ci-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#245c91,var(--ci));border-radius:inherit;transition:width .3s ease}
+.ci-skill-list{display:grid;gap:8px;margin-top:10px}
+.ci-skill{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;border:1px solid #e0e8f0;border-radius:10px;padding:10px 12px;background:#fbfdff}
+.ci-skill b{display:block;font-size:13.5px}.ci-skill small{display:block;color:var(--sub);font-size:11.5px;margin-top:2px}
+.ci-state{border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;background:#eef2f7;color:#52627a}
+.ci-state.learning{background:#fff3d7;color:#87620d}.ci-state.ready{background:#e8f7ef;color:#14603f}
 .ci-module-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
 .ci-module{min-height:148px;display:flex;flex-direction:column;align-items:flex-start}
 .ci-module small{margin-top:auto}
@@ -195,6 +213,11 @@ details.qa summary{font-weight:600}
 .pronounce-meaning-input{width:190px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:12px}
 .pronounce-row .sub{display:block;font-size:12px;margin-top:3px}
 .pronounce-row .chips{justify-content:flex-end}
+.pronounce-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:2px}
+.pronounce-ipa{font-family:Georgia,serif;color:#33475c;font-size:13px}
+.pronounce-example{margin-top:5px;color:#52627a;font-size:12.5px;font-style:italic;max-width:520px}
+.pronounce-due{display:inline-block;border-radius:999px;padding:2px 7px;background:#eef2f7;color:#52627a;font-size:11px;font-weight:700}
+.pronounce-due.today{background:#fff0f0;color:#9c2635}
 .ci-keyword .ci-save-word{margin-left:5px;padding:2px 6px;font-size:11px;background:#fff}
 .ci-fix .ci-save-word{margin-left:4px;padding:2px 6px;font-size:11px;background:#fff}
 @media(max-width:640px){.pronounce-add{align-items:stretch;flex-direction:column}.pronounce-row{align-items:flex-start;flex-direction:column}.pronounce-row .chips{justify-content:flex-start}}
@@ -244,6 +267,14 @@ textarea{width:100%;font-family:inherit;font-size:14px;padding:9px 11px;border:1
 .ci-original{margin-top:4px;color:var(--sub);line-height:1.55}
 .ci-fix{margin-top:5px;padding:6px 8px;border-radius:7px;background:#fff6e9;color:#8a4b12}
 .ci-goodline{margin-top:5px;padding:6px 8px;border-radius:7px;background:#ecf8f2;color:#14603f}
+.result-summary{border:1px solid #d7e2ef;border-left:5px solid var(--accent);border-radius:12px;background:#f8fbff;padding:14px 15px;margin:12px 0}
+.result-summary h3{font-size:16px;margin:0 0 7px}.result-summary>p{font-size:14px;margin-bottom:10px}
+.result-columns{display:grid;grid-template-columns:1fr 1fr;gap:9px}.result-col{border-radius:9px;padding:9px 10px;font-size:12.5px}.result-col.good{background:#ecf8f2;color:#14603f}.result-col.warn{background:#fff6e9;color:#8a4b12}
+.result-next{margin-top:9px;border-radius:9px;background:var(--accent);color:#fff;padding:9px 11px;font-size:13px;font-weight:700}
+.history-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 12px}.history-tools input,.history-tools select{flex:1 1 150px}
+.history-trend{margin-top:7px;padding:7px 9px;border-radius:8px;background:#eef4fa;color:#33475c;font-size:12px}.history-trend.up{background:#e8f7ef;color:#14603f}
+.archive-note{border-color:#e8d9a8;background:#fffaf0;color:#7a5c17}
+#bankList>.card,#ciBroadcastBody>.card,#reviewList>.card,#airlineList>.card{content-visibility:auto;contain-intrinsic-size:0 320px}
 .hist{border:1px solid var(--line);border-radius:11px;padding:10px 13px;margin-bottom:8px;font-size:13.5px}
 .hm{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;margin:8px 0}
 .hm div{aspect-ratio:1;border-radius:3px;background:#ece9df}
@@ -256,8 +287,10 @@ nav{scrollbar-width:none;position:relative}
 nav::-webkit-scrollbar{display:none}
 .navfade{position:absolute;top:0;right:0;bottom:0;width:26px;background:linear-gradient(90deg,transparent,rgba(11,30,58,.95));pointer-events:none;transition:opacity .25s;z-index:2}
 .navfade.hide{opacity:0}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid rgba(36,92,145,.35);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 /* ===== 密碼閘門 ===== */
-html:not(.unlocked) header, html:not(.unlocked) nav, html:not(.unlocked) main, html:not(.unlocked) footer, html:not(.unlocked) #dataBanner, html:not(.unlocked) #onboard{display:none!important}
+html:not(.unlocked) header, html:not(.unlocked) nav, html:not(.unlocked) main, html:not(.unlocked) footer, html:not(.unlocked) #dataBanner, html:not(.unlocked) #onboard, html:not(.unlocked) #contextBar{display:none!important}
 #gate{position:fixed;inset:0;background:linear-gradient(150deg,#0b1e3a,#16345c 60%,#274b7e);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
 #gate .gbox{border-top:4px solid var(--gold)}
 html.unlocked #gate{display:none}
@@ -272,8 +305,12 @@ html.unlocked #gate{display:none}
   header{padding:16px 14px 10px}
   header h1{font-size:18px}
   header p{font-size:11px;line-height:1.5}
-  nav button{font-size:13px;padding:12px 10px}
-  main{padding:12px 10px calc(70px + env(safe-area-inset-bottom))}
+  nav{position:fixed;left:0;right:0;top:auto;bottom:0;padding:4px 4px calc(4px + env(safe-area-inset-bottom));gap:0;overflow:visible;box-shadow:0 -4px 18px rgba(11,30,58,.18)}
+  nav button{font-size:11.5px;padding:8px 3px;flex:1 1 20%;white-space:nowrap;border-bottom:0;border-top:3px solid transparent}
+  nav button.on{border-top-color:var(--gold);border-bottom-color:transparent}
+  .navfade{display:none}
+  .contextbar{position:sticky;top:0;z-index:45;background:rgba(246,245,240,.96);backdrop-filter:blur(8px);padding:7px 11px}
+  main{padding:8px 10px calc(82px + env(safe-area-inset-bottom))}
   .card{padding:13px 14px;border-radius:12px}
   h2{font-size:15.5px}
   .qtext{font-size:16px}
@@ -288,6 +325,8 @@ html.unlocked #gate{display:none}
   .opt{padding:12px;min-height:44px}
   .flow{font-size:12px}
   .readblock{font-size:14px;padding:11px 12px}
+  .more-grid,.result-columns{grid-template-columns:1fr}
+  .ux-focus-actions .btn{width:100%}
 }
 @media(min-width:900px){
   main{max-width:960px}
@@ -297,11 +336,11 @@ html.unlocked #gate{display:none}
 <body>
 <div id="gate"><div class="gbox">
   <h1>✈️ 空服面試練習室</h1>
-  <p>私人練習空間，請輸入通關密碼</p>
+  <p>個人練習空間，請輸入通關密碼</p>
   <input type="password" id="gpw" placeholder="通關密碼" autocomplete="off">
   <button id="gbtn">進入</button>
   <div class="gerr" id="gerr"></div>
-  <p style="font-size:11.5px;color:var(--sub);margin-top:12px;opacity:.8">這是 Shelly 的空服面試個人練習室・忘記密碼請直接問本人 🌸</p>
+  <p style="font-size:11.5px;color:var(--sub);margin-top:12px;opacity:.8">此進入碼用來避免同裝置誤開，不等同伺服器帳號驗證；請勿在網站原始碼放證件或高度敏感資料。</p>
 </div></div>
 <script>
 (function(){
@@ -334,27 +373,26 @@ html.unlocked #gate{display:none}
     <h2 style="margin-bottom:10px">👋 歡迎回來，Shelly</h2>
     <p style="font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:16px">
       第一次用這頁，或好一陣子沒開？建議這樣走：<br>
-      1️⃣ <b>🌸 華航招考衝刺</b>——先分清楚初試與複試，今天只練需要的關卡。<br>
+      1️⃣ <b>🌸 華航招考首頁</b>——先看「今天最值得做的練習」，直接開始。<br>
       2️⃣ <b>初試</b>練資料、摸高與廣播詞；<b>複試</b>練英文自介、情境判斷、時事應對與個人特質。<br>
-      3️⃣ 原本的精選50、抽題、模擬、朗讀與弱點清單都保留在導覽列。<br>
-      4️⃣ 換裝置前先到「📈統計」匯出備份，進度才會接起來。
+      3️⃣ 主導覽只留首頁、練習、模擬與成果；完整題庫、故事庫和公司資料都收在「更多」。<br>
+      4️⃣ 換裝置前先到「📈成果」匯出備份，進度才會接起來。
     
     
     </p>
     <button class="btn" id="onboardOk" style="width:100%">我知道了，開始練習</button>
   </div>
 </div>
-<nav id="nav">
-  <button data-t="eva" class="on">🏠 招考首頁</button>
-  <button data-t="practice">🎯 題庫練習</button>
-  <button data-t="stage">🎬 面試關卡</button>
-  <button data-t="mock">🎙️ 模擬面試</button>
-  <button data-t="ciBroadcast">📢 華航廣播</button>
-  <button data-t="tools">🧰 工具進度</button>
-  <button data-t="airlines">📚 資料參考</button>
+<nav id="nav" aria-label="主要導覽">
+  <button data-t="eva" class="on" aria-current="page">🏠 首頁</button>
+  <button data-t="practice">🎯 練習</button>
+  <button data-t="mock">🎙️ 模擬</button>
+  <button data-t="stats">📈 成果</button>
+  <button data-t="more">☰ 更多</button>
   <div class="navfade" id="navFade"></div>
 </nav>
-<main>
+<div class="contextbar" id="contextBar" aria-live="polite"><strong id="contextPath">🌸 華航 › 招考首頁</strong><button class="context-back" id="contextBack" hidden>← 返回</button></div>
+<main id="mainContent" tabindex="-1">
 
 <!-- ============ 招考衝刺首頁（目前以華航為主） ============ -->
 <section id="tab-eva">
@@ -374,7 +412,6 @@ html.unlocked #gate{display:none}
       <p class="section-note">下一關：初試｜先完成華航初試基本功，再進入廣播與複試問答。</p>
       <div class="air-hero-actions">
         <button class="btn" data-ci-route="initial">初試準備</button><button class="btn" data-ci-route="final">複試準備</button>
-        <button class="btn sec" data-ci-route="today">⚡ 今日華航訓練</button><button class="btn sec" data-ci-route="final">🎙 華航全真模擬</button>
       </div>
       <div class="air-date-row">
         <label>初試日期：<input type="date" id="ciInitialDate" value="2026-11-07"></label>
@@ -385,6 +422,24 @@ html.unlocked #gate{display:none}
     </div>
     <div id="ciApp"></div>
     <div id="ciSprintPlan"></div>
+  </div>
+</section>
+
+<!-- ============ 更多：次要工具與封存資料 ============ -->
+<section id="tab-more" class="hidden">
+  <div class="card">
+    <h2>☰ 更多工具與資料</h2>
+    <p class="section-note">主要練習留在首頁、練習、模擬與成果；查資料或整理答案時再進入這裡。</p>
+  </div>
+  <div class="more-grid">
+    <button class="more-card" data-go="ciBroadcast"><b>📢 華航廣播詞</b><span>原文朗讀、英翻中、逐句比對與發音字庫。</span></button>
+    <button class="more-card" data-go="tools"><b>🧰 答題與故事工具</b><span>答題骨架、句型、故事庫與發音字庫。</span></button>
+    <button class="more-card" data-go="airlines"><b>📚 公司資料參考</b><span>公司知識題、品牌重點與面試策略。</span></button>
+    <button class="more-card" data-go="review"><b>📋 面試回顧</b><span>實戰題目、當下回答與中英文優化版本。</span></button>
+    <button class="more-card" data-go="reading"><b>🎤 朗讀練習</b><span>自介與通用朗讀素材。</span></button>
+    <button class="more-card" data-go="safety"><b>🛟 安全知識</b><span>安全流程、小測驗與解析。</span></button>
+    <button class="more-card" data-go="bank"><b>🗃️ 完整題庫</b><span>搜尋所有公司題目與擬答。</span></button>
+    <button class="more-card archive-note" data-go="stage"><b>🗂️ 其他公司關卡封存</b><span>團討、看圖說故事等內容不屬於目前華航流程，僅供查閱。</span></button>
   </div>
 </section>
 
@@ -432,7 +487,7 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>🧰 面試模板與關鍵詞</h2>
     <p class="section-note">四份工具：<b>答題骨架</b>（各題型的回答公式）、<b>關鍵句型庫</b>（中英對照，可直接套用）、<b>關鍵字卡</b>（緊張卡住時只要想起關鍵字）、<b>故事庫對照表</b>（你的真實故事分別能答哪些題）。</p>
-    <div class="quicknav"><button data-go="sprint">📅 衝刺計畫</button><button data-go="stats">📈 統計備份</button><button data-go="review">📋 面試回顧</button></div>
+    <div class="quicknav"><button data-go="sprint">📅 衝刺計畫</button><button data-go="stats">📈 成果與備份</button><button data-go="review">📋 面試回顧</button></div>
     <div class="chips" id="toolNav">
       <button class="chip on" data-x="frame">🧱 答題骨架</button>
       <button class="chip" data-x="phrase">💬 關鍵句型</button>
@@ -448,9 +503,9 @@ html.unlocked #gate{display:none}
 <!-- ============ 關卡練習 ============ -->
 <section id="tab-stage" class="hidden">
   <div class="card">
-    <h2>🎬 非問答關卡練習</h2>
-    <p class="section-note">面試不是只有問答。這些關卡有些是<b>過不了就直接結束</b>（摸高），有些佔分很重（英文團討、看圖說故事、廣播詞）。你實際遇過的關卡都在這裡。</p>
-    <div class="quicknav"><button data-go="reading">🎤 朗讀</button><button data-go="ciBroadcast">📢 華航廣播</button><button data-go="safety">🛟 安全知識</button></div>
+    <h2>🗂️ 其他公司關卡封存</h2>
+    <p class="section-note">以下團討、看圖說故事與其他廣播素材不屬於目前華航招考流程，保留作為其他航空公司的歷史練習資料。華航初試請回到「華航廣播詞」與摸高／台步準備。</p>
+    <div class="quicknav"><button data-go="eva">🌸 回華航首頁</button><button data-go="ciBroadcast">📢 華航廣播</button><button data-go="more">☰ 更多工具</button></div>
     <div class="chips" id="stageNav">
       <button class="chip on" data-x="gd">💬 英文團討</button>
       <button class="chip" data-x="pic">🖼️ 看圖說故事</button>
@@ -474,6 +529,10 @@ html.unlocked #gate{display:none}
         <option value="">中英文題都抽</option>
         <option value="zh">只抽中文題</option>
         <option value="en">只抽英文題</option>
+      </select>
+      <select id="fScope" aria-label="題目來源範圍">
+        <option value="company" selected>公司專屬題優先</option>
+        <option value="mixed">公司題＋通用題</option>
       </select>
       <select id="prepSec">
         <option value="0">不需準備時間</option>
@@ -552,11 +611,16 @@ html.unlocked #gate{display:none}
     </div>
     <p class="sub" id="bkMsg" style="margin-top:8px"></p>
   </div>
-  <div class="card" id="evaStatsBridge">
+  <div class="card hidden" id="evaStatsBridge" aria-hidden="true">
     <h2>🌍 長榮準備度</h2>
     <p class="section-note">分開查看初試練習次數、動態筆試正確率、複試核心、英文、追問與弱點；不顯示錄取機率。</p>
     <div id="evaStatsMini" class="sub">尚未建立長榮練習資料。</div>
     <button class="btn" id="evaStatsOpen" style="margin-top:10px">查看完整長榮準備度</button>
+  </div>
+  <div class="card">
+    <h2>🌸 華航能力狀態</h2>
+    <p class="section-note">依實際練習次數與最近練習日顯示，不把練習次數包裝成錄取率。</p>
+    <div id="ciStatsSummary"></div>
   </div>
   <div class="card">
     <h2>🧠 今天該複習的弱點題</h2>
@@ -574,8 +638,8 @@ html.unlocked #gate{display:none}
   <div class="card">
     <h2>🎙️ 模擬面試</h2>
     <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。選定航空公司後，會優先抽該公司的題目；通用題只在該類別沒有公司題時補進來。</p>
-    <div class="quicknav"><button data-go="practice">🎯 題庫練習</button><button data-go="stage">🎬 面試關卡</button><button data-go="review">📋 面試回顧</button></div>
-    <div class="tip">🔒 <b>隱私說明：</b>錄音與逐字稿只存在「這台裝置」的瀏覽器裡，不會上傳到任何地方。第一次按下🔴會跳出麥克風權限請求，請允許。</div>
+    <div class="quicknav"><button data-go="practice">🎯 題庫練習</button><button data-go="ciBroadcast">📢 華航廣播</button><button data-go="review">📋 面試回顧</button></div>
+    <div class="tip">🔒 <b>隱私說明：</b>錄音檔與練習紀錄儲存在這台裝置；語音轉文字是否使用瀏覽器服務，依瀏覽器的實作與設定而定。第一次錄音會詢問麥克風權限。</div>
     <div class="chips" id="mAirline"></div>
     <div class="searchrow">
       <select id="mCat"><option value="">全部類別</option></select>
@@ -602,14 +666,15 @@ html.unlocked #gate{display:none}
       <button class="btn sec" id="mStop" disabled>⏹ 完成回答</button>
       <button class="btn ghost" id="mSkip">換一題</button>
     </div>
-    <p class="tstate" id="mTimer" style="margin-top:10px"></p>
-    <div id="mLive" class="sub" style="min-height:1.2em"></div>
-    <div id="mResult"></div>
+    <p class="tstate" id="mTimer" style="margin-top:10px" aria-live="assertive"></p>
+    <div id="mLive" class="sub" style="min-height:1.2em" aria-live="polite"></div>
+    <div id="mResult" aria-live="polite"></div>
   </div>
 
   <div class="card">
     <h2>📼 我的模擬紀錄</h2>
     <p class="section-note" id="mHistNote">最近的練習會顯示在這裡，可回聽錄音、查看逐字稿與建議。</p>
+    <div class="history-tools"><select id="mHistAir" aria-label="篩選航空公司"><option value="">全部航空公司</option></select><input id="mHistSearch" type="text" placeholder="搜尋題目或逐字稿…" aria-label="搜尋模擬紀錄"></div>
     <div id="mHistory"></div>
   </div>
 </section>
@@ -1289,24 +1354,30 @@ checkDataBanner();
 
 /* TTS 語音朗讀（需在渲染前定義） */
 const SAYS = {}; let sayN = 0;
-function sayBtn(text, lang, label){
+function sayBtn(text, lang, label, rate=0.92){
   if(!text) return "";
   const id = "say" + (++sayN);
-  SAYS[id] = {t: text, l: lang};
+  SAYS[id] = {t: text, l: lang, r:rate};
   return `<button class="chip say" data-sid="${id}">${label}</button>`;
 }
 const PRONUNCIATION_ZH = {
   seattle:"西雅圖",starbucks:"星巴克",leicester:"英國萊斯特",coastline:"海岸線",harboring:"擁有／坐落於",aroma:"香氣",seafood:"海鮮",blend:"混合／融合",unique:"獨特的",serves:"提供服務／飛往",serving:"服務／供應",destinations:"目的地",ontario:"安大略",flights:"航班",complemented:"由……補充／搭配",nearly:"將近／幾乎",weekly:"每週的",northeast:"東北部",southeast:"東南部",asia:"亞洲",captain:"機長",ground:"地勤／地面作業",authorized:"獲授權的",turbulence:"亂流／顛簸",passenger:"旅客",passengers:"旅客",announcement:"廣播",boarding:"登機",departure:"出發／離站",arrival:"抵達",destination:"目的地",itinerary:"行程／旅程",beef:"牛肉",noodle:"麵條",soup:"湯",comfortable:"舒適的",excellent:"優良的",service:"服務",fasten:"繫好／扣緊",cabin:"客艙",amenities:"設備／用品",aircraft:"飛機",airline:"航空公司",airport:"機場",welcome:"歡迎",aboard:"在機上／搭乘",flight:"航班／飛行",traveling:"旅行／旅遊",adventure:"冒險",global:"全球的",piercings:"穿刺／耳洞",corporation:"企業／公司",season:"季度／季節",special:"特別的",visit:"造訪",appearing:"出現／登場",lounge:"貴賓室",launches:"推出／啟動",local:"當地的",flavor:"風味",tender:"柔嫩的",rich:"濃郁的",broth:"高湯",impressed:"留下深刻印象",facilities:"設施",inflight:"機上的",north:"北方的",american:"美國的",major:"主要的",complement:"補充／搭配",northern:"北部的",southern:"南部的",aesthetic:"美學的／美觀的",amidst:"在……之中",groundbreaking:"開創性的／突破性的",collaboration:"合作",cuisines:"料理／菜系",cuisine:"料理／菜系",seasonal:"季節性的",cultural:"文化的",heritage:"文化遺產／傳承",sustainable:"永續的",sustainability:"永續性",destination:"目的地",international:"國際的",regional:"區域的",network:"網絡／航網",routes:"航線",route:"航線",fleet:"機隊",upgrade:"升級",upgraded:"已升級的",introduced:"推出／引進",feature:"特色／以……為特色",featured:"以……為主題／刊登",initially:"起初／最初",assigned:"分配／安排",dedicated:"專屬的",wealth:"大量／豐富",content:"內容",behind:"在……後方／幕後",scenes:"場景／幕後",inquiries:"詢問／查詢",reservations:"預訂",tracking:"追蹤",checked:"託運的／已確認的",baggage:"行李",privacy:"隱私",deactivate:"停用／失效",expire:"到期",convenient:"方便的"
 };
+const PRONUNCIATION_META={
+  seattle:["/siˈætəl/","China Airlines serves Seattle from Taipei."],starbucks:["/ˈstɑːrbʌks/","Seattle is closely associated with Starbucks."],leicester:["/ˈlɛstər/","Leicester is pronounced without the middle syllables."],coastline:["/ˈkoʊstlaɪn/","The coastline is visible from the aircraft."],aroma:["/əˈroʊmə/","The aroma of coffee filled the cabin."],seafood:["/ˈsiːfuːd/","Fresh seafood is a local specialty."],blend:["/blɛnd/","This blend has a smooth aroma."],unique:["/juˈniːk/","The experience is unique to Taiwan."],serves:["/sɜːrvz/","China Airlines serves several North American destinations."],serving:["/ˈsɜːrvɪŋ/","We are now serving refreshments."],destinations:["/ˌdɛstəˈneɪʃənz/","The airline connects major destinations."],ontario:["/ɑːnˈtɛrioʊ/","Ontario is one of the airline's North American destinations."],flights:["/flaɪts/","Weekly flights connect the two regions."],complemented:["/ˈkɑːmpləˌmɛntɪd/","The service is complemented by regional flights."],fasten:["/ˈfæsən/","Please fasten your seat belt."],cabin:["/ˈkæbɪn/","The cabin crew will assist you."],amenities:["/əˈmɛnətiz/","The cabin offers updated amenities."],aircraft:["/ˈɛrkræft/","This aircraft is a Boeing 777."],turbulence:["/ˈtɜːrbjələns/","We may experience turbulence."],announcement:["/əˈnaʊnsmənt/","Please listen to the safety announcement."],boarding:["/ˈbɔːrdɪŋ/","Boarding will begin shortly."],departure:["/dɪˈpɑːrtʃər/","Our departure time has changed."],arrival:["/əˈraɪvəl/","The local arrival time is eight o'clock."],itinerary:["/aɪˈtɪnəˌrɛri/","Please check your travel itinerary."],groundbreaking:["/ˈɡraʊndˌbreɪkɪŋ/","The collaboration introduced a groundbreaking concept."],collaboration:["/kəˌlæbəˈreɪʃən/","The project is a collaboration between two brands."],cuisines:["/kwɪˈziːnz/","The menu features regional cuisines."]
+};
 let pronunciationWords = store.get("pronunciationWords",[]);
+if(!Array.isArray(pronunciationWords)) pronunciationWords=[];
+let pronunciationDueOnly=true;
 function pronunciationZh(word){ return PRONUNCIATION_ZH[(word||"").toLowerCase()]||""; }
-function savePronunciationWord(word, source="華航廣播", zh=""){
+function pronunciationMeta(word){return PRONUNCIATION_META[(word||"").toLowerCase()]||["","回到原文重讀此字，確認重音、連音與句尾。"]}
+function savePronunciationWord(word, source="華航廣播", zh="", context=""){
   const clean=(word||"").trim().toLowerCase();
   if(!clean) return false;
   const found=pronunciationWords.find(x=>x.word===clean);
   const meaning=(zh||pronunciationZh(clean)).trim();
-  if(found){ found.hits=(found.hits||0)+1; found.source=found.source||source; if(meaning) found.zh=meaning; }
-  else pronunciationWords.unshift({word:clean,zh:meaning,source,addedAt:Date.now(),practice:0,hits:1});
+  if(found){ found.hits=(found.hits||0)+1; found.source=found.source||source; if(meaning) found.zh=meaning; if(context)found.context=context; }
+  else pronunciationWords.unshift({word:clean,zh:meaning,source,context,addedAt:Date.now(),practice:0,hits:1,ivl:1,due:todayStr()});
   store.set("pronunciationWords",pronunciationWords);
   return true;
 }
@@ -1317,15 +1388,16 @@ function removePronunciationWord(word){
 function pronunciationRender(){
   const el=$("#toolBody");
   let migrated=false;
-  pronunciationWords.forEach(x=>{if(!x.zh){const meaning=pronunciationZh(x.word);if(meaning){x.zh=meaning;migrated=true;}}});
+  pronunciationWords.forEach(x=>{if(!x.zh){const meaning=pronunciationZh(x.word);if(meaning){x.zh=meaning;migrated=true;}}if(!x.due){x.due=todayStr();x.ivl=x.ivl||1;migrated=true;}});
   if(migrated) store.set("pronunciationWords",pronunciationWords);
-  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">把廣播逐句檢查中出現的疑似漏讀、地名、機型或不熟單字存下來。按「Listen」聽瀏覽器的英文示範，再自己重讀；熟悉後即可移除。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（可選填）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><p class="sub">目前收藏 ${pronunciationWords.length} 個 · 發音示範是練習輔助，仍要以航空原文與自己的回聽為準。</p></div>`+
-    (pronunciationWords.length?`<div class="card"><h3>📚 待練清單</h3>${pronunciationWords.map((x,i)=>`<div class="pronounce-row"><div><b>${esc(x.word)}</b><strong class="pronounce-meaning">${esc(x.zh||"中文意思待補充")}</strong><div class="pronounce-edit"><input class="pronounce-meaning-input" data-word="${esc(x.word)}" value="${esc(x.zh||"")}" placeholder="輸入中文意思"><button class="chip pronounce-save-meaning" data-word="${esc(x.word)}">儲存中文</button></div><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}</span><button class="chip pronounce-practice" data-word="${esc(x.word)}">✓ 已練一次</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`).join("")}</div>`:`<div class="card"><p class="sub">目前還沒有單字。從華航廣播的逐句檢查按「＋加入發音字庫」，或在上方手動輸入。</p></div>`);
+  const visible=pronunciationWords.filter(x=>!pronunciationDueOnly||!x.due||x.due<=todayStr()).sort((a,b)=>String(a.due||"").localeCompare(String(b.due||"")));
+  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">收藏漏讀或不熟的字，搭配中文、音標、原句與間隔複習。按慢速示範後自己重讀，再選「還不熟」或「已熟悉」。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（可選填）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><div class="chips"><button class="chip pronounce-filter ${pronunciationDueOnly?"on":""}" data-mode="due">今天要練（${pronunciationWords.filter(x=>!x.due||x.due<=todayStr()).length}）</button><button class="chip pronounce-filter ${!pronunciationDueOnly?"on":""}" data-mode="all">全部收藏（${pronunciationWords.length}）</button></div><p class="sub">自動中文與音標若未收錄，可直接手動補充；瀏覽器發音僅作練習輔助。</p></div>`+
+    (visible.length?`<div class="card"><h3>📚 ${pronunciationDueOnly?"今天待練":"全部字庫"}</h3>${visible.map(x=>{const meta=pronunciationMeta(x.word),dueToday=!x.due||x.due<=todayStr();return `<div class="pronounce-row"><div><b>${esc(x.word)}</b><div class="pronounce-meta"><strong class="pronounce-meaning">${esc(x.zh||"尚未找到自動翻譯")}</strong>${meta[0]?`<span class="pronounce-ipa">${esc(meta[0])}</span>`:""}<span class="pronounce-due ${dueToday?"today":""}">${dueToday?"今天複習":`下次 ${esc(x.due)}`}</span></div><div class="pronounce-example">${esc(x.context||meta[1])}</div><div class="pronounce-edit"><input class="pronounce-meaning-input" data-word="${esc(x.word)}" value="${esc(x.zh||"")}" placeholder="輸入中文意思"><button class="chip pronounce-save-meaning" data-word="${esc(x.word)}">儲存中文</button></div><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}${sayBtn(x.word,"en-US","🐢 慢速",0.65)}</span><button class="chip pronounce-grade" data-known="0" data-word="${esc(x.word)}">還不熟</button><button class="chip pronounce-grade" data-known="1" data-word="${esc(x.word)}">✓ 已熟悉</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`}).join("")}</div>`:`<div class="card"><p class="sub">${pronunciationWords.length?"今天沒有到期單字，切到「全部收藏」仍可自由練習。":"目前還沒有單字。從華航廣播逐句檢查加入，或在上方手動輸入。"}</p></div>`);
   const add=$("#pronounceAddBtn");
   if(add) add.addEventListener("click",()=>{const input=$("#pronounceInput"),meaning=$("#pronounceMeaning");if(savePronunciationWord(input.value,"手動加入",meaning.value)){input.value="";meaning.value="";pronunciationRender();}});
 }
-function pronunciationSaveBtn(word){
-  return `<button class="chip ci-save-word" data-word="${esc(word)}">＋加入發音字庫</button>`;
+function pronunciationSaveBtn(word,context=""){
+  return `<button class="chip ci-save-word" data-word="${esc(word)}" data-context="${encodeURIComponent(context)}">＋加入發音字庫</button>`;
 }
 document.addEventListener("click", e=>{
   const b = e.target.closest(".say"); if(!b) return;
@@ -1335,21 +1407,23 @@ document.addEventListener("click", e=>{
     if(speechSynthesis.speaking){ speechSynthesis.cancel(); return; }
     const s = SAYS[b.dataset.sid]; if(!s) return;
     const u = new SpeechSynthesisUtterance(s.t);
-    u.lang = s.l; u.rate = 0.92;
+    u.lang = s.l; u.rate = s.r||0.92;
     speechSynthesis.speak(u);
   }catch(err){}
 });
 document.addEventListener("click", e=>{
   const save=e.target.closest(".ci-save-word");
   if(save){
-    savePronunciationWord(save.dataset.word,"華航廣播");
+    savePronunciationWord(save.dataset.word,"華航廣播","",decodeURIComponent(save.dataset.context||""));
     save.textContent="✅ 已加入字庫"; save.disabled=true;
     return;
   }
-  const practice=e.target.closest(".pronounce-practice");
-  if(practice){
-    const item=pronunciationWords.find(x=>x.word===practice.dataset.word);
-    if(item){item.practice=(item.practice||0)+1;store.set("pronunciationWords",pronunciationWords);practice.textContent=`✓ 已練 ${item.practice} 次`;}
+  const filter=e.target.closest(".pronounce-filter");
+  if(filter){pronunciationDueOnly=filter.dataset.mode!=="all";pronunciationRender();return;}
+  const grade=e.target.closest(".pronounce-grade");
+  if(grade){
+    const item=pronunciationWords.find(x=>x.word===grade.dataset.word),known=grade.dataset.known==="1";
+    if(item){item.practice=(item.practice||0)+1;item.ivl=known?Math.min((item.ivl||1)*2,30):1;item.due=addDays(item.ivl);store.set("pronunciationWords",pronunciationWords);pronunciationRender();}
     return;
   }
   const remove=e.target.closest(".pronounce-remove");
@@ -1361,11 +1435,21 @@ document.addEventListener("click", e=>{
   }
 });
 
-/* ================= 分頁 ================= */
-function showTab(t){
+/* ================= 分頁與路徑 ================= */
+const TAB_LABELS={eva:"🌸 華航 › 招考首頁",practice:"🌸 華航 › 題庫練習",mock:"🌸 華航 › 模擬面試",stats:"🌸 華航 › 成果與複習",more:"更多工具與資料",p50:"練習 › 精選 50",daily:"練習 › 每日十分鐘",bank:"更多 › 完整題庫",weak:"成果 › 弱點清單",reading:"更多 › 朗讀練習",safety:"更多 › 安全知識",review:"更多 › 面試回顧",sprint:"更多 › 衝刺計畫",tools:"更多 › 答題與故事工具",stage:"更多 › 其他公司關卡封存",ciBroadcast:"🌸 華航 › 初試 › 廣播詞",airlines:"更多 › 公司資料參考"};
+let activeTab="eva", tabHistory=[];
+function setUXContext(label,canBack=true){
+  const path=$("#contextPath"), back=$("#contextBack");
+  if(path) path.textContent=label||TAB_LABELS[activeTab]||"空服面試練習室";
+  if(back) back.hidden=!canBack;
+}
+window.setUXContext=setUXContext;
+function showTab(t,options={}){
   const target = $("#tab-"+t); if(!target) return;
-  const navT = {p50:"practice",daily:"practice",bank:"practice",weak:"practice",reading:"stage",safety:"stage",review:"tools",sprint:"tools",stats:"tools"}[t] || t;
-  $$("#nav button").forEach(x=>x.classList.toggle("on",x.dataset.t===navT));
+  if(t!==activeTab && options.remember!==false) tabHistory.push(activeTab);
+  activeTab=t;
+  const navT = {p50:"practice",daily:"practice",weak:"stats",bank:"more",reading:"more",safety:"more",review:"more",sprint:"more",tools:"more",stage:"more",ciBroadcast:"more",airlines:"more"}[t] || t;
+  $$("#nav button").forEach(x=>{const on=x.dataset.t===navT;x.classList.toggle("on",on);if(on)x.setAttribute("aria-current","page");else x.removeAttribute("aria-current")});
   $$("main > section").forEach(s=>s.classList.add("hidden"));
   target.classList.remove("hidden");
   if(t==="weak") renderStars();
@@ -1375,7 +1459,15 @@ function showTab(t){
   if(t==="sprint") spPaint();
   if(t==="stats") renderDash();
   if(t==="p50") scheduleIdle(p50Paint);
-  if(t==="eva") setSprintAir("ci");
+  if(t==="eva"){setSprintAir("ci");if(typeof window.renderCI==="function")window.renderCI();}
+  if(t==="ciBroadcast" && !$("#ciBroadcastBody").childElementCount) scheduleIdle(renderCIBroadcast);
+  if(t==="tools" && !$("#toolBody").childElementCount) scheduleIdle(()=>{if(!$("#toolBody").childElementCount)toolRender("frame")});
+  if(t==="stage" && !$("#stageBody").childElementCount) scheduleIdle(()=>{if(!$("#stageBody").childElementCount)stageRender("gd")});
+  if(!["eva","more"].includes(t)) store.set("uxLastTab",t);
+  setUXContext(TAB_LABELS[t],t!=="eva");
+  const heading=target.querySelector("h2");
+  if(heading){heading.setAttribute("tabindex","-1");requestAnimationFrame(()=>heading.focus({preventScroll:true}));}
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 function scheduleIdle(fn){
   if(typeof requestIdleCallback==="function") requestIdleCallback(fn,{timeout:500});
@@ -1388,6 +1480,11 @@ $("#nav").addEventListener("click", e=>{
 document.addEventListener("click", e=>{
   const b = e.target.closest("button[data-go]"); if(!b) return;
   showTab(b.dataset.go);
+});
+$("#contextBack").addEventListener("click",()=>{
+  if(activeTab==="eva"&&!$("#contextPath").textContent.includes("招考首頁")&&typeof window.renderCI==="function"){window.renderCI();return;}
+  const prev=tabHistory.pop()||"eva";
+  showTab(prev,{remember:false});
 });
 /* nav 可橫向捲動提示：捲到底就淡出漸層 */
 (function(){
@@ -1404,16 +1501,17 @@ document.addEventListener("click", e=>{
 
 /* ================= 抽題練習 ================= */
 let selAir = "", curQ = null, timer = null, practiced = store.get("practiced",{}), sessionN = 0;
-function airChips(el, cb){
-  el.innerHTML = `<button class="chip on" data-a="">全部</button>` +
-    AIRLINES.map(a=>`<button class="chip" data-a="${a}">${a}</button>`).join("");
+function airChips(el, cb, initial=""){
+  el.innerHTML = `<button class="chip ${initial?"":"on"}" data-a="">全部</button>` +
+    AIRLINES.map(a=>`<button class="chip ${a===initial?"on":""}" data-a="${a}">${a}</button>`).join("");
   el.addEventListener("click", e=>{
     const c = e.target.closest(".chip"); if(!c) return;
     el.querySelectorAll(".chip").forEach(x=>x.classList.toggle("on",x===c));
     cb(c.dataset.a);
   });
+  if(initial) cb(initial);
 }
-airChips($("#fAirline"), a=>{ selAir=a; fillCats(); updatePool(); });
+airChips($("#fAirline"), a=>{ selAir=a; fillCats(); updatePool(); },"華航");
 
 function catsFor(a){
   const set = new Set();
@@ -1428,21 +1526,27 @@ function fillCats(){
 }
 function pool(){
   const cat = $("#fCat").value, lang = $("#fLang").value;
-  return DATA.filter(d=>
+  const all=DATA.filter(d=>
     hasAir(d,selAir) && (!cat || d.cat===cat) &&
     (lang!=="zh" || d.q_zh) && (lang!=="en" || d.q_en));
+  if(selAir&&selAir!=="通用"&&$("#fScope").value==="company"){
+    const own=all.filter(d=>airsOf(d).includes(selAir)&&!airsOf(d).includes("通用"));
+    return own.length?own:all;
+  }
+  return all;
 }
 function updatePool(){
   const p = pool();
   if(selAir && selAir!=="通用"){
     const own = p.filter(d=>airsOf(d).includes(selAir)).length;
-    $("#poolCount").textContent = `　題庫範圍：${p.length} 題（${selAir}專屬 ${own} 題＋通用 ${p.length-own} 題）`;
+    $("#poolCount").textContent = $("#fScope").value==="company"?`　目前鎖定：${selAir}專屬 ${p.length} 題`:`　題庫範圍：${p.length} 題（${selAir}專屬 ${own} 題＋通用 ${p.length-own} 題）`;
   } else {
     $("#poolCount").textContent = `　題庫範圍：${p.length} 題`;
   }
 }
 $("#fCat").addEventListener("change", updatePool);
 $("#fLang").addEventListener("change", updatePool);
+$("#fScope").addEventListener("change", updatePool);
 fillCats();
 
 function draw(){
@@ -1460,6 +1564,7 @@ function draw(){
 }
 function renderQ(){
   const d = curQ, lang = $("#fLang").value;
+  setUXContext(`${selAir?`${selAir} › `:""}題庫練習 › ${d.cat}`,true);
   $("#qCard").classList.remove("hidden");
   $("#qMeta").innerHTML = airTags(d) + `<span class="tag cat">${d.cat}</span><span class="sub">${esc(d.src)}</span>`;
   let h = "";
@@ -1513,7 +1618,7 @@ $("#starBtn").addEventListener("click", ()=>{
 
 /* ================= 題庫瀏覽 ================= */
 let bAir = "";
-airChips($("#bAirline"), a=>{ bAir=a; renderBank(); });
+airChips($("#bAirline"), a=>{ bAir=a; renderBank(); },"華航");
 $("#bSearch").addEventListener("input", renderBank);
 function qaCard(d, open){
   const q = [d.q_zh, d.q_en].filter(Boolean).map(esc).join("<br>");
@@ -1599,7 +1704,7 @@ function renderCIBroadcast(){
   CI_NEWS_RELEASES.forEach((d,i)=>{ SAYS[`news-${i}`]={t:d.text,l:"en-US"}; });
   CI_EXTERNAL_BROADCASTS.forEach((d,i)=>{ SAYS[`ext-${i}`]={t:d.text,l:"en-US"}; });
 }
-renderCIBroadcast();
+/* 廣播內容較長，第一次進入分頁時再建立 DOM。 */
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-ci-record]");if(!b)return;
   const item=CI_RECORDING_PROMPTS[b.dataset.ciRecord];if(!item)return;
@@ -1699,7 +1804,7 @@ async function mDel(id){ const db = await mdb(); if(!db) return;
   await new Promise(res=>{ const tx=db.transaction("recs","readwrite"); tx.objectStore("recs").delete(id); tx.oncomplete=()=>{db.close();res()}; tx.onerror=()=>{db.close();res()}; }); }
 
 /* --- 設定與抽題 --- */
-airChips($("#mAirline"), a=>{ M.air=a; fillMCats(); });
+airChips($("#mAirline"), a=>{ M.air=a; fillMCats(); },"華航");
 function fillMCats(){
   const sel = $("#mCat"); const old = sel.value;
   sel.innerHTML = `<option value="">全部類別</option>` + catsFor(M.air).map(c=>`<option>${c}</option>`).join("");
@@ -1730,6 +1835,7 @@ function mDraw(){
 }
 function mRenderQ(){
   const lang = $("#mLang").value;
+  setUXContext(`${M.air?`${M.air} › `:""}模擬面試 › ${M.queue?`第 ${M.qi+1} 題`:M.q.cat}`,true);
   if(M.audioUrl && typeof URL!=="undefined"){ URL.revokeObjectURL(M.audioUrl); M.audioUrl=null; }
   $("#mCard").classList.remove("hidden");
   const sourceTag = M.air && M.air!=="通用" ? `<span class="tag ${airsOf(M.q).includes("通用")?"gn":"cat"}">${airsOf(M.q).includes("通用")?"通用加強":"公司題優先"}</span>` : "";
@@ -1789,6 +1895,7 @@ $("#mRec").addEventListener("click", async ()=>{
   if(M.recActive || (M.mr && M.mr.state!=="inactive")) return;
   if(!hasMedia){ $("#mTimer").textContent = "⚠️ 此瀏覽器不支援錄音，請改用 Safari / Chrome 開啟。"; return; }
   $("#mRec").disabled = true;
+  $("#mTimer").textContent = "🎙️ 正在準備麥克風…";
   try{
     M.stream = await navigator.mediaDevices.getUserMedia({audio:true});
   }catch(e){ $("#mRec").disabled = false; $("#mTimer").textContent = "⚠️ 無法取得麥克風權限：請到瀏覽器設定允許麥克風。"; return; }
@@ -1814,7 +1921,7 @@ $("#mRec").addEventListener("click", async ()=>{
   }
 });
 $("#mStop").addEventListener("click", ()=>{
-  if(M.mr && M.mr.state !== "inactive") M.mr.stop();
+  if(M.mr && M.mr.state !== "inactive"){ $("#mTimer").textContent="⏳ 正在整理錄音與逐字稿…"; M.mr.stop(); }
   $("#mStop").disabled = true;
 });
 function mStopAll(){
@@ -1836,6 +1943,7 @@ function mFinish(){
   $("#mTimer").innerHTML = `✅ 錄音完成，共 <b>${M.dur}</b> 秒`;
   $("#mLive").textContent = "";
   $("#mRec").disabled = false;
+  if(M.q && M.q.cat==="華航初試・廣播朗讀" && typeof window.markCIProgress==="function") window.markCIProgress("broadcast");
   mShowResult(M.finalT.trim());
 }
 
@@ -1882,8 +1990,8 @@ function ciBroadcastReviewHtml(review){
   if(!review||!review.original) return "";
   const score=review.similarity;
   const status=score>=85?"good":score>=65?"warn":"bad";
-  const keys=review.keyRows.map(x=>`<span class="ci-keyword ${x.ok?"hit":"miss"}">${x.ok?"✓":"!"} ${esc(x.label)}${x.ok?"":pronunciationSaveBtn(x.label)}</span>`).join("");
-  const rows=review.sentences.map(x=>`<div class="ci-sentence-row"><div><b>第 ${x.i} 句</b><span class="sub">命中 ${x.hit}/${x.total} 個詞</span></div><div class="ci-original">原文：${esc(x.source)}</div>${x.missing.length?`<div class="ci-fix">🔧 疑似漏讀／辨識不到：${x.missing.map(w=>`${esc(w)} ${pronunciationSaveBtn(w)}`).join("、")}。請單獨重讀這一句，確認連音與句尾。</div>`:`<div class="ci-goodline">✅ 這句的主要詞彙都有被辨識到。</div>`}</div>`).join("");
+  const keys=review.keyRows.map(x=>`<span class="ci-keyword ${x.ok?"hit":"miss"}">${x.ok?"✓":"!"} ${esc(x.label)}${x.ok?"":pronunciationSaveBtn(x.label,review.original)}</span>`).join("");
+  const rows=review.sentences.map(x=>`<div class="ci-sentence-row"><div><b>第 ${x.i} 句</b><span class="sub">命中 ${x.hit}/${x.total} 個詞</span></div><div class="ci-original">原文：${esc(x.source)}</div>${x.missing.length?`<div class="ci-fix">🔧 疑似漏讀／辨識不到：${x.missing.map(w=>`${esc(w)} ${pronunciationSaveBtn(w,x.source)}`).join("、")}。請單獨重讀這一句，確認連音與句尾。</div>`:`<div class="ci-goodline">✅ 這句的主要詞彙都有被辨識到。</div>`}</div>`).join("");
   return `<div class="ci-broadcast-review"><h3>🔎 原文比對與逐句修正</h3><div class="fb ${status}">📄 原文詞彙命中率約 ${score}%（這是語音辨識比對，不等於正式發音評分）。</div><h4>關鍵字檢查</h4><div class="ci-keywords">${keys||"<span class='sub'>這段沒有可自動擷取的專有名詞或數字。</span>"}</div>${review.missing.length?`<div class="ci-fix" style="margin-top:8px">⚠️ 建議優先重讀：${esc(review.missing.join(", "))}</div>`:"<div class='ci-goodline' style='margin-top:8px'>✅ 沒有偵測到明顯漏讀的主要詞彙。</div>"}<h4>逐句檢查</h4>${rows}</div>`;
 }
 function analyze(t, dur, lang, item){
@@ -1977,6 +2085,32 @@ function answerComparisonHtml(c){
   return `<div class="answer-compare"><h3>🧭 你的回答和擬答差在哪裡？</h3><div class="compare-pills">${items||"<span class='sub'>這題沒有足夠的參考答案可比對。</span>"}</div><div class="tip">${esc(c.summary)}</div><p class="sub" style="margin:7px 0 0">這是「核心觀念覆蓋」提示，不是逐字相似度，也不會因為你用自己的方式回答就扣分。</p></div>`;
 }
 
+function resultSummaryHtml(fb,answerReview,ciReview){
+  const strengths=fb.filter(x=>x[0]==="good").slice(0,2).map(x=>x[1]);
+  const gaps=fb.filter(x=>x[0]!=="good").slice(0,2).map(x=>x[1]);
+  let lead="這次回答已完成；先修正最重要的一點，再重答一次即可。";
+  let next="保留現在做得好的部分，只針對第一個缺口重答同一題。";
+  if(answerReview){
+    const hit=answerReview.covered.map(x=>x.label),miss=answerReview.missing.map(x=>x.label);
+    lead=hit.length?`你的回答有答到${hit.slice(0,2).join("與")}${hit.length>2?"等重點":""}；${miss.length?`相較參考方向，還少了「${miss.slice(0,2).join("」與「")}」。`:"核心方向大致完整。"}`:`目前還沒有明確涵蓋參考答案的核心處理方式。`;
+    next=answerReview.structure?"保留目前結構，把缺少的動作補成一句具體做法。":"用三段式重組：先確認資訊，再提出具體行動，最後追蹤與收束；不需要逐字背誦。";
+  }else if(ciReview){
+    lead=`原文詞彙命中率約 ${ciReview.similarity}%。${ciReview.missing.length?`優先處理 ${ciReview.missing.slice(0,3).join("、")} 等疑似漏讀詞。`:"主要詞彙大致都有辨識到。"}`;
+    next="只挑命中較低的一句慢速重讀，確認重音、連音與句尾後再錄一次。";
+  }
+  const list=(items,empty)=>items.length?items.map(x=>`<div>• ${esc(x)}</div>`).join(""):`<div>${empty}</div>`;
+  return `<div class="result-summary" id="mTopSummary"><h3>🧭 這次回答的重點判斷</h3><p>${esc(lead)}</p><div class="result-columns"><div class="result-col good"><b>做得好的地方</b>${list(strengths,"已完成一次完整作答，可從回聽確認穩定度。")}</div><div class="result-col warn"><b>優先修正</b>${list(gaps,"目前沒有明顯警示，下一次可專注自然度。")}</div></div><div class="result-next">下一次只做一件事：${esc(next)}</div></div>`;
+}
+function refreshMockAnalysis(transcript){
+  const lang=$("#mLang").value,fb=analyze(transcript,M.dur,lang,M.q);
+  const ciReview=M.q&&M.q.cat==="華航初試・廣播朗讀"?ciBroadcastReview(transcript,M.q):null;
+  const answerReview=M.q&&M.q.cat!=="華航初試・廣播朗讀"?answerComparison(transcript,M.q,lang):null;
+  const top=$("#mTopSummary");if(top)top.outerHTML=resultSummaryHtml(fb,answerReview,ciReview);
+  $("#mFb").innerHTML=fbHtml(fb);
+  if(M.q&&M.q.cat!=="華航初試・廣播朗讀"){const cmp=$("#answerCompare");if(cmp)cmp.innerHTML=answerComparisonHtml(answerReview);}
+  if(M.q&&M.q.cat==="華航初試・廣播朗讀"){const cmp=$("#ciReview");if(cmp)cmp.innerHTML=ciBroadcastReviewHtml(ciReview);}
+}
+
 function mShowResult(transcript){
   const lang = $("#mLang").value;
   const fb = analyze(transcript, M.dur, lang, M.q);
@@ -1984,7 +2118,7 @@ function mShowResult(transcript){
   const answerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(transcript,M.q,lang) : null;
   let h = "";
   if(M.blob && typeof URL!=="undefined"){ M.audioUrl=URL.createObjectURL(M.blob); h += `<audio controls src="${M.audioUrl}"></audio>`; }
-  h += `<h3>📝 逐字稿（可修正後重新分析）</h3><textarea id="mTrans">${esc(transcript)}</textarea>
+  h += resultSummaryHtml(fb,answerReview,ciReview)+`<h3>📝 逐字稿（可修正後重新分析）</h3><textarea id="mTrans">${esc(transcript)}</textarea>
         <button class="btn sec" id="mRean" style="margin-top:6px">重新分析</button>
         <h3>💡 分析與建議</h3><div id="mFb">${fbHtml(fb)}</div>${answerReview?`<div id="answerCompare">${answerComparisonHtml(answerReview)}</div>`:""}${ciReview?`<div id="ciReview">${ciBroadcastReviewHtml(ciReview)}</div>`:""}`;
   const d = M.q;
@@ -1994,7 +2128,7 @@ function mShowResult(transcript){
   }
   if(M.queue){
     /* 一鏡到底：自動存檔、續往下一題 */
-    mSave({ ts: Date.now(), air: M.q.airline, q: M.q.q_zh || M.q.q_en, lang,
+    mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, lang,
             dur: M.dur, transcript, fb: fb.map(x=>x[1]), ciReview, answerReview, audio: M.blob });
     M.panel.push({ q: M.q.q_zh || M.q.q_en, dur: M.dur, warn: fb.filter(x=>x[0]==="warn").length });
     const last = M.qi >= M.queue.length - 1;
@@ -2004,9 +2138,7 @@ function mShowResult(transcript){
     $("#mResult").innerHTML = h;
     $("#mRean").addEventListener("click", ()=>{
       const t = $("#mTrans").value.trim();
-      $("#mFb").innerHTML = fbHtml(analyze(t, M.dur, lang, M.q));
-      if(M.q && M.q.cat!=="華航初試・廣播朗讀"){ const cmp=$("#answerCompare"); if(cmp) cmp.innerHTML = answerComparisonHtml(answerComparison(t,M.q,lang)); }
-      if(M.q && M.q.cat==="華航初試・廣播朗讀"){ const ciCmp=$("#ciReview"); if(ciCmp) ciCmp.innerHTML = ciBroadcastReviewHtml(ciBroadcastReview(t,M.q)); }
+      refreshMockAnalysis(t);
     });
     $("#mPanelNext").addEventListener("click", ()=>{
       if(last){ mPanelSummary(); } else { M.qi++; M.q = M.queue[M.qi]; mRenderQ(); }
@@ -2020,18 +2152,17 @@ function mShowResult(transcript){
   $("#mResult").innerHTML = h;
   $("#mRean").addEventListener("click", ()=>{
     const t = $("#mTrans").value.trim();
-    $("#mFb").innerHTML = fbHtml(analyze(t, M.dur, lang, M.q));
-    if(M.q && M.q.cat!=="華航初試・廣播朗讀"){ const cmp=$("#answerCompare"); if(cmp) cmp.innerHTML = answerComparisonHtml(answerComparison(t,M.q,lang)); }
-    if(M.q && M.q.cat==="華航初試・廣播朗讀"){ const ciCmp=$("#ciReview"); if(ciCmp) ciCmp.innerHTML = ciBroadcastReviewHtml(ciBroadcastReview(t,M.q)); }
+    refreshMockAnalysis(t);
   });
   $("#mRetry").addEventListener("click", ()=>{ $("#mResult").innerHTML=""; $("#mTimer").textContent="按下 🔴 重新錄音"; });
   $("#mSaveBtn").addEventListener("click", async ()=>{
     const t = $("#mTrans").value.trim();
     const savedCiReview = M.q && M.q.cat==="華航初試・廣播朗讀" ? ciBroadcastReview(t,M.q) : null;
     const savedAnswerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(t,M.q,lang) : null;
-    await mSave({ ts: Date.now(), air: M.q.airline, q: M.q.q_zh || M.q.q_en, lang,
+    await mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, lang,
                   dur: M.dur, transcript: t, fb: analyze(t, M.dur, lang, M.q).map(x=>x[1]),
                   ciReview: savedCiReview, answerReview: savedAnswerReview, audio: M.blob });
+    if((M.air==="華航"||airsOf(M.q).includes("華航"))&&M.q.cat!=="華航初試・廣播朗讀"&&typeof window.markCIProgress==="function")window.markCIProgress("final");
     $("#mSaveBtn").textContent = "✅ 已儲存"; $("#mSaveBtn").disabled = true;
     renderMHistory();
   });
@@ -2046,22 +2177,41 @@ function mPanelSummary(){
     ${M.panel.map((x,i)=>`<div class="fb ${x.warn<=2?"good":"warn"}">第${i+1}題「${esc(x.q.slice(0,22))}…」 ${x.dur} 秒 · ${x.warn} 個待改善點</div>`).join("")}
     <div class="tip">💡 每題的錄音、逐字稿與完整建議都在下方「我的模擬紀錄」。建議明天同模式再跑一輪，比較待改善點是否下降。</div>
     <button class="btn" style="margin-top:8px" onclick="document.getElementById('mDraw').click()">再跑一輪</button>`;
+  if(M.air==="華航"&&typeof window.markCIProgress==="function")window.markCIProgress("final");
   M.queue = null;
 }
 
 /* --- 紀錄 --- */
+function historyTrendHtml(current,previous){
+  if(!previous)return `<div class="history-trend">第一筆同題紀錄；下次重答後會顯示前後比較。</div>`;
+  const curWarn=(current.fb||[]).filter(x=>!/理想|穩定|清楚|清晰|說服力|控制得很好|做得好/.test(x)).length;
+  const prevWarn=(previous.fb||[]).filter(x=>!/理想|穩定|清楚|清晰|說服力|控制得很好|做得好/.test(x)).length;
+  const parts=[`回答 ${previous.dur||0}秒 → ${current.dur||0}秒`,`待改善 ${prevWarn} → ${curWarn}`];
+  let improved=curWarn<prevWarn;
+  if(current.ciReview&&previous.ciReview){parts.push(`原文命中 ${previous.ciReview.similarity||0}% → ${current.ciReview.similarity||0}%`);improved=improved||current.ciReview.similarity>previous.ciReview.similarity;}
+  if(current.answerReview&&previous.answerReview){const a=(previous.answerReview.covered||[]).length,b=(current.answerReview.covered||[]).length;parts.push(`核心重點 ${a} → ${b}`);improved=improved||b>a;}
+  return `<div class="history-trend ${improved?"up":""}">${improved?"↗ 有進步　":"↔ 歷次比較　"}${esc(parts.join(" · "))}</div>`;
+}
 async function renderMHistory(){
   if(!hasIDB){ $("#mHistNote").textContent = "此瀏覽器無法保存紀錄。"; return; }
-  const list = await mList();
-  if(!list.length){ $("#mHistory").innerHTML = `<p class="sub">還沒有紀錄——完成第一次模擬後按「存入紀錄」。</p>`; return; }
+  const all = await mList(),airSel=$("#mHistAir"),search=$("#mHistSearch");
+  if(airSel){const current=airSel.value,airs=[...new Set(all.map(x=>x.air).filter(Boolean))];airSel.innerHTML=`<option value="">全部航空公司</option>`+airs.map(x=>`<option ${x===current?"selected":""}>${esc(x)}</option>`).join("");}
+  const air=airSel?airSel.value:"",kw=search?search.value.trim().toLowerCase():"";
+  const list=all.filter(x=>(!air||x.air===air)&&(!kw||`${x.q||""} ${x.transcript||""}`.toLowerCase().includes(kw)));
+  if(!all.length){ $("#mHistory").innerHTML = `<p class="sub">還沒有紀錄——完成第一次模擬後按「存入紀錄」。</p>`; return; }
+  if(!list.length){ $("#mHistory").innerHTML = `<p class="sub">找不到符合篩選條件的紀錄。</p>`; return; }
   $("#mHistory").innerHTML = list.map(r=>{
     const d = new Date(r.ts);
     const when = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
     const legacyCi = !r.ciReview && r.air==="華航" && r.transcript && r.q ? Object.values(CI_RECORDING_PROMPTS).find(x=>r.q.includes(x.title)) : null;
     const savedCiReview = r.ciReview || (legacyCi ? ciBroadcastReview(r.transcript,{q_en:legacyCi.text,cat:"華航初試・廣播朗讀"}) : null);
+    const previous=all.find(x=>x.id!==r.id&&x.ts<r.ts&&x.q===r.q&&x.lang===r.lang&&x.air===r.air);
+    const headline=r.answerReview&&r.answerReview.summary?r.answerReview.summary:(savedCiReview?`原文詞彙命中率約 ${savedCiReview.similarity||0}%；${savedCiReview.missing&&savedCiReview.missing.length?`優先重讀 ${savedCiReview.missing.slice(0,3).join("、")}。`:"主要詞彙大致都有辨識到。"}`:"");
     return `<div class="hist" data-id="${r.id}">
       <b><span class="tag ${TAGC[r.air]||"cat"}">${esc(r.air)}</span>${esc(r.q)}</b>
       <div class="sub" style="margin:4px 0">${when} · ${r.dur} 秒 · ${r.lang==="en"?"英文":"中文"}</div>
+      ${historyTrendHtml(r,previous)}
+      ${headline?`<div class="tip" style="margin-top:7px">🧭 ${esc(headline)}</div>`:""}
       <div class="histaudio"></div>
       <details><summary>逐字稿與建議</summary><div class="body">
         ${r.transcript?`<p style="margin-bottom:6px">${esc(r.transcript)}</p>`:`<p class="sub">（無逐字稿）</p>`}
@@ -2075,6 +2225,8 @@ async function renderMHistory(){
       </div></div>`;
   }).join("");
 }
+$("#mHistAir").addEventListener("change",renderMHistory);
+$("#mHistSearch").addEventListener("input",()=>scheduleIdle(renderMHistory));
 $("#mHistory").addEventListener("click", async e=>{
   const hist=e.target.closest(".hist"); if(!hist) return;
   const id=+hist.dataset.id;
@@ -2537,6 +2689,10 @@ function srsNext(){
 }
 function renderDash(){
   renderSrs();
+  const ci=store.get("ciProgress",{modules:{},last:{}}),cm=ci.modules||{},cl=ci.last||{};
+  const state=n=>n>=3?["已練穩","ready"]:n>0?["練習中","learning"]:["未開始",""];
+  const ciRow=(name,key,go)=>{const n=cm[key]||0,s=state(n),date=cl[key]?new Date(cl[key]).toLocaleDateString("zh-TW",{month:"numeric",day:"numeric"}):"尚無紀錄";return `<div class="ci-skill"><div><b>${name}</b><small>${n} 次練習 · ${date}</small></div><span class="ci-state ${s[1]}">${s[0]}</span></div>`};
+  const ciSummary=$("#ciStatsSummary");if(ciSummary)ciSummary.innerHTML=`<div class="ci-skill-list">${ciRow("初試資料、摸高與台步","initial")}${ciRow("廣播原文與逐句修正","broadcast")}${ciRow("複試面談與錄音回答","final")}</div><div class="quicknav"><button data-go="eva">回華航首頁</button><button data-go="ciBroadcast">練廣播詞</button><button data-go="mock">進行模擬</button></div>`;
   const s = store.get("stats", {});
   const t = todayStr();
   const today = s[t] || {};
@@ -2571,7 +2727,7 @@ let P50 = [];
 const P50GRP = ["開場必備","動機與公司","經歷與自我","服務與客訴","團隊合作","安全職責","職涯與作息","語言與特色"];
 let p50Air="", p50Cur=null, p50Queue=null, p50Timer=null;
 $("#p50Total").textContent = DATA.length;
-airChips($("#p50Air"), a=>{ p50Air=a; p50Paint(); });
+airChips($("#p50Air"), a=>{ p50Air=a; p50Paint(); },"華航");
 $("#p50Grp").innerHTML = `<option value="">全部分組</option>` +
   P50GRP.map(g=>`<option>${g}（${P50.filter(x=>x.p50===g).length}）</option>`).join("");
 $("#p50Grp").addEventListener("change", p50Paint);
@@ -2698,7 +2854,7 @@ $("#toolNav").addEventListener("click", e=>{
   $$("#toolNav .chip").forEach(x=>x.classList.toggle("on",x===c));
   toolRender(c.dataset.x);
 });
-toolRender("frame");
+/* 工具內容在第一次進入分頁時載入。 */
 
 
 /* ================= 🎬 關卡練習 ================= */
@@ -2736,10 +2892,10 @@ $("#stageNav").addEventListener("click", e=>{
   $$("#stageNav .chip").forEach(x=>x.classList.toggle("on",x===c));
   stageRender(c.dataset.x);
 });
-stageRender("gd");
+/* 封存關卡內容在第一次進入分頁時載入。 */
 
 /* ================= 備份匯出／匯入 ================= */
-const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks"];
+const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","ciLastRoute"];
 function cleanImportedRecord(r){
   if(!r || typeof r!=="object" || Array.isArray(r)) return null;
   const text=v=>typeof v==="string"?v.slice(0,20000):"";
