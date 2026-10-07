@@ -10,7 +10,9 @@
   function markModule(k,n){ const p=practice(); p.modules[k]=(p.modules[k]||0)+(n||1); savePractice(p); }
   function addUnique(k,v){ const p=practice(); p[k]=Array.isArray(p[k])?p[k]:[]; if(!p[k].includes(v)) p[k].push(v); savePractice(p); }
   function paintStatsMini(){ const el=document.getElementById("evaStatsMini");if(!el)return;const p=practice(),math=Object.values(p.math||{}).reduce((a,s)=>({ok:a.ok+(s.ok||0),total:a.total+(s.total||0)}),{ok:0,total:0});el.textContent=`初試練習 ${Object.values(p.modules||{}).reduce((a,b)=>a+b,0)} 次${math.total?`・筆試 ${math.ok}/${math.total}`:""}｜複試核心 ${(p.core||[]).length} 題・追問 ${p.followups||0} 層`; }
-  function go(view){ EVA.view=view; render(); if(view==="home")paintEvaCountdown(); window.scrollTo({top:0,behavior:"smooth"}); }
+  const viewNames={home:"招考首頁",initial:"初試準備",final:"複試準備",reading:"英文無預讀",taiwanese:"台語廣播",sjt:"適職測驗",ethics:"職業倫理",paper:"筆試訓練",physical:"儀態提醒",core:"核心題",followup:"追問",picture:"看圖說故事",current:"時事",notice841:"84-1 注意事項",mock:"全真模擬",stats:"準備度"};
+  function setViewContext(view){if(typeof window.setUXContext==="function")window.setUXContext(`🌍 長榮 › ${viewNames[view]||"訓練"}`,view!=="home")}
+  function go(view,sync=true){ EVA.view=view; render(); setViewContext(view); const routeView=Object.prototype.hasOwnProperty.call(viewNames,view)?view:"mock"; if(sync&&typeof window.setAppRoute==="function")window.setAppRoute(`eva/${routeView}`); if(view==="home")paintEvaCountdown(); window.scrollTo({top:0,behavior:"smooth"}); }
   function navButton(view,label,cls){ return `<button class="btn ${cls||""}" data-eva-go="${view}">${label}</button>`; }
   function screenHead(title,sub){ const inSession=EVA.sessionSubflow&&EVA.session&&EVA.session.i<EVA.session.steps.length; return `<div class="card"><div class="eva-screen-head"><button class="eva-back" data-eva-go="${inSession?"session":"home"}">← ${inSession?"返回本次訓練":"長榮首頁"}</button><div style="flex:1"><div class="eva-eyebrow" style="color:var(--eva)">EVA AIR</div><h2>${esc(title)}</h2><p class="section-note">${esc(sub||"")}</p></div></div></div>`; }
   function moduleCard(view,icon,title,desc){ return `<button class="eva-module" data-eva-go="${view}"><b>${icon} ${title}</b><span>${desc}</span></button>`; }
@@ -210,11 +212,15 @@
     if(e.target.id==="evaMockSave"){saveMockTask();return}
   });
 
-  window.addEventListener("eva-home",()=>{EVA.view="home";render();paintEvaCountdown()});
+  window.addEventListener("eva-home",()=>{EVA.view="home";render();setViewContext("home");paintEvaCountdown()});
   document.addEventListener("click",e=>{
     if(e.target.closest('#nav button[data-t="stats"]')) setTimeout(paintStatsMini,0);
-    if(e.target.closest("#evaStatsOpen")){document.querySelector('#nav button[data-t="eva"]').click();EVA.view="stats";render();}
+    if(e.target.closest("#evaStatsOpen")){document.querySelector('#nav button[data-t="eva"]').click();go("stats");}
   });
+  window.renderEVARoute=view=>{
+    const safe=Object.prototype.hasOwnProperty.call(viewNames,view)?view:"home";
+    go(safe,false);
+  };
   paintStatsMini();
   render();
   paintEvaCountdown();

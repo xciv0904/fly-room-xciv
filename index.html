@@ -9,349 +9,30 @@
 <meta name="apple-mobile-web-app-title" content="空服面試">
 <title>✈️ 空服面試練習室</title>
 <link rel="stylesheet" href="eva-mode.css">
-<style>
-:root{
-  --bg:#f6f5f0; --card:#ffffff; --ink:#1a2438; --sub:#6b7488; --line:#e6e3d8;
-  --accent:#16345c; --accent-soft:#eef2f9;
-  --gold:#c9a232; --gold-deep:#8a6d1f; --gold-soft:#f7f0da;
-  --ci:#c81432; --sjx:#8a774a; --br:#1c6b3f; --cx:#00645a; --ek:#a4801d;
-  --good:#1a8a5a; --warn:#c2621a; --bad:#c0392b;
-  --radius:14px; --shadow:0 1px 3px rgba(22,52,92,.08),0 4px 14px rgba(22,52,92,.06);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
-header{background:linear-gradient(130deg,#0b1e3a 0%,#16345c 55%,#274b7e 100%);color:#fff;padding:22px 20px 14px;border-bottom:3px solid var(--gold)}
-header h1{font-size:21px;font-weight:700;letter-spacing:.5px}
-header h1 .gold{color:#e8c96a}
-header p{font-size:12.5px;opacity:.85;margin-top:3px}
-nav{display:flex;gap:4px;background:linear-gradient(130deg,#0b1e3a,#16345c 55%,#274b7e);padding:0 12px;overflow-x:auto;position:sticky;top:0;z-index:50}
-nav button{flex:0 0 auto;background:transparent;border:none;color:rgba(255,255,255,.72);font-size:14.5px;font-weight:600;padding:11px 14px;cursor:pointer;border-bottom:3px solid transparent;font-family:inherit}
-nav button.on{color:#f2d98c;border-bottom-color:var(--gold)}
-.contextbar{max-width:960px;margin:0 auto;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--sub);font-size:12.5px}
-.contextbar strong{color:var(--ink);font-weight:700}
-.context-back{border:0;background:transparent;color:var(--accent);font:700 12.5px/1.2 inherit;cursor:pointer;padding:6px 0}
-.context-back[hidden]{display:none}
-main{max-width:860px;margin:0 auto;padding:18px 14px 80px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:14px}
-h2{font-size:16.5px;margin-bottom:8px}
-h3{font-size:14.5px;margin:12px 0 6px}
-.sub{color:var(--sub);font-size:12.5px}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
-.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:5px 13px;font-size:13px;cursor:pointer;color:var(--sub);font-weight:600;font-family:inherit}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.quicknav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
-.quicknav button{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:6px 10px;font:600 12px/1.2 inherit;cursor:pointer}
-.quicknav button:hover{border-color:var(--accent);color:var(--accent)}
-.ux-focus{border:1px solid #d7e2ef;border-left:5px solid var(--ci);background:linear-gradient(145deg,#fff,#f7faff);box-shadow:0 8px 22px rgba(22,52,92,.1)}
-.ux-focus-label{font-size:11px;letter-spacing:1.2px;font-weight:800;color:var(--ci)}
-.ux-focus h2{font-size:21px;margin:5px 0 3px}
-.ux-focus-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-.ux-focus-actions .btn:first-child{min-width:210px;background:var(--ci)}
-.more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.more-card{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:13px;background:#fff;padding:15px;color:var(--ink);font:inherit;cursor:pointer;min-height:104px}
-.more-card:hover,.more-card:focus-visible{border-color:var(--accent);box-shadow:var(--shadow)}
-.more-card b{display:block;font-size:15px;margin-bottom:4px}.more-card span{display:block;color:var(--sub);font-size:12.5px}
-.ci-hero{background:linear-gradient(145deg,#183b68,#245c91 66%,#c81432);color:#fff;border:none;box-shadow:0 8px 24px rgba(24,59,104,.2);padding:22px}
-.ci-hero h2{font-size:23px;margin:4px 0 2px}
-.ci-hero .section-note{color:rgba(255,255,255,.86);margin-bottom:12px}
-.ci-hero .quicknav button{border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.96);color:#183b68}
-.air-hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
-.air-hero-actions .btn{min-height:50px;background:#fff;color:#183b68;border:0;font-size:15px}
-.air-hero-actions .btn.sec{background:#f6e8b9;color:#59430f}
-.air-date-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-.air-date-row label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:rgba(255,255,255,.92)}
-.air-date-row input{font-family:inherit;font-size:14px;padding:8px 10px;border:1.5px solid rgba(255,255,255,.55);border-radius:9px;background:rgba(255,255,255,.96);color:var(--ink)}
-.air-countdown{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
-.air-countdown span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;font-size:13px}
-.air-countdown b{font-size:20px;color:#fff2bd}
-@media(max-width:560px){.air-hero-actions{grid-template-columns:1fr}.air-date-row{display:grid;grid-template-columns:1fr}.air-date-row label{justify-content:space-between}.air-date-row input{width:150px}}
-.ci-eyebrow{font-size:12px;letter-spacing:1.5px;font-weight:800;color:#ffd9df;text-transform:uppercase}
-.ci-countdown{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
-.ci-countdown span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:7px 11px;font-size:13px}
-.ci-countdown b{font-size:20px;color:#fff2bd}
-.ci-phase-card{border:1px solid #d7e2ef;border-top:4px solid #245c91;background:linear-gradient(180deg,#fff,#f1f6fb);border-radius:14px;padding:17px;margin-bottom:14px;box-shadow:var(--shadow)}
-.ci-phase-card.active{border:2px solid var(--ci);border-top-width:5px;box-shadow:0 7px 20px rgba(200,20,50,.12)}
-.ci-phase-card h2{font-size:18px;margin-bottom:2px}
-.ci-phase-label{font-size:11px;font-weight:800;letter-spacing:1px;color:#245c91}
-.ci-phase-card.active .ci-phase-label{color:var(--ci)}
-.ci-phase-card .ci-task{background:rgba(255,255,255,.82);border:1px solid #e0e8f0;border-radius:9px}
-.ci-welcome{font-size:13px;color:var(--sub);margin:12px 0 10px}
-.ci-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 14px}
-.ci-module{background:#fff;border:1px solid #d7e2ef;border-top:4px solid #245c91;border-radius:13px;padding:15px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink);min-height:126px}
-.ci-module:hover{border-color:var(--ci);box-shadow:0 5px 14px rgba(200,20,50,.1)}
-.ci-module b{display:block;font-size:15px;margin-bottom:5px}
-.ci-module span{display:block;font-size:12px;color:var(--sub);line-height:1.55}
-.ci-module small{display:block;color:var(--ci);font-weight:800;font-size:11px;margin-top:10px}
-.ci-eval-note{display:flex;gap:10px;align-items:flex-start;background:#fff7f8;border:1px solid #f0cbd2;border-radius:11px;padding:11px 13px;font-size:12.5px;color:#7e3342}
-.ci-eval-note b{white-space:nowrap;color:var(--ci)}
-.ci-progress{background:#fff;border:1px solid #d7e2ef;border-radius:12px;padding:13px 15px;margin-top:12px}
-.ci-progress h3{margin:0 0 6px;color:#245c91}
-.ci-progress-row{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f5;padding:6px 0;font-size:13px}
-.ci-progress-row span{font-weight:800;color:var(--ci)}
-.ci-dashboard{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);gap:12px;margin-top:12px}
-.ci-phase-card{margin:0;position:relative;overflow:hidden}
-.ci-phase-card::after{content:"✈";position:absolute;right:18px;top:14px;font-size:52px;line-height:1;color:#dce8f3;transform:rotate(-12deg)}
-.ci-phase-top{display:flex;align-items:center;gap:8px;margin-bottom:7px;position:relative;z-index:1}
-.ci-phase-status{margin-left:auto;border-radius:99px;padding:4px 9px;background:#e8f6ef;color:#16734a;font-size:11px;font-weight:800}
-.ci-phase-card.active .ci-phase-status{background:#fdecef;color:var(--ci)}
-.ci-task-list{display:grid;gap:7px;margin-top:12px;position:relative;z-index:1}
-.ci-task{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:12.5px}
-.ci-task::before{content:"○";color:#245c91;font-size:16px}
-.ci-task.done::before{content:"✓";color:var(--good);font-weight:800}
-.ci-next-card{background:linear-gradient(145deg,#fff8f8,#fff);border:1px solid #f0cbd2;border-radius:14px;padding:17px;box-shadow:var(--shadow)}
-.ci-next-card h3{margin:0 0 4px;color:var(--ci);font-size:15px}
-.ci-next-card p{font-size:13px;color:var(--sub);margin-bottom:12px}
-.ci-next-card .btn{width:100%;background:var(--ci);box-shadow:0 5px 12px rgba(200,20,50,.18)}
-.ci-route{margin-top:12px;border:1px solid #d7e2ef;border-radius:14px;background:#fff;box-shadow:var(--shadow);overflow:hidden}
-.ci-route-head{padding:17px 18px;background:linear-gradient(135deg,#183b68,#245c91);color:#fff}
-.ci-route-head .ci-phase-label{color:#dcecff}
-.ci-route-head h2{margin:4px 0 2px;font-size:20px}
-.ci-route-head p{font-size:13px;color:rgba(255,255,255,.84)}
-.ci-route-body{padding:17px 18px}
-.ci-route-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 16px}
-.ci-route-step{border:1px solid #e0e8f0;border-radius:10px;padding:10px;font-size:12.5px;background:#f8fbfe}
-.ci-route-step b{display:block;color:#245c91;margin-bottom:3px}
-.ci-initial-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0 16px}
-.ci-initial-list>div{border:1px solid #e0e8f0;border-left:4px solid #245c91;border-radius:10px;padding:11px 12px;background:#f8fbfe}
-.ci-initial-list b{display:block;color:#245c91;font-size:13.5px;margin-bottom:3px}
-.ci-initial-list span{display:block;color:var(--sub);font-size:12.5px;line-height:1.55}
-.ci-stage-list{display:grid;gap:9px;margin:2px 0 16px}
-.ci-stage-item{display:grid;grid-template-columns:42px 1fr 22px;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);background:#fff;border:1px solid #d7e2ef;border-radius:11px;padding:12px;cursor:pointer}
-.ci-stage-item:hover{border-color:var(--ci);background:#fff8f8;box-shadow:0 4px 12px rgba(200,20,50,.08)}
-.ci-stage-num{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#eef4fa;color:#245c91;font-weight:800;font-size:12px}
-.ci-stage-item b,.ci-stage-item small{display:block}.ci-stage-item b{font-size:14px;margin-bottom:2px}.ci-stage-item small{font-size:12.5px;color:var(--sub);line-height:1.5}.ci-stage-item strong{color:var(--ci);font-size:20px}
-.ci-eva-shell{margin-top:0}
-.ci-route .ci-route-head{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px 18px 18px;box-shadow:var(--shadow)}
-.ci-route .ci-route-head .ci-phase-label{color:#245c91;font-size:12px}
-.ci-route .ci-route-head h2{color:var(--ink);font-size:23px;margin:9px 0 8px}
-.ci-route .ci-route-head p{color:var(--sub);font-size:15px;line-height:1.75;margin:0}
-.ci-eva-back{display:inline-block;border:0;background:#eef4fa;color:#183b68;font:700 15px/1.2 inherit;border-radius:9px;padding:12px 16px;cursor:pointer;min-height:44px;margin-bottom:15px}
-.ci-route .ci-route-body{padding:14px 0 0}
-.ci-route .ci-stage-list{gap:10px}
-.ci-route .ci-stage-item{grid-template-columns:1fr;border:1.5px solid #d7e2ef;border-radius:14px;padding:18px 16px;min-height:112px;background:#fff}
-.ci-route .ci-stage-item:hover{border-color:#245c91;background:#f1f6fb;box-shadow:none}
-.ci-route .ci-stage-num{display:none}
-.ci-route .ci-stage-item span:nth-child(2){display:block}
-.ci-route .ci-stage-item b{font-size:17px;color:var(--ink);margin-bottom:5px}
-.ci-route .ci-stage-item small{font-size:14px;line-height:1.65;color:var(--sub)}
-.ci-route .ci-stage-item strong{display:none}
-.ci-route .ci-route-actions{margin-top:10px}
-.ci-route .ci-route-actions .btn.ghost{width:100%;background:#fff;border:1.5px solid #d7e2ef;color:var(--sub);min-height:48px}
-.ci-today-card{margin-top:14px}
-.ci-home-stage{border-top-color:#245c91;background:linear-gradient(180deg,#fff,#f1f6fb)}
-.ci-home-stage.final{border-top-color:var(--ci);background:linear-gradient(180deg,#fff,#fff5f6)}
-.ci-home-stage .eva-stage-label{color:#245c91}.ci-home-stage.final .eva-stage-label{color:var(--ci)}
-.ci-home-stage .eva-feature{border-color:#d7e2ef}.ci-home-stage.final .eva-feature{border-color:#f0cbd2}
-.ci-primary{background:#245c91;color:#fff}.ci-home-stage.final .ci-primary{background:var(--ci)}
-.ci-route-actions{display:flex;gap:8px;flex-wrap:wrap}
-@media(max-width:560px){.ci-route-steps,.ci-initial-list{grid-template-columns:1fr}.ci-route-actions .btn{flex:1 1 100%}}
-.ci-progress-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
-.ci-progress-head h3{margin:0;color:#245c91}
-.ci-progress-head span{font-size:12px;color:var(--sub)}
-.ci-progress-track{height:8px;background:#edf1f5;border-radius:99px;overflow:hidden;margin-bottom:11px}
-.ci-progress-track span{display:block;height:100%;background:linear-gradient(90deg,#245c91,var(--ci));border-radius:inherit;transition:width .3s ease}
-.ci-skill-list{display:grid;gap:8px;margin-top:10px}
-.ci-skill{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;border:1px solid #e0e8f0;border-radius:10px;padding:10px 12px;background:#fbfdff}
-.ci-skill b{display:block;font-size:13.5px}.ci-skill small{display:block;color:var(--sub);font-size:11.5px;margin-top:2px}
-.ci-state{border-radius:999px;padding:4px 9px;font-size:11px;font-weight:800;background:#eef2f7;color:#52627a}
-.ci-state.learning{background:#fff3d7;color:#87620d}.ci-state.ready{background:#e8f7ef;color:#14603f}
-.ci-module-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
-.ci-module{min-height:148px;display:flex;flex-direction:column;align-items:flex-start}
-.ci-module small{margin-top:auto}
-@media(max-width:760px){.ci-dashboard{grid-template-columns:1fr}.ci-module-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:640px){.ci-module-grid{grid-template-columns:1fr}.ci-eval-note{display:block}.ci-eval-note b{display:block;margin-bottom:3px}}
-select,input[type=text]{font-family:inherit;font-size:13.5px;padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
-.btn{font-family:inherit;font-size:14.5px;font-weight:700;padding:10px 20px;border-radius:11px;border:none;cursor:pointer;background:var(--accent);color:#fff}
-.btn.sec{background:var(--gold-soft);color:var(--gold-deep);border:1px solid #e8d9a8}
-.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--sub)}
-.btn:disabled{opacity:.4;cursor:default}
-.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 8px;margin-right:5px;vertical-align:2px}
-.tag.hl{background:#fdecef;color:var(--ci)}.tag.sj{background:#f3efe3;color:var(--sjx)}.tag.cx{background:#e2f2f0;color:var(--cx)}.tag.ek{background:#f7f0da;color:var(--ek)}.tag.br{background:#e6f2e9;color:#1c6b3f}.tag.gn{background:#e9edf3;color:#3f5675}
-.tag.cat{background:#eef2f7;color:var(--sub)}
-.qtext{font-size:17px;font-weight:700;margin:10px 0 4px}
-.qtext.en{font-size:15.5px;color:#33475c;font-weight:600}
-.timerbar{height:10px;background:#edf1f6;border-radius:6px;overflow:hidden;margin:10px 0 4px}
-.timerbar>div{height:100%;background:linear-gradient(90deg,#16345c,#c9a232);width:100%;transition:width .95s linear}
-.timerbar.warn>div{background:linear-gradient(90deg,#c2621a,#e08b3d)}
-.tstate{font-size:13px;font-weight:700;color:var(--sub)}
-.tstate b{font-size:20px;color:var(--ink)}
-.ansbox{background:#f7fafd;border:1px solid var(--line);border-radius:11px;padding:12px 14px;margin-top:10px;font-size:14px}
-.ansbox .zh{margin-bottom:8px}
-.ansbox .en{color:#33475c}
-.tip{background:#fff8e8;border:1px solid #f1e2b8;border-radius:9px;padding:8px 12px;font-size:12.5px;color:#7a5c17;margin-top:8px}
-details{border:1px solid var(--line);border-radius:11px;margin-bottom:8px;background:#fff}
-details summary{padding:10px 14px;cursor:pointer;font-size:14px;font-weight:600;list-style:none;display:flex;align-items:center;gap:6px}
-details summary::before{content:"▸";color:var(--sub);transition:transform .15s}
-details[open] summary::before{transform:rotate(90deg)}
-details .body{padding:2px 16px 13px;font-size:13.5px}
-details.qa summary{font-weight:600}
-.star{margin-left:auto;cursor:pointer;font-size:16px;color:#c9d4e0;flex:0 0 auto}
-.star.on{color:#f5b301}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}}
-.stat{font-size:12px;color:var(--sub);margin-top:6px}
-.readblock{white-space:pre-wrap;font-size:14.5px;background:#f7fafd;border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-top:8px}
-.readblock.en{color:#33475c}
-.story-card{border-top:3px solid #c9e3d5}
-.story-summary{color:var(--sub);font-size:13.5px;margin:8px 0 12px}
-.story-answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.story-answer{min-width:0}
-.story-label{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--navy);text-transform:uppercase}
-.story-answer .chips{margin-top:6px}
-@media(max-width:720px){.story-answer-grid{grid-template-columns:1fr}}
-.company-q{padding:10px 0 14px;border-bottom:1px solid var(--line)}
-.company-q:last-child{border-bottom:0;padding-bottom:0}
-.company-q h3{font-size:15px;margin:0 0 5px;color:var(--navy)}
-.company-q .en-q{margin-top:14px;color:var(--sub);font-weight:700}
-.pronounce-add{display:flex;gap:8px;align-items:center;margin:10px 0}
-.pronounce-add input{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit}
-.pronounce-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
-.pronounce-row:last-child{border-bottom:0}
-.pronounce-row b{display:block;font-size:16px;color:var(--navy)}
-.pronounce-meaning{display:block;color:var(--sub);font-size:14px;margin-top:2px}
-.pronounce-edit{display:flex;gap:5px;margin-top:5px}
-.pronounce-meaning-input{width:190px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:12px}
-.pronounce-row .sub{display:block;font-size:12px;margin-top:3px}
-.pronounce-row .chips{justify-content:flex-end}
-.pronounce-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:2px}
-.pronounce-ipa{font-family:Georgia,serif;color:#33475c;font-size:13px}
-.pronounce-example{margin-top:5px;color:#52627a;font-size:12.5px;font-style:italic;max-width:520px}
-.pronounce-due{display:inline-block;border-radius:999px;padding:2px 7px;background:#eef2f7;color:#52627a;font-size:11px;font-weight:700}
-.pronounce-due.today{background:#fff0f0;color:#9c2635}
-.ci-keyword .ci-save-word{margin-left:5px;padding:2px 6px;font-size:11px;background:#fff}
-.ci-fix .ci-save-word{margin-left:4px;padding:2px 6px;font-size:11px;background:#fff}
-@media(max-width:640px){.pronounce-add{align-items:stretch;flex-direction:column}.pronounce-row{align-items:flex-start;flex-direction:column}.pronounce-row .chips{justify-content:flex-start}}
-.pill{display:inline-block;background:var(--gold-soft);color:var(--gold-deep);font-size:12px;font-weight:700;border-radius:7px;padding:2px 9px;margin:2px 4px 2px 0}
-.star.on{color:var(--gold)}
-ul.tight{padding-left:20px;font-size:13.5px}
-ul.tight li{margin-bottom:4px}
-.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;font-weight:600;margin:6px 0}
-.flow span{background:#eef2f7;border-radius:8px;padding:4px 10px}
-.flow em{color:var(--sub);font-style:normal}
-.seatgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
-.seat{background:#f0f5fb;border:1.5px solid #d5e2f0;border-radius:10px;padding:8px 12px;font-size:14px;font-weight:600;text-align:center}
-.seat b{color:var(--accent);margin-right:6px}
-.opt{display:block;width:100%;text-align:left;font-family:inherit;font-size:13.5px;background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;margin-bottom:6px;cursor:pointer}
-.opt.right{border-color:var(--good);background:#ecf8f2}
-.opt.wrong{border-color:var(--bad);background:#fdeeec}
-.section-note{font-size:12.5px;color:var(--sub);margin-bottom:10px}
-.hidden{display:none!important}
-.input-invalid{border-color:var(--bad)!important;background:#fff5f4!important}
-.searchrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-.count{font-size:12px;color:var(--sub)}
-.warnbox{background:#fdf3ec;border:1px solid #ecd3bd;border-radius:10px;padding:10px 13px;font-size:13px;color:#8a4b12;margin:8px 0}
-footer{text-align:center;font-size:11.5px;color:#9aa8b8;padding:20px}
-audio{width:100%;margin-top:8px}
-textarea{width:100%;font-family:inherit;font-size:14px;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;min-height:90px;color:var(--ink)}
-.recdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--bad);margin-right:6px;animation:blink 1s infinite}
-@keyframes blink{50%{opacity:.2}}
-.fb{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;margin:6px 0;padding:8px 11px;border-radius:9px}
-.fb.good{background:#ecf8f2;color:#14603f}
-.fb.warn{background:#fdf3ec;color:#8a4b12}
-.fb.bad{background:#fff0f0;color:#9c2635}
-.answer-compare{margin-top:12px;padding:12px;border:1px solid #d7e2ef;border-radius:11px;background:#fbfdff}
-.answer-compare h3{margin:0 0 8px;color:var(--navy)}
-.compare-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
-.compare-pill{display:inline-block;border-radius:7px;padding:4px 8px;font-size:12px;font-weight:700}
-.compare-pill.hit{background:#e8f7ef;color:#14603f}
-.compare-pill.miss{background:#fff0f0;color:#9c2635}
-.ci-broadcast-review{margin-top:12px;padding:12px;border:1px solid #d7e2ef;border-radius:11px;background:#fbfdff}
-.ci-broadcast-review h3{margin:0 0 8px;color:var(--navy)}
-.ci-broadcast-review h4{margin:12px 0 6px;color:var(--navy);font-size:14px}
-.ci-keywords{display:flex;flex-wrap:wrap;gap:5px}
-.ci-keyword{display:inline-block;border-radius:7px;padding:4px 8px;font-size:12px;font-weight:700}
-.ci-keyword.hit{background:#e8f7ef;color:#14603f}
-.ci-keyword.miss{background:#fff0f0;color:#9c2635}
-.ci-sentence-row{padding:9px 0;border-top:1px solid var(--line);font-size:13px}
-.ci-sentence-row>div:first-child{display:flex;gap:10px;align-items:center}
-.ci-original{margin-top:4px;color:var(--sub);line-height:1.55}
-.ci-fix{margin-top:5px;padding:6px 8px;border-radius:7px;background:#fff6e9;color:#8a4b12}
-.ci-goodline{margin-top:5px;padding:6px 8px;border-radius:7px;background:#ecf8f2;color:#14603f}
-.result-summary{border:1px solid #d7e2ef;border-left:5px solid var(--accent);border-radius:12px;background:#f8fbff;padding:14px 15px;margin:12px 0}
-.result-summary h3{font-size:16px;margin:0 0 7px}.result-summary>p{font-size:14px;margin-bottom:10px}
-.result-columns{display:grid;grid-template-columns:1fr 1fr;gap:9px}.result-col{border-radius:9px;padding:9px 10px;font-size:12.5px}.result-col.good{background:#ecf8f2;color:#14603f}.result-col.warn{background:#fff6e9;color:#8a4b12}
-.result-next{margin-top:9px;border-radius:9px;background:var(--accent);color:#fff;padding:9px 11px;font-size:13px;font-weight:700}
-.history-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 12px}.history-tools input,.history-tools select{flex:1 1 150px}
-.history-trend{margin-top:7px;padding:7px 9px;border-radius:8px;background:#eef4fa;color:#33475c;font-size:12px}.history-trend.up{background:#e8f7ef;color:#14603f}
-.archive-note{border-color:#e8d9a8;background:#fffaf0;color:#7a5c17}
-#bankList>.card,#ciBroadcastBody>.card,#reviewList>.card,#airlineList>.card{content-visibility:auto;contain-intrinsic-size:0 320px}
-.hist{border:1px solid var(--line);border-radius:11px;padding:10px 13px;margin-bottom:8px;font-size:13.5px}
-.hm{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;margin:8px 0}
-.hm div{aspect-ratio:1;border-radius:3px;background:#ece9df}
-.hm .l1{background:#e8d9a8}.hm .l2{background:#d4b95e}.hm .l3{background:#b28f2e}.hm .l4{background:#16345c}
-.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:8px 0}
-.statbox{background:var(--accent-soft);border-radius:11px;padding:10px;text-align:center}
-.statbox b{font-size:22px;color:var(--accent);display:block}
-.statbox span{font-size:11.5px;color:var(--sub)}
-nav{scrollbar-width:none;position:relative}
-nav::-webkit-scrollbar{display:none}
-.navfade{position:absolute;top:0;right:0;bottom:0;width:26px;background:linear-gradient(90deg,transparent,rgba(11,30,58,.95));pointer-events:none;transition:opacity .25s;z-index:2}
-.navfade.hide{opacity:0}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid rgba(36,92,145,.35);outline-offset:2px}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-/* ===== 密碼閘門 ===== */
-html:not(.unlocked) header, html:not(.unlocked) nav, html:not(.unlocked) main, html:not(.unlocked) footer, html:not(.unlocked) #dataBanner, html:not(.unlocked) #onboard, html:not(.unlocked) #contextBar{display:none!important}
-#gate{position:fixed;inset:0;background:linear-gradient(150deg,#0b1e3a,#16345c 60%,#274b7e);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
-#gate .gbox{border-top:4px solid var(--gold)}
-html.unlocked #gate{display:none}
-#gate .gbox{background:#fff;border-radius:18px;padding:30px 26px;max-width:340px;width:100%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
-#gate h1{font-size:19px;color:var(--ink);margin-bottom:6px}
-#gate p{font-size:12.5px;color:var(--sub);margin-bottom:16px}
-#gate input{width:100%;font-size:16px;padding:12px;border:1.5px solid var(--line);border-radius:11px;text-align:center;letter-spacing:2px}
-#gate button{width:100%;margin-top:10px;font-size:15px;font-weight:700;padding:12px;border:none;border-radius:11px;background:var(--accent);color:#fff;cursor:pointer;font-family:inherit}
-#gate .gerr{color:var(--bad);font-size:12.5px;margin-top:8px;min-height:1.2em}
-/* ===== 手機優化（≤560px 自動切換）===== */
-@media(max-width:560px){
-  header{padding:16px 14px 10px}
-  header h1{font-size:18px}
-  header p{font-size:11px;line-height:1.5}
-  nav{position:fixed;left:0;right:0;top:auto;bottom:0;padding:4px 4px calc(4px + env(safe-area-inset-bottom));gap:0;overflow:visible;box-shadow:0 -4px 18px rgba(11,30,58,.18)}
-  nav button{font-size:11.5px;padding:8px 3px;flex:1 1 20%;white-space:nowrap;border-bottom:0;border-top:3px solid transparent}
-  nav button.on{border-top-color:var(--gold);border-bottom-color:transparent}
-  .navfade{display:none}
-  .contextbar{position:sticky;top:0;z-index:45;background:rgba(246,245,240,.96);backdrop-filter:blur(8px);padding:7px 11px}
-  main{padding:8px 10px calc(82px + env(safe-area-inset-bottom))}
-  .card{padding:13px 14px;border-radius:12px}
-  h2{font-size:15.5px}
-  .qtext{font-size:16px}
-  .btn{padding:13px 18px;font-size:15px;border-radius:12px;flex:1 1 auto;min-height:46px}
-  .chip{padding:8px 14px;font-size:13.5px}
-  select,input[type=text]{padding:10px 10px;font-size:14px;flex:1 1 40%}
-  .searchrow{gap:6px}
-  details summary{padding:12px 13px;min-height:44px}
-  .star{font-size:20px;padding:0 4px}
-  .grid2{grid-template-columns:1fr}
-  .seatgrid{grid-template-columns:1fr 1fr}
-  .opt{padding:12px;min-height:44px}
-  .flow{font-size:12px}
-  .readblock{font-size:14px;padding:11px 12px}
-  .more-grid,.result-columns{grid-template-columns:1fr}
-  .ux-focus-actions .btn{width:100%}
-}
-@media(min-width:900px){
-  main{max-width:960px}
-}
-</style>
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="mobile-a11y.css">
 </head>
 <body>
-<div id="gate"><div class="gbox">
-  <h1>✈️ 空服面試練習室</h1>
+<a class="skip-link" href="#mainContent">跳到主要內容</a>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle"><div class="gbox">
+  <h1 id="gateTitle">✈️ 空服面試練習室</h1>
   <p>個人練習空間，請輸入通關密碼</p>
-  <input type="password" id="gpw" placeholder="通關密碼" autocomplete="off">
-  <button id="gbtn">進入</button>
-  <div class="gerr" id="gerr"></div>
-  <p style="font-size:11.5px;color:var(--sub);margin-top:12px;opacity:.8">此進入碼用來避免同裝置誤開，不等同伺服器帳號驗證；請勿在網站原始碼放證件或高度敏感資料。</p>
+  <label class="visually-hidden" for="gpw">通關密碼</label>
+  <input type="password" id="gpw" placeholder="通關密碼" autocomplete="off" aria-describedby="gerr gateNote">
+  <button type="button" id="gbtn">進入</button>
+  <div class="gerr" id="gerr" role="alert" aria-live="assertive"></div>
+  <p id="gateNote" style="font-size:11.5px;color:var(--sub);margin-top:12px;opacity:.8">此進入碼用來避免同裝置誤開，不等同伺服器帳號驗證；請勿在網站原始碼放證件或高度敏感資料。</p>
 </div></div>
 <script>
 (function(){
   var HASH = "vrpmjf";
   function djb2(s){var h=5381;for(var i=0;i<s.length;i++){h=((h*33)^s.charCodeAt(i))>>>0}return h.toString(36)}
-  function unlock(){ document.documentElement.classList.add("unlocked"); }
+  function unlock(){ document.documentElement.classList.add("unlocked"); document.getElementById("gate").setAttribute("aria-hidden","true"); }
   try{ if(localStorage.getItem("fa_gate")===HASH){ unlock(); } }catch(e){}
   function tryPw(){
     var v = document.getElementById("gpw").value.trim();
-    if(djb2(v)===HASH){ try{ localStorage.setItem("fa_gate",HASH); }catch(e){} unlock(); }
-    else document.getElementById("gerr").textContent = "密碼不對，再試一次";
+    if(djb2(v)===HASH){ try{ localStorage.setItem("fa_gate",HASH); }catch(e){} document.getElementById("gpw").setAttribute("aria-invalid","false"); unlock(); }
+    else { document.getElementById("gpw").setAttribute("aria-invalid","true"); document.getElementById("gerr").textContent = "密碼不對，再試一次"; }
   }
   document.getElementById("gbtn").addEventListener("click", tryPw);
   document.getElementById("gpw").addEventListener("keydown", function(e){ if(e.key==="Enter") tryPw(); });
@@ -361,16 +42,16 @@ html.unlocked #gate{display:none}
   <h1>✈️ 空服面試練習室</h1>
   <p>Shelly 專屬 · 近期目標：華航｜同步維持其他航空公司題庫與面試資料 · 題庫 <span id="totalCount"></span> 題</p>
 </header>
-<div id="dataBanner" class="hidden warnbox" style="max-width:860px;margin:10px auto 0;border-radius:12px">
+<div id="dataBanner" class="hidden warnbox" role="status" aria-live="polite" style="max-width:860px;margin:10px auto 0;border-radius:12px">
   📭 這台裝置目前沒有練習紀錄。如果你曾在別的裝置或瀏覽器練習過，先匯入備份檔就能接續進度；如果這是新的一份，按「知道了」就可以開始。
   <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
     <button class="btn sec" id="dataBannerBtn" style="padding:8px 14px;font-size:13px">前往匯入</button>
     <button class="btn ghost" id="dataBannerClose" style="padding:8px 14px;font-size:13px">知道了，這是新的一份</button>
   </div>
 </div>
-<div id="onboard" class="hidden" style="position:fixed;inset:0;background:rgba(11,30,58,.55);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px">
+<div id="onboard" class="hidden" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" aria-hidden="true" style="position:fixed;inset:0;background:rgba(11,30,58,.55);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:18px;padding:26px 24px;max-width:380px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3)">
-    <h2 style="margin-bottom:10px">👋 歡迎回來，Shelly</h2>
+    <h2 id="onboardTitle" style="margin-bottom:10px">👋 歡迎回來，Shelly</h2>
     <p style="font-size:13.5px;color:var(--sub);line-height:1.8;margin-bottom:16px">
       第一次用這頁，或好一陣子沒開？建議這樣走：<br>
       1️⃣ <b>🌸 華航招考首頁</b>——先看「今天最值得做的練習」，直接開始。<br>
@@ -398,11 +79,7 @@ html.unlocked #gate{display:none}
 <section id="tab-eva">
   <div class="card">
     <h2>🧭 招考衝刺首頁</h2>
-    <p class="section-note">目前首頁聚焦華航，初試與複試分開整理；其他航空公司的題庫與資料仍保留在導覽列。</p>
-    <div class="chips" id="sprintAirNav" style="display:none" aria-hidden="true">
-      <button class="chip" data-sprint-air="eva">🌍 長榮衝刺</button>
-      <button class="chip on" data-sprint-air="ci">🌸 華航衝刺</button>
-    </div>
+    <p class="section-note">首頁只保留華航目前的初試、廣播詞與複試準備動線。</p>
   </div>
   <div id="evaApp" class="hidden"></div>
   <div id="ciSprintPanel">
@@ -764,7 +441,7 @@ html.unlocked #gate{display:none}
 <section id="tab-airlines" class="hidden">
   <div class="card">
     <h2>🏢 六家航空公司檔案</h2>
-    <p class="section-note">理念、航網、必背知識與面試偏好（資料更新至 2026 年 7 月）。每張卡最下方有給你的專屬策略。</p>
+    <p class="section-note">理念、航網、新機型與最新航點（資料確認至 2026 年 10 月 8 日）。每張卡附官方來源與給你的專屬面試策略。</p>
   </div>
   <div id="airlineList"></div>
 </section>
@@ -776,6 +453,7 @@ html.unlocked #gate{display:none}
 
 <script src="eva-data.js"></script>
 <script src="ci-2025-data.js"></script>
+<script src="airline-data.js"></script>
 <script>
 let DATA = [];
 
@@ -1133,9 +811,12 @@ const WEAK = [
   ["星宇核心","boutique positioning · consistency · sophistication · brand ambassador"],
   ["高階加分","cross-cultural communication · build trust · premium service · lumbar support · tailored service"]]},
  {icon:"📖", title:"公司資料速記", items:[
-  "華航：1959 創立，首條國際線台北—西貢；客機 68 架（A350-900×15、A330-300×16、777-300ER×10、737-800×10、A321neo×17）；彩繪機：帝雉/臺灣藍鵲（飛翔使者）、60週年∞、皮卡丘 A321neo；穿山甲保育＝你的暨大連結",
-  "星宇：張國煒創立，精品航空定位；機上雜誌《kiânn》台語命名；航線涵蓋東北亞/東南亞/北美",
-  "國泰：1946 成立、香港樞紐、oneworld 成員；品牌精神 Move Beyond／Life Well Travelled；70+ 航點；核心價值 Safety First · People First · Teamwork · Global Mindset"]}
+  "華航：1959 創立、SkyTeam；2025 年底 65 架客機＋18 架貨機；2026 引進 787，最新航線含台中－沖繩與高雄－金浦",
+  "長榮：1989 創立、Star Alliance；2026 年 9 月在役 89 架；華盛頓開航後北美十門戶，A350-1000 預計 2027 起交付",
+  "虎航：華航集團 LCC；2025 年底 17 架 A320／A320neo；2026 高雄新增石垣島、小松，A321neo 預計 2028 起交付",
+  "星宇：張國煒創立、精品航空定位；2026 年 3 月機隊 31 架，A350-1000 已加入；布拉格為首條歐洲線",
+  "國泰：1946 成立、香港樞紐、oneworld；航網 100+，2026 復航西雅圖；777-9 首架預計 2027 交付",
+  "阿聯酋：杜拜樞紐、Fly Better；2026 年 3 月航網 152 城市／80 國、機隊 277 架；台北每日 A350＋每日 A380"]}
 ];
 
 /* ================= 安全知識 ================= */
@@ -1185,52 +866,6 @@ const SQUIZ = [
  {q:"機上有旅客失去意識且沒有正常呼吸，順序應為？", o:["先廣播找醫師，等醫師來再行動","評估→通報→開始 CPR 並取 AED，同時廣播尋求醫療志願者","先給氧氣瓶觀察","扶到廚房區平躺休息"], a:1, why:"CPR 每延遲 1 分鐘存活率降約 10%，急救與求援要同步進行。"},
  {q:"防撞姿勢（brace position）的主要目的是？", o:["表示配合機組指令","減少撞擊瞬間頭頸與身體的二次衝擊傷害","方便快速起身撤離","保護隨身物品"], a:1, why:"降低頭部撞擊前方物體的力道與甩動傷害。"},
  {q:"嬰兒在亂流中的正確保護方式是？", o:["與大人共用同一條安全帶綁在一起","使用嬰兒安全帶（loop belt）或提籃固定","抱緊即可","放在空座位上"], a:1, why:"共用成人安全帶會在衝擊時壓傷嬰兒。"}
-];
-
-/* ================= 航空公司檔案 ================= */
-const AIRINFO = [
- {name:"中華航空 China Airlines", code:"CI", cls:"hl", target:"🎯 目標公司",
-  base:"1959 年成立｜樞紐：桃園｜天合聯盟 SkyTeam｜台灣歷史最悠久的國籍航空（子公司：台灣虎航、華信航空）",
-  idea:"「以客為尊」的款待精神，品牌溫度是「讓旅行更深刻」。紅梅揚姿機尾（梅花＝台灣精神象徵）；用帝雉、臺灣藍鵲彩繪機與穿山甲保育把台灣帶向世界，永續（SAF 減塑）走在亞洲前列。",
-  net:"台灣直飛歐洲最多：阿姆斯特丹、法蘭克福、維也納、倫敦、羅馬、布拉格六大航點。北美七航點：洛杉磯、舊金山、安大略、西雅圖、紐約、溫哥華＋2025/12/3 開航鳳凰城（亞洲第一家直飛）。客機約 68 架：A350-900、A330-300、777-300ER、A321neo、737-800，787 機隊陸續加入；貨運全球名列前茅。",
-  must:["鳳凰城＝最新航點、亞洲第一、服務半導體供應鏈（每週三班）","歐洲六航點口訣：阿-法-維-倫-羅-布","彩繪機：帝雉、臺灣藍鵲（飛翔使者）、60 週年∞、皮卡丘 A321neo","穿山甲保育計畫（你的暨大吉祥物連結！）","1959 創立、首條國際線台北—西貢、天合聯盟 2011 加入"],
-  pref:"面試重視端莊親切的整體儀態（摸高 190cm 不踮腳單手、ㄇ字型台步）、中文表達與台語加分題、品牌認同與「一致性」（複試會比對初試答案）。適性測驗 10 分鐘 120 題，直覺作答。喜歡沉穩、有故事、認同台灣文化的人。",
-  you:"動機題主打「凱悅一年＝職前訓練」的實戰敘事（穿山甲已降級為彩繪機／公益題的彩蛋）；台語題先備兩段（檨仔＋考完打給阿母）；把「制服是榮譽的勳章」和「授權範圍內誠實溝通」講穩。"},
- {name:"長榮航空 EVA Air", code:"BR", cls:"sj", target:"🎯 國籍選項",
-  base:"1989 年由張榮發創立（1991 首航）｜樞紐：桃園｜星空聯盟 Star Alliance（2013 加入）｜SKYTRAX 五星航空",
-  idea:"「飛航安全快捷、服務親切周到、經營效率創新」——以嚴謹管理與飛安紀錄聞名，常年名列全球最安全航空前段班；皇璽桂冠艙定義精緻長程服務；Hello Kitty 彩繪機是全球知名的品牌資產。",
-  net:"北美十大門戶：洛杉磯、舊金山、西雅圖、紐約、休士頓、芝加哥、溫哥華、多倫多＋達拉斯（2025/10 開航）＋華盛頓特區（2026/6/26 開航）。歐洲：倫敦、巴黎、阿姆斯特丹、維也納、慕尼黑、米蘭（2026/1 起每日）。機隊：777-300ER、787-9/10、A350-1000（新機隊）、A321、A330。",
-  must:["最新航點：華盛頓特區（2026/6/26）、達拉斯（2025/10/3）→ 北美十航點","星空聯盟 vs 華航天合聯盟——必考比較題","SKYTRAX 五星、全球最安全航空常客","Hello Kitty 彩繪機、皇璽桂冠艙（Royal Laurel）","2026 年招募：1 月報名、3/7 初試、3/21 複試"],
-  pref:"公司文化紀律嚴謹，面試偏好端莊保守、穩定服從、團隊感強的形象（招牌綠制服氣質）；重視英文與抗壓；問題常繞「配合度」：外站、輪班、調派。展現長期投入與守規矩的特質最加分。",
-  you:"對長榮強調你的「制度感」：公共行政訓練＝重視規範與 SOP；凱悅的標準化服務訓練；「先遵守、後建議」的案例。避免過度強調個人風格，多講團隊。"},
- {name:"台灣虎航 Tigerair Taiwan", code:"IT", cls:"hl", target:"✈️ 國籍選項（LCC）",
-  base:"2014 年成立｜華航集團子公司、台灣唯一本土廉航｜樞紐：桃園＋高雄｜2024 年上市",
-  idea:"「領航四部曲・定義新飛行」願景——年輕、靈活、有趣的品牌性格；把日韓小旅行變成台灣人的日常，強調高效率與親切不拘謹的服務。2026 全面調薪 5.3%。",
-  net:"飛日本、韓國航點最多的國籍航空！航網涵蓋日本（東京、大阪、福岡、名古屋、沖繩、佐賀、花卷、新潟等）、韓國（首爾、釜山、大邱、濟州）、澳門、泰國、越南。機隊：A320／A321neo，第三代機隊持續引進。",
-  must:["日韓航點最多的國籍航空＝核心賣點","華航子公司（回答華航 vs 虎航差異時：定位互補，不是競爭）","2026 首場招募：60 名、近 2400 人報名、錄取率約 2.5%","LCC 模式：點對點、高周轉、服務加購制"],
-  pref:"面試最活潑：除中英文問答外有團體討論＋合作遊戲關卡（拼圖等），觀察你在團隊中的真實互動。偏好開朗、親和、反應快、不怕玩的人格特質；日韓語能力大加分（航網以日韓為主）。",
-  you:"你的 TOPIK 4 韓語在虎航是稀有資產（韓國航點多）！遊戲關卡發揮「學姊」特質：主動補位、讓隊友發光。記得展現輕鬆有趣的一面，不要太端著。"},
- {name:"星宇航空 STARLUX", code:"JX", cls:"sj", target:"🎯 目標公司",
-  base:"2018 年由張國煒創立（2020 首航）｜樞紐：桃園｜未加入聯盟（與阿拉斯加航空等夥伴聯營）",
-  idea:"「精品航空」——把每一次飛行當作完整的體驗設計：從機艙燈光、香氛、制服到機上雜誌《kiânn》（台語「行」），追求質感與一致性；服務關鍵字：細節、預判、溫柔穩定。",
-  net:"北美五航點：洛杉磯、安大略、舊金山、西雅圖＋鳳凰城（2026/1/15 開航、3 月起每週四班，規劃 A350-1000 執飛）。亞洲 30 城市 35 條航線（日、韓、港澳、東南亞）。機隊 2026 年底達 43 架：A350-900／A350-1000（首架已交付）、A330neo、A321neo——全空巴新世代機隊。",
-  must:["鳳凰城 2026/1/15 開航＝北美第 5 點（與華航打對台）","A350-1000 旗艦新機、2026 機隊 43 架","《kiânn》機上雜誌＝台語文化梗（面試講過依然好用）","五關流程：摸高 210（可踮腳・雙手）→ 英文團討 → 廣播詞 → 看圖說故事 → 個人面試＋筆試（含記憶力測驗）"],
-  pref:"全程偏英文，重視質感與穩定：語速從容、細節觀察、看圖說故事要有個人連結；筆試有獨特的記憶力測驗（座位圖＋旅客需求）。偏好有國際飯店/精品服務背景、氣質沉穩的人——你的凱悅背景是天然 fit。",
-  you:"上次弱點：英文收束句＋記憶力測驗——用本站模擬器每天練。故事庫（哭泣旅客/餅乾屑/醉酒韓客）已被驗證有效，補強英文版流暢度即可。"},
- {name:"國泰航空 Cathay Pacific", code:"CX", cls:"cx", target:"✈️ 外商練習",
-  base:"1946 年成立｜樞紐：香港赤鱲角｜寰宇一家 oneworld｜太古集團（Swire）旗下（子品牌：香港快運 HK Express）",
-  idea:"品牌精神「Move Beyond」與「Life Well Travelled」——現代高效與亞洲款待的結合；核心價值：Safety First、People First、Teamwork、Global Mindset；重視多元共融（D&I），機組來自多國。",
-  net:"2025 年底重回並突破 100 個航點的全球網絡（亞洲、歐洲、北美、大洋洲、中東）。機隊：777-300ER、A350-900/1000、A330、A321neo，777-9 陸續加入。台籍組員基地在香港。",
-  must:["1946 創立、香港樞紐、oneworld、Move Beyond／Life Well Travelled","航點恢復至 100+（2025 達成百點目標）","台籍空服 2026 招募：4/2–4/14 報名、6 月台北一日面試、Q4 報到、基地香港","多益 650（聽讀各 325）可免英語測驗","流程：資料→摸高 208→英文團討（字卡整合）→Panel＋HireVue digital interview"],
-  pref:"最重「真實感」：不要背稿，用故事回答；觀察力、團隊合作與情境判斷比英文流利更關鍵（英文流利被刷的大有人在）；喜歡文化敏感度高、能自然設定界線、成熟不做作的人。",
-  you:"考官點過你的安全知識缺口——本頁安全專區＋測驗每天刷。你的多元文化故事（加拿大直接文化 vs 韓國語境文化）正中 CX 的 cultural bridge 命題。"},
- {name:"阿聯酋航空 Emirates", code:"EK", cls:"cx", target:"✈️ 外商練習",
-  base:"1985 年成立｜樞紐：杜拜 DXB｜未加入聯盟｜杜拜政府投資公司旗下｜口號「Fly Better」",
-  idea:"世界級的豪華與規模：全球最大 A380 營運商，機上酒吧、淋浴 Spa 定義奢華飛行；組員來自 140 多國，是「世界公民」文化的代表——重視多元、成熟、獨立與國際視野。",
-  net:"140+ 航點、遍及 80 餘國六大洲；機隊以 A380 與 777 為主力，A350-900 自 2024 年起加入。台北每日直飛杜拜，轉往歐非中東極方便。",
-  must:["基地在杜拜：需離家外派、公司提供免費住宿與交通","條件：21 歲以上、摸高 212cm（可踮腳）、高中以上學歷、1 年以上服務業經驗、英語流利、制服覆蓋範圍不可見刺青","薪資免稅：月薪約 AED 7,000–11,000（底薪＋飛時），另有免費宿舍、醫療與機票福利","招募：線上申請→受邀 Open Day／錄影面試，全英文；2026/1/25 曾辦台北場，近年在台密集招募","流程特色：CV 審查→團體活動→英文測驗→Final Interview（STAR 行為面試）"],
-  pref:"偏好成熟獨立、外向自信、能適應多元文化與離家生活的人；重視儀容標準（妝容、髮髻、微笑）；回答用 STAR 結構、強調 customer service 實例與 flexibility。飯店背景（尤其國際連鎖）是他們的最愛。",
-  you:"你的優勢組合＝凱悅國際連鎖＋韓國獨立交換生活（證明能離家）＋英韓雙語。準備全英文 STAR 故事集，並把「為什麼能適應杜拜」講成故事：在韓國從零建立生活的經驗。"}
 ];
 
 const COMPANY_QA = {
@@ -1481,7 +1116,7 @@ function showTab(t,options={}){
   if(t==="sprint") spPaint();
   if(t==="stats") renderDash();
   if(t==="p50") scheduleIdle(p50Paint);
-  if(t==="eva"){setSprintAir("ci");if(typeof window.renderCI==="function")window.renderCI();}
+  if(t==="eva"&&!options.preserveSubroute){setSprintAir("ci");if(typeof window.renderCI==="function")window.renderCI();}
   if(t==="ciBroadcast" && !$("#ciBroadcastBody").childElementCount) scheduleIdle(renderCIBroadcast);
   if(t==="tools" && !$("#toolBody").childElementCount) scheduleIdle(()=>{if(!$("#toolBody").childElementCount)toolRender("frame")});
   if(t==="stage" && !$("#stageBody").childElementCount) scheduleIdle(()=>{if(!$("#stageBody").childElementCount)stageRender("gd")});
@@ -1489,8 +1124,13 @@ function showTab(t,options={}){
   setUXContext(TAB_LABELS[t],t!=="eva");
   const heading=target.querySelector("h2");
   if(heading){heading.setAttribute("tabindex","-1");requestAnimationFrame(()=>heading.focus({preventScroll:true}));}
+  if(options.syncRoute!==false&&typeof window.setAppRoute==="function"){
+    const route=t==="eva"?`${window.currentSprintAir||"ci"}/home`:t==="ciBroadcast"?"ci/broadcast":t;
+    window.setAppRoute(route);
+  }
   window.scrollTo({top:0,behavior:"smooth"});
 }
+window.showTab=showTab;
 function scheduleIdle(fn){
   if(typeof requestIdleCallback==="function") requestIdleCallback(fn,{timeout:500});
   else setTimeout(fn,0);
@@ -1504,7 +1144,12 @@ document.addEventListener("click", e=>{
   showTab(b.dataset.go);
 });
 $("#contextBack").addEventListener("click",()=>{
-  if(activeTab==="eva"&&!$("#contextPath").textContent.includes("招考首頁")&&typeof window.renderCI==="function"){window.renderCI();return;}
+  if(activeTab==="eva"&&!$("#contextPath").textContent.includes("招考首頁")){
+    if(window.currentSprintAir==="eva")window.dispatchEvent(new Event("eva-home"));
+    else if(typeof window.renderCI==="function")window.renderCI();
+    if(typeof window.setAppRoute==="function")window.setAppRoute(`${window.currentSprintAir||"ci"}/home`);
+    return;
+  }
   const prev=tabHistory.pop()||"eva";
   showTab(prev,{remember:false});
 });
@@ -2334,6 +1979,7 @@ $("#airlineList").innerHTML = AIRINFO.map(a=>`
  <div class="card">
    <h2><span class="tag ${a.cls}">${a.code}</span>${esc(a.name)} <span class="sub" style="font-weight:400">${esc(a.target)}</span></h2>
    <p class="sub" style="margin-bottom:8px">${esc(a.base)}</p>
+   <div class="airinfo-meta"><span>資料確認：${esc(a.updated||"未標示")}</span>${(a.sources||[]).map((s,i)=>`<a href="${s[1]}" target="_blank" rel="noopener noreferrer">官方來源 ${i+1}：${esc(s[0])}</a>`).join("")}</div>
    <div class="tip" style="margin-bottom:10px">📌 <b>一句話重點：</b>${esc(a.must[0]||"")}</div>
    <details><summary>🧭 品牌理念</summary><div class="body"><p style="font-size:13.5px">${esc(a.idea)}</p></div></details>
    <details><summary>🗺️ 航網與機隊</summary><div class="body"><p style="font-size:13.5px">${esc(a.net)}</p></div></details>
@@ -2599,12 +2245,12 @@ function ciSprintPaint(){
 }
 function setSprintAir(air){
   const ci=air==="ci";
+  window.currentSprintAir=ci?"ci":"eva";
   $("#evaApp").classList.toggle("hidden",ci);
   $("#ciSprintPanel").classList.toggle("hidden",!ci);
-  $$("#sprintAirNav button").forEach(b=>b.classList.toggle("on",b.dataset.sprintAir===air));
   if(ci) ciSprintPaint();
 }
-$("#sprintAirNav").addEventListener("click",e=>{const b=e.target.closest("button[data-sprint-air]");if(b)setSprintAir(b.dataset.sprintAir)});
+window.setSprintAir=setSprintAir;
 $("#ciInitialDate").addEventListener("change",e=>{const d=store.get("ciSprintDates",{});if(validDateValue(e.target.value)){d.initial=e.target.value;store.set("ciSprintDates",d)}ciSprintPaint()});
 $("#ciFinalDate").addEventListener("change",e=>{const d=store.get("ciSprintDates",{});if(validDateValue(e.target.value)){d.final=e.target.value;store.set("ciSprintDates",d)}ciSprintPaint()});
 $("#ciSprintPlan").addEventListener("change",e=>{const cb=e.target.closest("input[data-ci-k]");if(!cb)return;const d=store.get("ciSprintChecks",{});d[cb.dataset.ciK]=cb.checked;store.set("ciSprintChecks",d);ciSprintPaint()});
@@ -2949,7 +2595,7 @@ $("#stageNav").addEventListener("click", e=>{
 /* 封存關卡內容在第一次進入分頁時載入。 */
 
 /* ================= 備份匯出／匯入 ================= */
-const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","ciLastRoute"];
+const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","uxRoute","ciLastRoute"];
 function cleanImportedRecord(r){
   if(!r || typeof r!=="object" || Array.isArray(r)) return null;
   const text=v=>typeof v==="string"?v.slice(0,20000):"";
@@ -3033,5 +2679,7 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 </script>
 <script src="eva-mode.js"></script>
 <script src="ci-mode.js"></script>
+<script src="app-accessibility.js"></script>
+<script src="app-router.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-const CACHE_NAME = "fly-room-static-v4";
+const CACHE_NAME = "fly-room-static-v6";
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", event => event.waitUntil((async () => {
