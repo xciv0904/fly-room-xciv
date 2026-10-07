@@ -4,10 +4,11 @@
   if(!app || typeof store==="undefined") return;
   const panel=document.getElementById("ciSprintPanel");
   const plan=document.getElementById("ciSprintPlan");
+  const planWrap=document.getElementById("ciSprintPlanWrap");
   const defaultProgress={modules:{initial:0,broadcast:0,final:0},sessions:0,checklists:{}};
   const progress=()=>store.get("ciProgress",defaultProgress);
   const save=p=>store.set("ciProgress",p);
-  const routeNames={initial:"初試準備",broadcast:"廣播詞",final:"複試模擬",today:"今日訓練"};
+  const routeNames={initial:"初試準備",broadcast:"廣播詞",final:"複試準備",today:"今日訓練"};
   const infoItems=[["學歷文件","準備中文畢業證書、各學期成績單；有交換、轉學或肄業經歷時，確認是否需要完整證明。"],["英文能力","目前招募資料列 TOEIC 聽讀 600 或同等英語成績，實際認定以華航公告為準。"],["報到檢查","身分證、通知函要求文件、服裝鞋子與交通時間，前一天逐項確認。"]];
   const initialChecks=[["documents","繳交資料","已依通知函核對正本、影本與英檢資料。"],["walk","摸高與ㄇ字型台步","已實際完成摸高、站姿、轉身與回到定位一輪。"],["broadcast","廣播詞朗讀","已朗讀並回聽一段華航英文原文。"]];
   const todayChecks=[["documents","資料確認","已核對今天要帶的文件與報到事項。"],["practice","摸高、台步與廣播詞","已完成動作一輪，並朗讀一段華航原文。"],["weakness","留下明日弱點","已寫下一個明天要修正的具體項目。"]];
@@ -16,8 +17,8 @@
   const stateFor=count=>count>=3?["已練穩","ready"]:count>0?["練習中","learning"]:["未開始",""];
   const lastLabel=ts=>ts?`最近練習：${new Date(ts).toLocaleDateString("zh-TW",{month:"numeric",day:"numeric"})}`:"尚無紀錄";
   const skillRow=(name,count,last)=>{const s=stateFor(count);return `<div class="ci-skill"><div><b>${name}</b><small>${count||0} 次練習 · ${lastLabel(last)}</small></div><span class="ci-state ${s[1]}">${s[0]}</span></div>`};
-  const hidePlan=()=>{if(plan)plan.classList.add("hidden")};
-  const showPlan=()=>{if(plan)plan.classList.remove("hidden")};
+  const hidePlan=()=>{if(planWrap)planWrap.classList.add("hidden")};
+  const showPlan=()=>{if(planWrap)planWrap.classList.remove("hidden")};
   const nav=t=>{if(typeof window.showTab==="function"){window.showTab(t);return}document.querySelector(`#nav button[data-t="${t}"]`)?.click()};
   const localDay=()=>{const d=new Date(),pad=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 
@@ -49,7 +50,7 @@
     else if((m.broadcast||0)>=3&&(m.final||0)<3)task={route:"final",title:"開始一輪華航複試回答",desc:"練英文自介、情境判斷或個人特質，完成後查看核心觀念缺口。",label:"開始複試模擬"};
     else if((m.final||0)>=3)task={route:"today",title:"只補目前最弱的一項",desc:"今天不必把全部內容重做；完成一小組並留下下一個修正點即可。",label:"開始今日複習"};
     const previous=store.get("ciLastRoute","");
-    app.innerHTML=`<div class="card ux-focus"><div class="ux-focus-label">TODAY · 下一個最值得做的練習</div><h2>${task.title}</h2><p class="section-note">${task.desc}</p><div class="ux-focus-actions"><button class="btn" data-ci-route="${task.route}">${task.label} →</button>${previous&&previous!==task.route?`<button class="btn ghost" data-ci-route="${previous}">回到上次：${routeNames[previous]||"練習"}</button>`:""}</div></div><div class="eva-stage-grid ci-home-stages"><div class="eva-stage-card ci-home-stage"><div class="eva-stage-label">① INITIAL SCREENING</div><h2>初試</h2><p class="sub">只練實際遇到的三關：繳資料、摸高／台步、唸廣播詞。</p><div class="eva-feature-list"><div class="eva-feature">📄 書面資料</div><div class="eva-feature">📏 摸高與台步</div><div class="eva-feature">📢 廣播詞朗讀</div></div><button class="btn ci-primary" data-ci-route="initial">進入初試準備</button></div><div class="eva-stage-card ci-home-stage final"><div class="eva-stage-label">② FINAL INTERVIEW</div><h2>複試</h2><p class="sub">一對多面談，集中練英文自介、情境、時事與個人特質。</p><div class="eva-feature-list"><div class="eva-feature">👥 一對多面談</div><div class="eva-feature">🇬🇧 英文自介</div><div class="eva-feature">🧩 情境判斷</div><div class="eva-feature">📰 時事與特質</div></div><button class="btn ci-primary" data-ci-route="final">進入複試準備</button></div></div><div class="ci-progress"><div class="ci-progress-head"><h3>華航能力狀態</h3><span>依實際練習顯示，不預測錄取率</span></div><div class="ci-skill-list">${skillRow("初試資料、摸高與台步",m.initial,last.initial)}${skillRow("廣播原文、英翻中與逐句修正",m.broadcast,last.broadcast)}${skillRow("複試面談與錄音回答",m.final,last.final)}</div></div>`;
+    app.innerHTML=`<div class="card ux-focus"><div class="ux-focus-label">TODAY · 現在只做這一件</div><h2>${task.title}</h2><p class="section-note">${task.desc}</p><div class="ux-focus-actions"><button class="btn" data-ci-route="${task.route}">${task.label} →</button>${previous&&previous!==task.route?`<button class="ci-resume-link" data-ci-route="${previous}">回到上次的${routeNames[previous]||"練習"} →</button>`:""}</div></div><div class="card ci-path-card"><div class="ci-section-head"><div><span>TRAINING PATH</span><h2>選擇準備階段</h2></div><small>需要時再切換</small></div><div class="ci-path-grid"><button class="ci-path-button" data-ci-route="initial"><span>01 · INITIAL</span><b>初試準備</b><small>文件、摸高台步、廣播詞</small><strong>→</strong></button><button class="ci-path-button final" data-ci-route="final"><span>02 · FINAL</span><b>複試準備</b><small>英文自介、情境、時事與特質</small><strong>→</strong></button></div></div><details class="card ci-progress-disclosure"><summary><span><b>練習紀錄</b><small>初試 ${m.initial||0} · 廣播 ${m.broadcast||0} · 複試 ${m.final||0}</small></span></summary><div class="ci-progress"><div class="ci-progress-head"><h3>華航能力狀態</h3><span>依實際練習顯示，不預測錄取率</span></div><div class="ci-skill-list">${skillRow("初試資料、摸高與台步",m.initial,last.initial)}${skillRow("廣播原文、英翻中與逐句修正",m.broadcast,last.broadcast)}${skillRow("複試面談與錄音回答",m.final,last.final)}</div></div></details>`;
   }
   function mark(key,rerender=true){const p=progress();p.modules=p.modules||{};p.last=p.last||{};p.modules[key]=(p.modules[key]||0)+1;p.last[key]=Date.now();save(p);if(rerender)render()}
   window.markCIProgress=(key)=>mark(key,false);
@@ -67,7 +68,7 @@
     hidePlan();const initial=stage==="initial";
     const data=initial?{eyebrow:"INITIAL SCREENING · 01",title:"華航初試準備",desc:"依你的實際經驗，初試就是繳資料、摸高與唸廣播詞。公開招募流程寫明初試包含書面資料審核與面試；現場細節仍以初試通知函為準。",items:[["📄 書面資料與報到","確認畢業證書、各學期成績單、英檢成績與身分文件版本一致；報到攜帶內容以通知函為準。","info"],["📏 儀態與基本動作","摸高、ㄇ字型台步、站姿、轉身、眼神與表情。這是面試前要反覆練的基本功。","initial"],["📢 廣播詞朗讀","練習陌生英文朗讀、數字／機型／航點與句尾穩定度。","broadcast"]]}:{eyebrow:"FINAL INTERVIEW · 02",title:"華航複試準備",desc:"依你的面試回顧，複試是一對多面談。準備重點不是團討，而是英文自我介紹、情境判斷、時事應對與個人特質。",items:[["👥 一對多面談流程","同時面對多位考官，先聽完題目再回答；控制眼神、音量、節奏與回答長度。","mock"],["🇬🇧 英文自我介紹","準備 30 秒版本：姓名、服務背景、國際經驗、適合華航的原因與收束句。","mock"],["🧩 情境判斷","處理旅客需求、客訴、延誤或安全情境；回答要有判斷順序與實際做法。","mock"],["📰 時事應對與個人特質","能說出自己的觀點，也能用凱悅經驗證明細心、穩定、可靠等特質。","mock"]]};
     context(initial?"初試準備":"複試準備");store.set("ciLastRoute",initial?"initial":"final");setRoute(`ci/${initial?"initial":"final"}`,sync);
-    app.innerHTML=`<div class="ci-route ci-eva-shell"><div class="ci-route-head"><button class="ci-eva-back" data-ci-back="1">← 華航首頁</button><span class="ci-phase-label">${data.eyebrow}</span><h2>${data.title}</h2><p>${data.desc}</p></div><div class="ci-route-body"><div class="ci-stage-list">${data.items.map((x,i)=>`<button class="ci-stage-item" data-ci-module="${x[2]}"><span class="ci-stage-num">${String(i+1).padStart(2,"0")}</span><span><b>${x[0]}</b><small>${x[1]}</small></span><strong>→</strong></button>`).join("")}</div><div class="ci-route-actions"><button class="btn ghost" data-ci-back="1">← 回到華航準備度</button></div></div></div>`;
+    app.innerHTML=`<div class="ci-route ci-eva-shell"><div class="ci-route-head"><button class="ci-eva-back" data-ci-back="1">← 華航首頁</button><span class="ci-phase-label">${data.eyebrow}</span><h2>${data.title}</h2><p>${data.desc}</p></div><div class="ci-route-body"><div class="ci-stage-list">${data.items.map((x,i)=>`<button class="ci-stage-item" data-ci-module="${x[2]}"><span class="ci-stage-num">${String(i+1).padStart(2,"0")}</span><span><b>${x[0]}</b><small>${x[1]}</small></span><strong>→</strong></button>`).join("")}</div></div></div>`;
   }
   function openMock(){nav("mock");const b=[...document.querySelectorAll("#mAirline button")].find(x=>x.textContent.includes("華航"));if(b)b.click();const lang=document.getElementById("mLang"),mode=document.getElementById("mMode");if(lang)lang.value="zh";if(mode)mode.value="single";document.getElementById("mDraw")?.scrollIntoView({behavior:"smooth",block:"center"})}
 
@@ -80,9 +81,27 @@
     const open=e.target.closest("[data-ci-open]");if(open){const action=open.dataset.ciOpen;if(action==="broadcast"){store.set("ciLastRoute","broadcast");nav("ciBroadcast");return}if(action==="initial"){renderCiStage("initial");return}if(action==="today"){renderTodayModule();return}if(action==="final"){renderCiStage("final");return}}
     const button=e.target.closest("button[data-ci-action]");if(!button)return;const action=button.dataset.ciAction;if(action==="broadcast"||action==="today"){renderRoute(action);return}if(action==="initial"){renderCiStage("initial");return}if(action==="final"){renderCiStage("final");return}if(action==="stats"){render();document.querySelector("#ciApp .ci-progress")?.scrollIntoView({behavior:"smooth",block:"center"})}
   });
-  panel.addEventListener("click",e=>{const route=e.target.closest("[data-ci-route]");if(!route)return;const action=route.dataset.ciRoute;if(action==="stats"){render();document.querySelector("#ciApp .ci-progress")?.scrollIntoView({behavior:"smooth",block:"center"});return}if(action==="initial")renderCiStage("initial");else if(action==="final")renderCiStage("final");else renderRoute(action);document.querySelector("#ciApp .ci-route")?.scrollIntoView({behavior:"smooth",block:"start"})});
+  panel.addEventListener("click",e=>{
+    const route=e.target.closest("[data-ci-route]");
+    if(!route)return;
+    const action=route.dataset.ciRoute;
+    if(action==="stats"){
+      render();
+      document.querySelector("#ciApp .ci-progress-disclosure")?.scrollIntoView({behavior:"smooth",block:"center"});
+      return;
+    }
+    if(action==="initial")renderCiStage("initial");
+    else if(action==="final")renderCiStage("final");
+    else if(action==="today")renderTodayModule();
+    else if(action==="broadcast"){
+      store.set("ciLastRoute","broadcast");
+      nav("ciBroadcast");
+      return;
+    }else renderRoute(action);
+    document.querySelector("#ciApp .ci-route")?.scrollIntoView({behavior:"smooth",block:"start"});
+  });
 
   window.renderCI=render;
-  window.renderCIRoute=view=>{if(view==="initial")renderCiStage("initial",false);else if(view==="final")renderCiStage("final",false);else if(view==="initial-training")renderInitialModule(false);else if(view==="today")renderRoute("today",false);else if(view==="today-training")renderTodayModule(false);else if(view==="info")renderCiInfo(undefined,undefined,undefined,false);else render(false)};
+  window.renderCIRoute=view=>{if(view==="initial")renderCiStage("initial",false);else if(view==="final")renderCiStage("final",false);else if(view==="initial-training")renderInitialModule(false);else if(view==="today"||view==="today-training")renderTodayModule(false);else if(view==="info")renderCiInfo(undefined,undefined,undefined,false);else render(false)};
   render(false);
 })();

@@ -86,6 +86,16 @@ html:not(.unlocked) .skip-link { display: none; }
   .more-grid, .result-columns { grid-template-columns: 1fr; gap: 8px; }
   .more-card { min-height: 82px; padding: 12px; }
   .ci-hero { padding: 16px 14px; }
+  .ci-hero-title { align-items: center; }
+  .ci-hero-stage { min-height: 28px; padding-inline: 8px; font-size: 11px; }
+  .ci-hero-compact .air-countdown { gap: 5px; }
+  .ci-hero-compact .air-countdown span { padding: 5px 8px; }
+  .ci-path-card { padding: 12px; }
+  .ci-path-button { min-height: 80px; padding: 10px 30px 10px 10px; }
+  .ci-path-button > strong { right: 10px; }
+  .ci-section-head > small { display: none; }
+  .ci-progress-disclosure > summary, .ci-plan-disclosure > summary { min-height: 52px; padding: 9px 12px; }
+  .ci-plan-disclosure #ciSprintPlan { padding: 3px 10px 10px; }
   .ci-hero h2, .ci-route .ci-route-head h2 { font-size: 20px; }
   .ci-route { margin-top: 8px; }
   .ci-route .ci-route-head { padding: 13px; }

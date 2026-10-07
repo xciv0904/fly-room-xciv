@@ -77,28 +77,28 @@
 
 <!-- ============ 招考衝刺首頁（目前以華航為主） ============ -->
 <section id="tab-eva">
-  <div class="card">
-    <h2>🧭 招考衝刺首頁</h2>
-    <p class="section-note">首頁只保留華航目前的初試、廣播詞與複試準備動線。</p>
-  </div>
   <div id="evaApp" class="hidden"></div>
   <div id="ciSprintPanel">
-    <div class="card ci-hero">
-      <div class="ci-eyebrow">CHINA AIRLINES · RECRUITMENT SPRINT</div>
-      <h2>🌸 華航招考衝刺</h2>
-      <p class="section-note">下一關：初試｜先完成華航初試基本功，再進入廣播與複試問答。</p>
-      <div class="air-hero-actions">
-        <button class="btn" data-ci-route="initial">初試準備</button><button class="btn" data-ci-route="final">複試準備</button>
+    <div class="card ci-hero ci-hero-compact">
+      <div class="ci-hero-title">
+        <div><div class="ci-eyebrow">CHINA AIRLINES · PREP ROOM</div><h2>🌸 華航準備室</h2></div>
+        <span class="ci-hero-stage" id="ciHeroStage">目前：初試準備</span>
       </div>
-      <div class="air-date-row">
-        <label>初試日期：<input type="date" id="ciInitialDate" value="2026-11-07"></label>
-        <label>複試日期：<input type="date" id="ciFinalDate" value="2026-11-14"></label>
-      </div>
-      <p class="sub" id="ciDateHint" style="color:rgba(255,255,255,.86);margin-top:6px"></p>
       <div class="air-countdown" id="ciSprintCountdown"></div>
+      <details class="ci-date-settings">
+        <summary>調整招考日期</summary>
+        <div class="air-date-row">
+          <label>初試日期：<input type="date" id="ciInitialDate" value="2026-11-07"></label>
+          <label>複試日期：<input type="date" id="ciFinalDate" value="2026-11-14"></label>
+        </div>
+        <p class="sub" id="ciDateHint"></p>
+      </details>
     </div>
     <div id="ciApp"></div>
-    <div id="ciSprintPlan"></div>
+    <details class="card ci-plan-disclosure" id="ciSprintPlanWrap">
+      <summary><span><b>完整衝刺計畫</b><small id="ciSprintPlanSummary">查看目前階段與後續安排</small></span></summary>
+      <div id="ciSprintPlan"></div>
+    </details>
   </div>
 </section>
 
@@ -109,7 +109,6 @@
     <p class="section-note">主要練習留在首頁、練習、模擬與成果；查資料或整理答案時再進入這裡。</p>
   </div>
   <div class="more-grid">
-    <button class="more-card" data-go="ciBroadcast"><b>📢 華航廣播詞</b><span>原文朗讀、英翻中、逐句比對與發音字庫。</span></button>
     <button class="more-card" data-go="tools"><b>🧰 答題與故事工具</b><span>答題骨架、句型、故事庫與發音字庫。</span></button>
     <button class="more-card" data-go="airlines"><b>📚 公司資料參考</b><span>公司知識題、品牌重點與面試策略。</span></button>
     <button class="more-card" data-go="review"><b>📋 面試回顧</b><span>實戰題目、當下回答與中英文優化版本。</span></button>
@@ -1105,7 +1104,7 @@ function showTab(t,options={}){
   const target = $("#tab-"+t); if(!target) return;
   if(t!==activeTab && options.remember!==false) tabHistory.push(activeTab);
   activeTab=t;
-  const navT = {p50:"practice",daily:"practice",weak:"stats",bank:"more",reading:"more",safety:"more",review:"more",sprint:"more",tools:"more",stage:"more",ciBroadcast:"more",airlines:"more"}[t] || t;
+  const navT = {p50:"practice",daily:"practice",weak:"stats",bank:"more",reading:"more",safety:"more",review:"more",sprint:"more",tools:"more",stage:"more",ciBroadcast:"eva",airlines:"more"}[t] || t;
   $$("#nav button").forEach(x=>{const on=x.dataset.t===navT;x.classList.toggle("on",on);if(on)x.setAttribute("aria-current","page");else x.removeAttribute("aria-current")});
   $$("main > section").forEach(s=>s.classList.add("hidden"));
   target.classList.remove("hidden");
@@ -2239,8 +2238,13 @@ function ciSprintPaint(){
   if(orderWarning){ $("#ciSprintCountdown").textContent="請先修正日期順序"; return; }
   const di=dayDiff(init.value), df=dayDiff(fin.value);
   let active=di>=0?(di>14?0:di>7?1:2):(df>=0?3:4);
+  const heroStage=$("#ciHeroStage");
+  if(heroStage)heroStage.textContent=active<3?"目前：初試準備":"目前：複試準備";
   $("#ciSprintCountdown").innerHTML = di>0 ? `<span>🛫 距離初試 <b>${di}</b> 天</span><em>→</em><span>複試 ${df>0?`還有 <b>${df}</b> 天`:"已到"}</span>` : di===0 ? `<span>🌟 今天初試</span><em>→</em><span>複試 ${df>0?`還有 <b>${df}</b> 天`:""}</span>` : `<span>✅ 初試完成</span><em>→</em><span>${df>0?`距離複試 <b>${df}</b> 天`:(df===0?"今天複試":"請更新日期")}</span>`;
   const saved=store.get("ciSprintChecks",{});
+  const currentDone=CI_SPRINT[active].items.reduce((n,item,ii)=>n+(saved[`w${active}i${ii}`]?1:0),0);
+  const planSummary=$("#ciSprintPlanSummary");
+  if(planSummary)planSummary.textContent=`${CI_SPRINT[active].w} · ${currentDone}/${CI_SPRINT[active].items.length} 已完成`;
   $("#ciSprintPlan").innerHTML=CI_SPRINT.map((wk,wi)=>`<div class="ci-phase-card ${active===wi?"active":""}"><div class="ci-phase-label">PHASE ${String(wi+1).padStart(2,"0")} ${active===wi?"· CURRENT":""}</div><h2>${esc(wk.w)} ${active===wi?'<span class="tag" style="background:#fdecef;color:var(--ci)">👉 目前階段</span>':''}<br><span class="sub" style="font-weight:400">${esc(wk.d)}</span></h2>${wk.items.map((it,ii)=>{const k=`w${wi}i${ii}`,on=saved[k];return `<label class="ci-task" style="display:flex;gap:10px;align-items:flex-start;padding:9px 10px;margin-top:7px;font-size:13.5px;cursor:pointer"><input type="checkbox" data-ci-k="${k}" ${on?"checked":""} style="margin-top:3px;width:17px;height:17px;accent-color:var(--ci)"><span ${on?'style="color:var(--sub);text-decoration:line-through"':''}>${esc(it)}</span></label>`}).join("")}</div>`).join("");
 }
 function setSprintAir(air){
