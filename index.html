@@ -455,6 +455,7 @@
 <script src="airline-data.js"></script>
 <script src="ci-reading.js"></script>
 <script src="ci-vocabulary.js"></script>
+<script src="ci-source-vocabulary.js"></script>
 <script>
 let DATA = [];
 
@@ -1027,13 +1028,14 @@ const PRONUNCIATION_META={
 let pronunciationWords = store.get("pronunciationWords",[]);
 if(!Array.isArray(pronunciationWords)) pronunciationWords=[];
 let pronunciationDueOnly=true;
-function pronunciationZh(word){ const key=(word||"").trim().toLowerCase().replace(/[’]/g,"'");return PRONUNCIATION_ZH[key]||CI_VOCABULARY_ZH[key]||""; }
+function pronunciationZh(word){return ciSourceMeaning(word);}
 function pronunciationMeta(word){return PRONUNCIATION_META[(word||"").toLowerCase()]||["","回到原文重讀此字，確認重音、連音與句尾。"]}
 function savePronunciationWord(word, source="華航廣播", zh="", context=""){
   const clean=(word||"").trim().toLowerCase();
   if(!clean) return false;
   const found=pronunciationWords.find(x=>x.word===clean);
   const meaning=(zh||found?.zh||pronunciationZh(clean)).trim();
+  context=ciWordContext(clean,context||found?.context||"");
   if(!meaning&&!(found&&found.zh)){
     const entered=window.prompt(`請補上「${clean}」的中文意思，再加入字庫：`,"");
     if(!entered||!entered.trim())return false;
@@ -1048,18 +1050,30 @@ function removePronunciationWord(word){
   pronunciationWords=pronunciationWords.filter(x=>x.word!==word);
   store.set("pronunciationWords",pronunciationWords);
 }
+function repairPronunciationWords(){
+  let migrated=false;
+  pronunciationWords.forEach(item=>{
+    if(!String(item.zh||"").trim()){
+      const meaning=pronunciationZh(item.word);
+      if(meaning){item.zh=meaning;migrated=true;}
+    }
+    const sentence=ciWordContext(item.word,item.context);
+    if(sentence!==item.context){item.context=sentence;migrated=true;}
+    if(!item.due){item.due=todayStr();item.ivl=item.ivl||1;migrated=true;}
+  });
+  if(migrated) store.set("pronunciationWords",pronunciationWords);
+}
 function pronunciationRender(){
   const el=$("#toolBody");
-  let migrated=false;
-  pronunciationWords.forEach(x=>{if(!x.zh){const meaning=pronunciationZh(x.word);if(meaning){x.zh=meaning;migrated=true;}}if(!x.due){x.due=todayStr();x.ivl=x.ivl||1;migrated=true;}});
-  if(migrated) store.set("pronunciationWords",pronunciationWords);
+  repairPronunciationWords();
   const visible=pronunciationWords.filter(x=>!pronunciationDueOnly||!x.due||x.due<=todayStr()).sort((a,b)=>String(a.due||"").localeCompare(String(b.due||"")));
-  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">收藏漏讀或不熟的字，搭配中文、音標、原句與間隔複習。按慢速示範後自己重讀，再選「還不熟」或「已熟悉」。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（已收錄會自動填入）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><div class="chips"><button class="chip pronounce-filter ${pronunciationDueOnly?"on":""}" data-mode="due">今天要練（${pronunciationWords.filter(x=>!x.due||x.due<=todayStr()).length}）</button><button class="chip pronounce-filter ${!pronunciationDueOnly?"on":""}" data-mode="all">全部收藏（${pronunciationWords.length}）</button></div><p class="sub">已收錄的單字會自動帶入中文；未收錄時請補填後儲存。舊字庫缺少的中文也會依內建詞表補齊；音標若未收錄則不顯示。</p></div>`+
-    (visible.length?`<div class="card"><h3>📚 ${pronunciationDueOnly?"今天待練":"全部字庫"}</h3>${visible.map(x=>{const meta=pronunciationMeta(x.word),dueToday=!x.due||x.due<=todayStr();return `<div class="pronounce-row"><div><b>${esc(x.word)}</b><div class="pronounce-meta"><strong class="pronounce-meaning">${esc(x.zh||"尚未找到自動翻譯")}</strong>${meta[0]?`<span class="pronounce-ipa">${esc(meta[0])}</span>`:""}<span class="pronounce-due ${dueToday?"today":""}">${dueToday?"今天複習":`下次 ${esc(x.due)}`}</span></div><div class="pronounce-example">${esc(x.context||meta[1])}</div><div class="pronounce-edit"><input class="pronounce-meaning-input" data-word="${esc(x.word)}" value="${esc(x.zh||"")}" placeholder="輸入中文意思"><button class="chip pronounce-save-meaning" data-word="${esc(x.word)}">儲存中文</button></div><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}${sayBtn(x.word,"en-US","🐢 慢速",0.65)}</span><button class="chip pronounce-grade" data-known="0" data-word="${esc(x.word)}">還不熟</button><button class="chip pronounce-grade" data-known="1" data-word="${esc(x.word)}">✓ 已熟悉</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`}).join("")}</div>`:`<div class="card"><p class="sub">${pronunciationWords.length?"今天沒有到期單字，切到「全部收藏」仍可自由練習。":"目前還沒有單字。從華航廣播逐句檢查加入，或在上方手動輸入。"}</p></div>`);
+  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">收藏漏讀或不熟的字，搭配中文、音標、原句與間隔複習。按慢速示範後自己重讀，再選「還不熟」或「已熟悉」。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（已收錄會自動填入）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><div class="chips"><button class="chip pronounce-filter ${pronunciationDueOnly?"on":""}" data-mode="due">今天要練（${pronunciationWords.filter(x=>!x.due||x.due<=todayStr()).length}）</button><button class="chip pronounce-filter ${!pronunciationDueOnly?"on":""}" data-mode="all">全部收藏（${pronunciationWords.length}）</button></div><p class="sub">文章詞彙會自動帶入中文與單字所在的原句；舊收藏缺少的中文及過長的節錄也會自動修補。自訂的未收錄單字可自行填寫中文。</p></div>`+
+    (visible.length?`<div class="card"><h3>📚 ${pronunciationDueOnly?"今天待練":"全部字庫"}</h3>${visible.map(x=>{const meta=pronunciationMeta(x.word),dueToday=!x.due||x.due<=todayStr();return `<div class="pronounce-row"><div><b>${esc(x.word)}</b><div class="pronounce-meta"><strong class="pronounce-meaning">${esc(x.zh||"尚未填入中文")}</strong>${meta[0]?`<span class="pronounce-ipa">${esc(meta[0])}</span>`:""}<span class="pronounce-due ${dueToday?"today":""}">${dueToday?"今天複習":`下次 ${esc(x.due)}`}</span></div><div class="pronounce-example">${esc(x.context||meta[1])}</div><div class="pronounce-edit"><input class="pronounce-meaning-input" data-word="${esc(x.word)}" value="${esc(x.zh||"")}" placeholder="輸入中文意思"><button class="chip pronounce-save-meaning" data-word="${esc(x.word)}">儲存中文</button></div><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}${sayBtn(x.word,"en-US","🐢 慢速",0.65)}</span><button class="chip pronounce-grade" data-known="0" data-word="${esc(x.word)}">還不熟</button><button class="chip pronounce-grade" data-known="1" data-word="${esc(x.word)}">✓ 已熟悉</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`}).join("")}</div>`:`<div class="card"><p class="sub">${pronunciationWords.length?"今天沒有到期單字，切到「全部收藏」仍可自由練習。":"目前還沒有單字。從華航廣播逐句檢查加入，或在上方手動輸入。"}</p></div>`);
   const add=$("#pronounceAddBtn");
   if(add) add.addEventListener("click",()=>{const input=$("#pronounceInput"),meaning=$("#pronounceMeaning");if(savePronunciationWord(input.value,"手動加入",meaning.value)){input.value="";meaning.value="";pronunciationRender();}});
 }
 function pronunciationSaveBtn(word,context=""){
+  context=ciWordContext(word,context);
   return `<button class="chip ci-save-word" data-word="${esc(word)}" data-context="${encodeURIComponent(context)}">＋加入發音字庫</button>`;
 }
 document.addEventListener("click", e=>{
@@ -1655,16 +1669,16 @@ function mFinish(){
 /* --- 分析 --- */
 function count(t, re){ return (t.match(re)||[]).length; }
 function ciTokens(text){
-  return (text||"").toLowerCase().replace(/[’']/g,"'").match(/[a-z]+(?:'[a-z]+)?|\d+(?:[-/]\d+)*/g)||[];
+  return (text||"").toLowerCase().replace(/’/g,"'").match(/\p{Script=Latin}+(?:'\p{Script=Latin}+)?|\d+(?:[-/]\d+)*/gu)||[];
 }
 function ciTokenLabel(token){ return token.replace(/^[.,!?;:]+|[.,!?;:]+$/g,""); }
 function ciKeyTerms(text){
   const stop=new Set("about after again against also because before being between could every from have into just more other should their there these those through very when where which while with would your they this that than then them were will been being much some such only over under what what’s whose our into just from have has had does did for and the you are was not but can its all one two three four five six seven eight nine ten".split(/\s+/));
-  const raw=(text||"").match(/[A-Za-z]+(?:['’-][A-Za-z]+)?|\d+(?:[-/]\d+)*/g)||[];
+  const raw=(text||"").match(/\p{Script=Latin}+(?:['’-]\p{Script=Latin}+)?|\d+(?:[-/]\d+)*/gu)||[];
   const out=[];
   raw.forEach((x,i)=>{
     const k=x.toLowerCase().replace(/[’']/g,"'");
-    const proper=/^[A-Z][a-z]{2,}/.test(x) && i>0;
+    const proper=/^\p{Lu}\p{Ll}{2,}/u.test(x) && i>0;
     const numeric=/\d/.test(x);
     const useful=x.length>=7 && !stop.has(k);
     if((proper||numeric||useful) && !out.some(y=>y.key===k)) out.push({key:k,label:x});
