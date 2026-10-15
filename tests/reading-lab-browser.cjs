@@ -21,7 +21,7 @@ const server=http.createServer((request,response)=>{
   const view=async name=>{await page.locator(`#readingLabRoot .lab-nav [data-view="${name}"]`).click();};
   const waitSave=()=>page.waitForFunction(async()=>{const db=await new Promise(resolve=>{const r=indexedDB.open("fly-room-reading-lab",1);r.onsuccess=()=>resolve(r.result);});return new Promise(resolve=>{const tx=db.transaction("sessions"),r=tx.objectStore("sessions").count();r.onsuccess=()=>resolve(r.result>0);tx.oncomplete=()=>db.close();});});
   try{
-    await page.goto(origin+"/#readingLab");await page.getByRole("heading",{name:"英文朗讀實驗室",exact:true}).waitFor();
+    await page.goto(origin+"/#readingLab");await page.getByRole("heading",{name:"英文朗讀訓練中心",exact:true}).waitFor();
     assert.equal(await page.evaluate(()=>CI_PDF_DRILLS.length),38);
     await view("exam");await click("random");await page.locator('#labPreview').selectOption("15");
     await page.clock.install();await click("prepare");await page.clock.fastForward(15000);await page.locator('#labTimer').filter({hasText:"秒"}).waitFor();
@@ -63,7 +63,7 @@ const server=http.createServer((request,response)=>{
     assert.equal(await page.locator('.lab-destination-table tbody tr').count(),2);
     await page.locator('[data-lab-action="place-pick"][data-id="place-ci-denpasar"]').click();assert.equal(await page.locator('.lab-word').textContent(),"Denpasar");await click("place-reveal");assert.match(await page.locator('.lab-answer').textContent(),/den-PAH-sar/);await click("place-grade");await click("place-favorite");
     await page.locator('#labPlaceSearch').fill("找不到的地點");assert.equal(await page.locator('.lab-place-pick').count(),0);await page.locator('#labPlaceSearch').fill("");
-    await click("place-reset");assert.equal(await page.locator('#labPlaceGroup').inputValue(),"全部地區");assert.equal(await page.locator('.lab-place-pick').count(),95);await page.locator('#labPlaceGroup').selectOption("東南亞");
+    await click("place-reset");assert.equal(await page.locator('#labPlaceGroup').inputValue(),"全部地區");assert.equal(await page.locator('.lab-place-pick').count(),await page.evaluate(()=>ReadingLabData.places.length));await page.locator('#labPlaceGroup').selectOption("東南亞");
     await view("history");await click("clear-lab");await view("history");assert.equal(await page.locator('.lab-history').count(),0);
     await page.locator('#labImport').setInputFiles({name:"lab-backup.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(backup))});await page.locator('.lab-history summary').waitFor();
     await page.locator('.lab-history summary').click();await click("play-session");await page.locator('.lab-history audio').waitFor();

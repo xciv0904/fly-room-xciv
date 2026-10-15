@@ -16,7 +16,7 @@ function evidence(phones){
 function splitVariants(entry){return (entry?.phones||[]).map(evidence).filter(v=>v.syllableCount);}
 function loadExisting(root){
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8'),s={};s.window=s;vm.createContext(s);
-  for(const f of ['reading-lab/data.js','reading-lab/ci-destinations.js','ci-vocabulary.js','ci-source-vocabulary.js'])vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),s);
+  for(const f of ['reading-lab/data.js','reading-lab/ci-destinations.js','reading-lab/destination-network.js','ci-vocabulary.js','ci-source-vocabulary.js'])if(fs.existsSync(path.join(root,f)))vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),s);
   vm.runInContext(html.slice(html.indexOf('const PRONUNCIATION_ZH'),html.indexOf('let pronunciationWords')),s);
   return {words:s.ReadingLabData.words,places:s.ReadingLabData.places,meaning:word=>s.ciSourceMeaning(word)};
 }

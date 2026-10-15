@@ -4,9 +4,9 @@
   "uniqueTextCount": 910,
   "processed": 942,
   "withCandidates": 941,
-  "vocabularyCount": 3222,
-  "cardCount": 3223,
-  "pronunciationPending": 414,
+  "vocabularyCount": 3225,
+  "cardCount": 3226,
+  "pronunciationPending": 417,
   "translationPending": 115,
   "counts": {
     "華航": {
@@ -63,8 +63,8 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 237,
-      "pendingIPA": 98,
+      "total": 240,
+      "pendingIPA": 101,
       "pendingChinese": 29
     },
     "word": {
@@ -82,7 +82,7 @@
   ],
   "failures": [],
   "excluded": {
-    "count": 210,
+    "count": 212,
     "reason": "短問句、非英文、翻譯／UI 文案不作文章；程式、測試、字典與衍生檔案不重複掃描"
   },
   "articles": [
@@ -194,8 +194,8 @@
       "sourceFile": "ci-2025-data.js",
       "collection": "CI_2025_MAGAZINE_DRILLS",
       "words": 60,
-      "candidates": 33,
-      "occurrences": 33,
+      "candidates": 34,
+      "occurrences": 34,
       "processed": true
     },
     {
@@ -376,8 +376,8 @@
       "sourceFile": "ci-2025-data.js",
       "collection": "CI_2025_NEWS_RELEASES",
       "words": 114,
-      "candidates": 53,
-      "occurrences": 54,
+      "candidates": 54,
+      "occurrences": 55,
       "processed": true
     },
     {
@@ -474,8 +474,8 @@
       "sourceFile": "ci-2025-data.js",
       "collection": "CI_2025_NEWS_RELEASES",
       "words": 91,
-      "candidates": 46,
-      "occurrences": 55,
+      "candidates": 47,
+      "occurrences": 56,
       "processed": true
     },
     {
@@ -1524,8 +1524,8 @@
       "sourceFile": "index.html",
       "collection": "CI_NEWS_RELEASES",
       "words": 166,
-      "candidates": 63,
-      "occurrences": 88,
+      "candidates": 64,
+      "occurrences": 89,
       "processed": true
     },
     {
@@ -1846,8 +1846,8 @@
       "sourceFile": "question-bank.js",
       "collection": "__QUESTION_BANK__",
       "words": 79,
-      "candidates": 25,
-      "occurrences": 31,
+      "candidates": 26,
+      "occurrences": 32,
       "processed": true
     },
     {
@@ -2374,8 +2374,8 @@
       "sourceFile": "question-bank.js",
       "collection": "__QUESTION_BANK__",
       "words": 36,
-      "candidates": 10,
-      "occurrences": 14,
+      "candidates": 11,
+      "occurrences": 15,
       "processed": true
     },
     {
@@ -2419,8 +2419,8 @@
       "sourceFile": "question-bank.js",
       "collection": "__QUESTION_BANK__",
       "words": 37,
-      "candidates": 11,
-      "occurrences": 11,
+      "candidates": 12,
+      "occurrences": 12,
       "processed": true
     },
     {
@@ -8675,8 +8675,8 @@
       "sourceFile": "question-bank.js",
       "collection": "__QUESTION_BANK__",
       "words": 64,
-      "candidates": 27,
-      "occurrences": 28,
+      "candidates": 28,
+      "occurrences": 29,
       "processed": true
     },
     {
@@ -8749,8 +8749,8 @@
       "sourceFile": "question-bank.js",
       "collection": "__QUESTION_BANK__",
       "words": 61,
-      "candidates": 29,
-      "occurrences": 30,
+      "candidates": 30,
+      "occurrences": 31,
       "processed": true
     },
     {
@@ -9050,8 +9050,8 @@
       "sourceFile": "question-bank.js",
       "collection": "__QUESTION_BANK__",
       "words": 41,
-      "candidates": 21,
-      "occurrences": 22,
+      "candidates": 22,
+      "occurrences": 23,
       "processed": true
     },
     {

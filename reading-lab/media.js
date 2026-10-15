@@ -3,7 +3,7 @@
   class LabRecorder{
     constructor(){this.active=false;this.urls=new Map();this.generation=0;}
     cancelPending(){this.generation++;}
-    async start({recognition=false,onText=()=>{},onStatus=()=>{}}={}){
+    async start({recognition=false,onText=()=>{},onStatus=()=>{},onChunk=()=>{}}={}){
       if(this.active)throw Error("請先停止目前的錄音。");
       if(!navigator.mediaDevices?.getUserMedia||!root.MediaRecorder)throw Error("此瀏覽器不支援錄音。可匯入裝置錄音檔，或貼上逐字稿繼續練習。");
       const generation=++this.generation;
@@ -14,7 +14,7 @@
       this.chunks=[];this.started=Date.now();this.active=true;
       try{
         this.recorder=new MediaRecorder(this.stream);
-        this.recorder.ondataavailable=e=>{if(e.data.size)this.chunks.push(e.data);};
+        this.recorder.ondataavailable=e=>{if(e.data.size){this.chunks.push(e.data);Promise.resolve(onChunk({blob:new Blob(this.chunks,{type:this.recorder.mimeType||"audio/webm"}),duration:Math.round((Date.now()-this.started)/1000)})).catch(()=>onStatus("錄音檢查點無法儲存，請保持此頁並按停止後匯出備份。"));}};
         this.finished=new Promise(resolve=>{this.recorder.onstop=()=>{this.stream.getTracks().forEach(t=>t.stop());resolve({blob:new Blob(this.chunks,{type:this.recorder.mimeType||"audio/webm"}),duration:Math.round((Date.now()-this.started)/1000)});};});
         this.recorder.start(1000);
       }catch(error){this.active=false;this.stream.getTracks().forEach(t=>t.stop());throw Error("無法啟動錄音，請改匯入音檔或使用另一個瀏覽器。");}
@@ -32,6 +32,7 @@
       if(!this.active)return null;this.active=false;this.generation++;clearTimeout(this.restart);try{this.speech?.stop();}catch{}
       if(this.recorder.state!=="inactive")this.recorder.stop();return this.finished;
     }
+    flush(){if(this.active&&this.recorder?.state==="recording")try{this.recorder.requestData();}catch{}}
     play(holder,blob){
       const old=this.urls.get(holder);if(old)URL.revokeObjectURL(old);
       const url=URL.createObjectURL(blob);this.urls.set(holder,url);
