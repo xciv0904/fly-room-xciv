@@ -1,6 +1,12 @@
 (function(root){
   "use strict";
   const categories={long:"Long Words 多音節單字",stress:"Word Stress 重音",final:"Final Consonants 詞尾子音",proper:"Proper Nouns 專有名詞",skipped:"Skipped Words 漏讀",fluency:"Fluency 流暢度",intonation:"Intonation 語調",other:"其他文字差異（待人工分類）"};
+  function scheduleValue(s){return s&&Number.isFinite(s.due)&&Number.isFinite(s.reviewedAt)?{due:s.due,reviewedAt:s.reviewedAt,days:Math.max(1,Math.min(60,Number(s.days)||1)),stage:Math.max(0,Math.min(4,Number(s.stage)||0))}:undefined;}
+  function assessmentValue(a){return Object.fromEntries(['tone','volume','fluency','accuracy','pausing','eye'].map(k=>[k,['pending','good','retry'].includes(a?.[k])?a[k]:'pending']));}
+  function audioValue(a){
+    if(!a||!['duration','rmsDb','peakDb','clippedPercent','quietSeconds','thresholdDb'].every(k=>Number.isFinite(a[k]))||!Array.isArray(a.pauses)||a.duration<0||a.duration>600)return undefined;
+    return {duration:a.duration,rmsDb:a.rmsDb,peakDb:a.peakDb,clippedPercent:Math.max(0,Math.min(100,a.clippedPercent)),quietSeconds:Math.max(0,Math.min(a.duration,a.quietSeconds)),thresholdDb:a.thresholdDb,pauses:a.pauses.filter(p=>p&&Number.isFinite(p.start)&&Number.isFinite(p.end)&&p.end>=p.start&&p.start>=0&&p.end<=a.duration&&Number.isFinite(p.duration)).slice(0,1000).map(p=>({start:p.start,end:p.end,duration:p.duration})),imported:true,method:'imported-not-recomputed'};
+  }
   const tokens=text=>String(text||"").match(/[\p{L}\p{N}]+(?:['’/-][\p{L}\p{N}]+)*/gu)||[];
   const normalize=t=>t.toLowerCase().replace(/’/g,"'");
   const forms=t=>{
@@ -70,18 +76,18 @@
     for(const [id,w]of Object.entries(input.state.wordCards||{}).slice(0,20000))if(/^[a-z0-9-]+$/i.test(id)&&w&&typeof w.word==="string")wordCards[id]={id,word:safeString(w.word,150),zh:safeString(w.zh,2000),normalized:safeString(w.normalized,150),type:safeString(w.type,30),difficulty:safeString(w.difficulty,30),context:safeString(w.context,3000),archived:true,ipa:"",syllables:"",sources:[],note:"保留的已練習字；來源與讀音待確認。"};
     for(const [id,p]of Object.entries(input.state.words||{}).slice(0,20000)){
       if(!/^[a-z0-9-]+$/i.test(id)||!p||!["pending","unsure","retry","mastered"].includes(p.status))continue;
-      words[id]={status:p.status,confirmed:p.confirmed===true,updated:Number(p.updated)||0,attempts:Math.max(0,Number(p.attempts)||0)};
+      words[id]={status:p.status,confirmed:p.confirmed===true,updated:Number(p.updated)||0,attempts:Math.max(0,Number(p.attempts)||0),...(scheduleValue(p.schedule)?{schedule:scheduleValue(p.schedule)}:{})};
     }
-    const places={};for(const [id,p]of Object.entries(input.state.places||{}))if(/^place-(?:\d+|ci-[a-z0-9-]+)$/.test(id)&&p&&Number.isFinite(p.updated)&&Number.isFinite(p.attempts))places[id]={updated:p.updated,attempts:Math.max(0,p.attempts)};
+    const places={};for(const [id,p]of Object.entries(input.state.places||{}))if(/^place-(?:\d+|ci-[a-z0-9-]+)$/.test(id)&&p&&Number.isFinite(p.updated)&&Number.isFinite(p.attempts))places[id]={updated:p.updated,attempts:Math.max(0,p.attempts),...(['pending','mastered','unsure','retry'].includes(p.status)?{status:p.status}:{}),...(scheduleValue(p.schedule)?{schedule:scheduleValue(p.schedule)}:{})};
     const daily={};for(const [date,v]of Object.entries(input.state.daily||{}))if(/^\d{4}-\d{2}-\d{2}$/.test(date)&&v?.tasks){const tasks={};for(const k of ["words","places","reading","review"])tasks[k]=v.tasks[k]===true;daily[date]={tasks,complete:Object.values(tasks).every(Boolean)};}
     const sessions=input.sessions.map(s=>{
       if(!s||!Number.isFinite(s.ts)||!Number.isFinite(s.duration)||s.duration<0||s.duration>86400)throw Error("備份含有無效的練習時間。");
-      return {id:safeString(s.id,100),ts:s.ts,title:safeString(s.title,300),questionId:safeString(s.questionId,100),difficulty:safeString(s.difficulty,30),original:safeString(s.original),transcript:safeString(s.transcript),duration:s.duration,notes:safeString(s.notes,5000),errors:(Array.isArray(s.errors)?s.errors:[]).slice(0,1000).map(e=>({original:safeString(e.original,150),heard:safeString(e.heard,150),category:categories[e.category]?e.category:"long",confirmed:e.confirmed===true,note:safeString(e.note,1000)})),reviewed:s.reviewed===true};
+      return {id:safeString(s.id,100),ts:s.ts,title:safeString(s.title,300),questionId:safeString(s.questionId,100),difficulty:safeString(s.difficulty,30),original:safeString(s.original),transcript:safeString(s.transcript),duration:s.duration,assessment:assessmentValue(s.assessment),visual:{eye:s.visual?.eye===true,expression:s.visual?.expression===true,posture:s.visual?.posture===true},completedWords:Number.isInteger(s.completedWords)&&s.completedWords>=0?Math.min(tokens(s.original).length,s.completedWords):null,audioAnalysis:audioValue(s.audioAnalysis),reviewSchedule:scheduleValue(s.reviewSchedule),kind:safeString(s.kind,50),source:safeString(s.source,1000),sourceUrl:/^https:\/\//.test(s.sourceUrl||"")?safeString(s.sourceUrl,2000):"",notes:safeString(s.notes,5000),errors:(Array.isArray(s.errors)?s.errors:[]).slice(0,1000).map(e=>({original:safeString(e.original,150),heard:safeString(e.heard,150),category:categories[e.category]?e.category:"long",confirmed:e.confirmed===true,note:safeString(e.note,1000)})),reviewed:s.reviewed===true};
     });
     if(sessions.some(s=>!s.id||!s.original)||new Set(sessions.map(s=>s.id)).size!==sessions.length)throw Error("備份紀錄缺少原稿或有重複識別碼。");
     if(sessions.some(s=>tokens(s.original).length>1000||tokens(s.transcript).length>1000))throw Error("備份包含超過比對上限的原稿或逐字稿。");
     return {sessions,state:{words,wordCards,places,daily,favorites:(Array.isArray(input.state.favorites)?input.state.favorites:[]).filter(x=>typeof x==="string").slice(0,1000)},audio:input.audio||[]};
   }
-  root.ReadingLabCore={categories,tokens,compare,dayKey,streak,trends,mergeState,validateBackup};
+  root.ReadingLabCore={categories,tokens,compare,dayKey,streak,trends,mergeState,validateBackup,assessmentValue,audioValue,scheduleValue};
   if(typeof module!=="undefined")module.exports=root.ReadingLabCore;
 })(typeof window!=="undefined"?window:globalThis);

@@ -4,7 +4,8 @@
   "scripts": {
     "build:vocabulary": "node scripts/build-vocabulary.cjs",
     "test": "node --test tests/*.test.cjs",
-    "test:browser": "node tests/reading-lab-browser.cjs"
+    "test:browser": "node tests/reading-lab-browser.cjs",
+    "test:center": "node tests/reading-center-browser.cjs"
   },
   "devDependencies": {
     "acorn": "8.19.0",
