@@ -62,3 +62,10 @@
   #tab-readingLab input:not([type=checkbox]),#tab-readingLab select{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){#tab-readingLab *{scroll-behavior:auto}}
+.lab-vocab-filters{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.lab-vocab-filters label,.lab-vocab-filters select{min-width:0;max-width:100%}
+.lab-word-sources section{border-top:1px solid var(--line,#ddd);padding:.8rem 0}
+.lab-word-sources blockquote{margin:.5rem 0;padding-left:1rem;border-left:3px solid #d4dbe4;line-height:1.8;overflow-wrap:anywhere}
+.lab-source-article{padding:1rem;background:#f4f7fa;border-radius:12px;overflow-wrap:anywhere}
+.lab-source-article .lab-original{white-space:pre-wrap}
+@media(max-width:600px){.lab-vocab-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.lab-vocab-filters label:nth-child(3),.lab-vocab-filters label:last-child{grid-column:1/-1}.lab-answer{overflow-wrap:anywhere}}

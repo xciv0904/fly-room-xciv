@@ -90,10 +90,12 @@
       await persist();notice="本輪已停止。請回聽、貼上或修正逐字稿，再比對原稿。";
     }finally{render();}
   }
-  function wordPool(){return reviewOnly?D.words.filter(w=>["pending","unsure","retry"].includes(state.words[w.id]?.status)):D.words;}
+  const V=window.ReadingLabVocabulary;
+  let wordFilters={};
+  function wordPool(){return V.pool(wordFilters,state,reviewOnly);}
   function words(){
     const pool=wordPool();wordIndex=Math.min(wordIndex,Math.max(0,pool.length-1));const w=pool[wordIndex];
-    shell(`<div class="card"><h3>陌生長單字解碼</h3><p>先試讀，再揭曉；不確定和需要重練的詞會留在複習清單。</p><div class="lab-actions">${button("word-mode",reviewOnly?"顯示全部字庫":"只看待確認／需複習")}</div>${w?`<p class="sub">${wordIndex+1}/${pool.length} · 來源：${esc(w.source)} · ${state.words[w.id]?.status==="pending"?"辨識落差待確認，並非已確定發音錯誤":({mastered:"已掌握",unsure:"不確定",retry:"需要重練"}[state.words[w.id]?.status]||"尚未練習")}</p><div class="lab-word" lang="en">${esc(w.word)}</div><div class="lab-actions">${button("sample-record","🔴 錄下我的嘗試",'data-mode="word"')}${button("sample-stop","停止錄音",sampleMode==="word"?"":" disabled")}${button("word-attempt","我已先猜讀一次")}</div><div id="labSamplePlayback"></div>${revealed?`<div class="lab-answer"><b>${esc(w.ipa||"此地名未設定標準英語 IPA，請參考下方近似提示")}</b><p>${esc(w.syllables)}</p><p>${esc(w.zh)}</p><p class="sub">${esc(w.note)}</p>${link(w.url,"詞典／地名參考")}${button("say","🔊 合成音示範",`data-text="${esc(w.word)}"`)}<p class="sub">瀏覽器合成音不是官方標準錄音；請配合詞典核對。</p></div><div class="lab-actions">${[["mastered","已掌握"],["unsure","不確定"],["retry","需要重練"]].map(([status,label])=>button("word-grade",label,`data-grade="${status}"`)).join("")}</div>`:button("word-reveal","揭曉發音",attempted?"":" disabled")}<div class="lab-actions">${button("word-prev","上一字",wordIndex?"":" disabled")}${button("word-next","下一字",wordIndex<pool.length-1?"":" disabled")}</div>`:"<p>目前沒有待複習的詞，可以切回全部字庫繼續練習。</p>"}</div><div class="card"><h3>字尾規則練習</h3><p class="sub">規則是解碼線索，不能只靠拼字保證正確發音。</p><label>選擇字尾<select id="labRule">${options(D.rules.map((x,i)=>[i,x.suffix]),0)}</select></label><div id="labRuleBody">${ruleBody(D.rules[0])}</div></div><div class="card">${button("done-words","完成今天的單字訓練")}</div>`);
+    shell(`<div class="card"><h3>陌生長單字解碼</h3><p>先試讀，再揭曉；不確定和需要重練的詞會留在複習清單。</p>${V.controls(wordFilters,pool.length)}<div class="lab-actions">${button("word-mode",reviewOnly?"顯示全部字庫":"只看待確認／需複習")}</div>${w?`<p class="sub">${wordIndex+1}/${pool.length} · ${esc(w.source||"全站文章自動擷取")} · ${({pending:"辨識落差待確認，並非已確定發音錯誤",mastered:"已掌握",unsure:"不確定",retry:"需要重練"}[state.words[w.id]?.status]||"尚未練習")}</p><div class="lab-word" lang="en">${esc(w.word)}</div><div class="lab-actions">${button("sample-record","🔴 錄下我的嘗試",'data-mode="word"')}${button("sample-stop","停止錄音",sampleMode==="word"?"":" disabled")}${button("word-attempt","我已先猜讀一次")}</div><div id="labSamplePlayback"></div>${revealed?`${V.answer(w)}<div class="lab-actions">${[["mastered","已掌握"],["unsure","不確定"],["retry","需要重練"]].map(([status,label])=>button("word-grade",label,`data-grade="${status}"`)).join("")}</div>${V.sources(w)}`:button("word-reveal","揭曉發音",attempted?"":" disabled")}<div class="lab-actions">${button("word-prev","上一字",wordIndex?"":" disabled")}${button("word-next","下一字",wordIndex<pool.length-1?"":" disabled")}</div>`:"<p>沒有符合條件的詞。可以清除篩選或切回全部字庫。</p>"}</div><div class="card"><h3>字尾規則練習</h3><p class="sub">規則是解碼線索，不能只靠拼字保證正確發音。</p><label>選擇字尾<select id="labRule">${options(D.rules.map((x,i)=>[i,x.suffix]),0)}</select></label><div id="labRuleBody">${ruleBody(D.rules[0])}</div></div><div class="card">${button("done-words","完成今天的單字訓練")}</div>`);
   }
   function ruleBody(r){return `<p>先想一個這種字尾的單字，試讀並猜重音。</p><details><summary>揭曉規則、示例與例外</summary><div class="body"><p>${esc(r.rule)}</p><p lang="en">${esc(r.example)}</p><p class="lab-caution">${esc(r.exception)}</p>${button("say","聽示例中的單字",`data-text="${esc(r.example.split(' →')[0].split(' /')[0])}"`)}${link("https://dictionary.cambridge.org/help/phonetics.html","音標核對說明")}</div></details>`;}
   let placeGroup="全部地區",placeSearch="";
@@ -125,6 +127,7 @@
   async function changeView(next){
     if(active())throw Error("請先停止目前的錄音或倒數，再切換實驗室功能。");
     if(!["home","exam","words","places","history"].includes(next))return;
+    if(next==="words"){notify("正在載入全站詞彙題庫…");await V.load(state);}
     view=next;notice="";render();
   }
   async function sampleStart(mode){
@@ -151,7 +154,7 @@
   async function exportBackup(){
     const audio=[];
     if(el("labExportAudio").checked){let total=0;for(const s of sessions){const b=await DB.get("audio",s.id);if(!b)continue;total+=b.size;if(total>60*1024*1024)throw Error("音檔合計超過 60 MB，請取消包含錄音，或先刪除不需要的音檔。");const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(b);});audio.push({id:s.id,data});}}
-    const file=new Blob([JSON.stringify({kind:"fly-room-reading-lab",version:1,exportedAt:new Date().toISOString(),state:{words:state.words,places:state.places,favorites:state.favorites,daily:state.daily},sessions,audio})],{type:"application/json"});
+    const file=new Blob([JSON.stringify({kind:"fly-room-reading-lab",version:1,exportedAt:new Date().toISOString(),state:{words:state.words,wordCards:state.wordCards||{},places:state.places,favorites:state.favorites,daily:state.daily},sessions,audio})],{type:"application/json"});
     const a=document.createElement("a"),url=URL.createObjectURL(file);a.href=url;a.download=`fly-room-reading-lab-${C.dayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify("已產生備份檔；請確認瀏覽器下載完成。");
   }
   async function importBackup(file){
@@ -166,7 +169,7 @@
       const [prefix,encoded]=item.data.split(","),bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));size+=bytes.length;if(size>60*1024*1024)throw Error("匯入音檔超過 60 MB。");audio.push([item.id,new Blob([bytes],{type:prefix.slice(5).split(";")[0]})]);
     }
     await saveQueue;
-    const next=C.mergeState(state,data.state);await DB.importData(data,next,audio);state=next;sessions=await DB.list("sessions");notice=`已合併 ${data.sessions.length} 筆紀錄，保留既有紀錄與目前草稿；重複紀錄略過。`;render();
+    const next=C.mergeState(state,data.state);await DB.importData(data,next,audio);state=next;if(V.index)await V.load(state);sessions=await DB.list("sessions");notice=`已合併 ${data.sessions.length} 筆紀錄，保留既有紀錄與目前草稿；重複紀錄略過。`;render();
   }
   async function act(action,node){
     if(action==="view")return changeView(node.dataset.view);
@@ -194,11 +197,14 @@
     }
     if(action==="review-words"){reviewOnly=true;wordIndex=0;revealed=false;attempted=false;return changeView("words");}
     if(action==="word-mode"){reviewOnly=!reviewOnly;wordIndex=0;revealed=false;attempted=false;render();return;}
+    if(action==="word-reset"){wordFilters={};reviewOnly=false;wordIndex=0;revealed=false;attempted=false;render();return;}
+    if(action==="word-random"){wordIndex=Math.floor(Math.random()*Math.max(1,wordPool().length));revealed=false;attempted=false;render();return;}
+    if(action==="word-source"){if(!revealed)throw Error("請先猜讀並揭曉。");return V.source(node.dataset.id,el("labWordSource"));}
     if(action==="word-attempt"){attempted=true;render();return;}
     if(action==="word-reveal"){if(!attempted)throw Error("請先自行猜讀一次。");revealed=true;render();return;}
     if(action==="word-next"||action==="word-prev"){wordIndex+=action==="word-next"?1:-1;revealed=false;attempted=false;render();return;}
     if(action==="word-grade"){
-      if(!revealed)throw Error("請先試讀並揭曉發音。");const w=wordPool()[wordIndex],old=state.words[w.id];state.words[w.id]={status:node.dataset.grade,confirmed:old?.confirmed||false,attempts:(old?.attempts||0)+1,updated:Date.now()};await persist();revealed=false;attempted=false;render();notify("自評已儲存；不確定與需要重練的字會留在複習清單。");return;
+      if(!revealed)throw Error("請先試讀並揭曉發音。");const w=wordPool()[wordIndex],old=state.words[w.id];state.words[w.id]={status:node.dataset.grade,confirmed:old?.confirmed||false,attempts:(old?.attempts||0)+1,updated:Date.now()};state.wordCards||={};state.wordCards[w.id]={id:w.id,word:w.word,zh:w.zh,normalized:w.normalized,type:w.type,difficulty:w.difficulty,context:w.sources?.length?window.ReadingLabVocabulary.index?.articles.find(a=>a.id===w.sources[0].articleId)?.sentences[w.sources[0].sentenceIndices[0]]:w.context,archived:true,ipa:'',syllables:'',sources:[],note:'先前已練習的字；來源或讀音如已移除則待重新確認。'};await persist();revealed=false;attempted=false;render();notify("自評已儲存；不確定與需要重練的字會留在複習清單。");return;
     }
     if(action==="sample-record")return sampleStart(node.dataset.mode);
     if(action==="sample-stop")return sampleStop();
@@ -237,7 +243,7 @@
     if(action==="export")return exportBackup();
     if(action==="clear-lab"){
       if(!confirm("刪除朗讀實驗室的全部紀錄、錄音與設定？原網站資料不受影響。此動作無法還原，請先匯出備份。"))return;
-      await saveQueue.catch(()=>{});await DB.clear();recorder.release();state=initial();sessions=[];blob=null;phase="setup";view="home";notice="實驗室個人資料已刪除；起始待確認清單已重設。";await persist();render();return;
+      await saveQueue.catch(()=>{});await DB.clear();recorder.release();state=initial();if(V.index)await V.load(state);sessions=[];blob=null;phase="setup";view="home";notice="實驗室個人資料已刪除；起始待確認清單已重設。";await persist();render();return;
     }
   }
   root.addEventListener("click",async event=>{
@@ -248,6 +254,10 @@
   });
   root.addEventListener("input",event=>{
     const node=event.target;
+    if(node.id==="labWordSearch"){
+      if(sampleMode){node.value=wordFilters.search||"";notify("請先停止單字錄音再篩選。");return;}
+      const caret=node.selectionStart;wordFilters.search=node.value;wordIndex=0;revealed=false;attempted=false;render();el("labWordSearch").focus({preventScroll:true});el("labWordSearch").setSelectionRange(caret,caret);return;
+    }
     if(node.id==="labPlaceSearch"){
       const caret=node.selectionStart;placeSearch=node.value;placeIndex=0;placeRevealed=false;render();el("labPlaceSearch").focus({preventScroll:true});el("labPlaceSearch").setSelectionRange(caret,caret);return;
     }
@@ -260,6 +270,10 @@
   root.addEventListener("change",async event=>{
     const node=event.target;
     try{
+      if(node.dataset.vocabFilter){
+        if(sampleMode){node.value=wordFilters[node.dataset.vocabFilter]||"";notify("請先停止單字錄音再篩選。");return;}
+        wordFilters[node.dataset.vocabFilter]=node.value;if(["airline","kind"].includes(node.dataset.vocabFilter))wordFilters.article="";wordIndex=0;revealed=false;attempted=false;render();return;
+      }
       const fields={labAirline:"airline",labDifficulty:"difficulty",labBand:"band",labPreview:"preview"};
       if(fields[node.id]){state.config[fields[node.id]]=["labBand","labPreview"].includes(node.id)?Number(node.value):node.value;await persist();render();}
       if(node.id==="labRule")el("labRuleBody").innerHTML=ruleBody(D.rules[Number(node.value)]);

@@ -49,6 +49,7 @@
   }
   function mergeState(current,incoming){
     const next=structuredClone(current);
+    next.wordCards={...(current.wordCards||{}),...(incoming.wordCards||{})};
     for(const [id,p]of Object.entries(incoming.words||{}))if(!next.words[id]||(p.updated||0)>(next.words[id].updated||0))next.words[id]=p;
     next.favorites=[...new Set([...(current.favorites||[]),...(incoming.favorites||[])])];
     next.places={...(current.places||{})};
@@ -65,7 +66,9 @@
     if(!input.state||typeof input.state!=="object")throw Error("備份缺少設定。");
     const safeString=(x,max=20000)=>typeof x==="string"?x.slice(0,max):"";
     const words={};
-    for(const [id,p]of Object.entries(input.state.words||{}).slice(0,5000)){
+    const wordCards={};
+    for(const [id,w]of Object.entries(input.state.wordCards||{}).slice(0,20000))if(/^[a-z0-9-]+$/i.test(id)&&w&&typeof w.word==="string")wordCards[id]={id,word:safeString(w.word,150),zh:safeString(w.zh,2000),normalized:safeString(w.normalized,150),type:safeString(w.type,30),difficulty:safeString(w.difficulty,30),context:safeString(w.context,3000),archived:true,ipa:"",syllables:"",sources:[],note:"保留的已練習字；來源與讀音待確認。"};
+    for(const [id,p]of Object.entries(input.state.words||{}).slice(0,20000)){
       if(!/^[a-z0-9-]+$/i.test(id)||!p||!["pending","unsure","retry","mastered"].includes(p.status))continue;
       words[id]={status:p.status,confirmed:p.confirmed===true,updated:Number(p.updated)||0,attempts:Math.max(0,Number(p.attempts)||0)};
     }
@@ -77,7 +80,7 @@
     });
     if(sessions.some(s=>!s.id||!s.original)||new Set(sessions.map(s=>s.id)).size!==sessions.length)throw Error("備份紀錄缺少原稿或有重複識別碼。");
     if(sessions.some(s=>tokens(s.original).length>1000||tokens(s.transcript).length>1000))throw Error("備份包含超過比對上限的原稿或逐字稿。");
-    return {sessions,state:{words,places,daily,favorites:(Array.isArray(input.state.favorites)?input.state.favorites:[]).filter(x=>typeof x==="string").slice(0,1000)},audio:input.audio||[]};
+    return {sessions,state:{words,wordCards,places,daily,favorites:(Array.isArray(input.state.favorites)?input.state.favorites:[]).filter(x=>typeof x==="string").slice(0,1000)},audio:input.audio||[]};
   }
   root.ReadingLabCore={categories,tokens,compare,dayKey,streak,trends,mergeState,validateBackup};
   if(typeof module!=="undefined")module.exports=root.ReadingLabCore;

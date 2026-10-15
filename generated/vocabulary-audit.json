@@ -1,0 +1,1025 @@
+[
+  {
+    "word": "Expo",
+    "type": "word",
+    "ipa": "/ˈɛkspoʊ/",
+    "stress": [
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "EH1 K S P OW0",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "ɛ",
+          "kspoʊ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-4b0bac6e522ae477",
+      "title": "活力風情賀慶典｜英文原文朗讀／英翻中",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "雜誌",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_MAGAZINE_DRILLS",
+      "words": 63,
+      "candidates": 26,
+      "occurrences": 27,
+      "processed": true
+    },
+    "sentence": "As the Northern Hemisphere awakens from spring’s revival and quietly greets summer, the grand Expo 2025 Osaka stands poised to dazzle visitors with imaginative wonders.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "independent",
+    "type": "word",
+    "ipa": "/ˌɪndɪˈpɛndənt/",
+    "stress": [
+      [
+        3
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "IH2 N D IH0 P EH1 N D AH0 N T",
+        "syllableCount": 4,
+        "primaryStress": [
+          3
+        ],
+        "phoneticSyllables": [
+          "ɪ",
+          "ndɪ",
+          "pɛ",
+          "ndənt"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-a0897f88e624187c",
+      "title": "你家人知道你這次考空服嗎？他們怎麼說？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 71,
+      "candidates": 21,
+      "occurrences": 24,
+      "processed": true
+    },
+    "sentence": "As the eldest daughter I've always been independent and someone they don't need to worry about, so they know this is a goal I've planned carefully rather than an impulse.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "towel",
+    "type": "word",
+    "ipa": "/ˈtaʊəɫ/；/ˈtaʊɫ/",
+    "stress": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "T AW1 AH0 L",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "taʊ",
+          "əl"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "T AW1 L",
+        "syllableCount": 1,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "taʊl"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-7dec09434f7ed488",
+      "title": "餐點不小心灑到旅客衣服上，你會怎麼辦？",
+      "airlines": [
+        "通用"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 93,
+      "candidates": 25,
+      "occurrences": 29,
+      "processed": true
+    },
+    "sentence": "I'd apologise sincerely straight away, hand them a damp towel to help immediately, and take the remaining drinks back to the galley to prevent a second accident.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "moved",
+    "type": "word",
+    "ipa": "/ˈmuvd/",
+    "stress": [
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "M UW1 V D",
+        "syllableCount": 1,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "muvd"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-156d6a75f648ebfc",
+      "title": "你有給過客人什麼貼心服務嗎？",
+      "airlines": [
+        "星宇",
+        "國泰"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 81,
+      "candidates": 24,
+      "occurrences": 26,
+      "processed": true
+    },
+    "sentence": "I quietly offered a back pillow and moved her to a room nearer the lift.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "supporting",
+    "type": "word",
+    "ipa": "/səˈpɔɹtɪŋ/",
+    "stress": [
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "S AH0 P AO1 R T IH0 NG",
+        "syllableCount": 3,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "sə",
+          "pɔ",
+          "ɹtɪŋ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-160a6f32aba26ec7",
+      "title": "lab-0-0-0-0 · Service Information Workshop · 初級",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "模擬朗讀",
+      "sourceFile": "reading-lab/data.js",
+      "collection": "ReadingLabData.questions",
+      "words": 113,
+      "candidates": 41,
+      "occurrences": 45,
+      "processed": true
+    },
+    "sentence": "Participants will learn to identify the main action in each sentence before adding supporting details.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "director",
+    "type": "word",
+    "ipa": "/daɪˈɹɛktɝ/；/dɝˈɛktɝ/；/diˈɹɛktɝ/；/dɪˈɹɛktɝ/",
+    "stress": [
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "D ER0 EH1 K T ER0",
+        "syllableCount": 3,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "dɚ",
+          "ɛ",
+          "ktɚ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "D AY0 R EH1 K T ER0",
+        "syllableCount": 3,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "daɪ",
+          "ɹɛ",
+          "ktɚ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "D IY0 R EH1 K T ER0",
+        "syllableCount": 3,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "di",
+          "ɹɛ",
+          "ktɚ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "D IH0 R EH1 K T ER0",
+        "syllableCount": 3,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "dɪ",
+          "ɹɛ",
+          "ktɚ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-2632e9963779a1b3",
+      "title": "華航董事長與總經理新任命",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "新聞稿",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_NEWS_RELEASES",
+      "words": 113,
+      "candidates": 41,
+      "occurrences": 54,
+      "processed": true
+    },
+    "sentence": "President Chen joined the CAL Board as a director in 2016 and became Chairman of Tigerair Taiwan in 2020.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "grooming",
+    "type": "word",
+    "ipa": "/ˈɡɹumɪŋ/",
+    "stress": [
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "G R UW1 M IH0 NG",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "ɡɹu",
+          "mɪŋ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-75e002bb54d7ae25",
+      "title": "__QUESTION_BANK__ 44",
+      "airlines": [
+        "通用"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 40,
+      "candidates": 13,
+      "occurrences": 14,
+      "processed": true
+    },
+    "sentence": "I follow all grooming standards and SOPs to maintain the brand’s professional image.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "seafood",
+    "type": "word",
+    "ipa": "/ˈsiˌfud/",
+    "stress": [
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "S IY1 F UW2 D",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "si",
+          "fud"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-547280f83fe67cb7",
+      "title": "Seattle 與咖啡香｜英文原文朗讀／英翻中",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "雜誌",
+      "sourceFile": "index.html",
+      "collection": "CI_BROADCAST_DRILLS",
+      "words": 56,
+      "candidates": 18,
+      "occurrences": 20,
+      "processed": true
+    },
+    "sentence": "Accompanied by undulating coastline and harbor scenery, this aroma, associated with the color blue, also possesses a hint of fresh seafood.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "gifts",
+    "type": "word",
+    "ipa": "/ˈɡɪfs/；/ˈɡɪfts/",
+    "stress": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "G IH1 F T S",
+        "syllableCount": 1,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "ɡɪfts"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "G IH1 F S",
+        "syllableCount": 1,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "ɡɪfs"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-44bfc05d375dcc37",
+      "title": "捷克布拉格復活節｜英文原文朗讀／英翻中",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "雜誌",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_MAGAZINE_DRILLS",
+      "words": 60,
+      "candidates": 33,
+      "occurrences": 33,
+      "processed": true
+    },
+    "sentence": "In the Czech Republic, Easter combines artistry and tradition, with wax-dyed eggs exchanged as gifts and lively markets offering traditional foods and crafts.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "vitality",
+    "type": "word",
+    "ipa": "/vaɪˈtæɫəti/",
+    "stress": [
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "V AY0 T AE1 L AH0 T IY0",
+        "syllableCount": 4,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "vaɪ",
+          "tæ",
+          "lə",
+          "ti"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-44bfc05d375dcc37",
+      "title": "捷克布拉格復活節｜英文原文朗讀／英翻中",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "雜誌",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_MAGAZINE_DRILLS",
+      "words": 60,
+      "candidates": 33,
+      "occurrences": 33,
+      "processed": true
+    },
+    "sentence": "The unique Pomlázka custom sees men tapping women with willow twigs, symbolizing wishes for health and vitality.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "long-range",
+    "type": "word",
+    "ipa": "/ˈɫɔŋˈɹeɪndʒ/",
+    "stress": [
+      [
+        1,
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "L AO1 NG R EY1 N JH",
+        "syllableCount": 2,
+        "primaryStress": [
+          1,
+          2
+        ],
+        "phoneticSyllables": [
+          "lɔ",
+          "ŋɹeɪndʒ"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-15f9db3a78cb5c68",
+      "title": "Zootopia 2 主題彩繪機",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "新聞稿",
+      "sourceFile": "index.html",
+      "collection": "CI_NEWS_RELEASES",
+      "words": 141,
+      "candidates": 59,
+      "occurrences": 77,
+      "processed": true
+    },
+    "sentence": "The Zootopia 2 themed livery plane featured on CAL’s long-range 777.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "installations",
+    "type": "word",
+    "ipa": "/ˌɪnstəˈɫeɪʃənz/",
+    "stress": [
+      [
+        3
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "IH2 N S T AH0 L EY1 SH AH0 N Z",
+        "syllableCount": 4,
+        "primaryStress": [
+          3
+        ],
+        "phoneticSyllables": [
+          "ɪ",
+          "nstə",
+          "leɪ",
+          "ʃənz"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-4b0bac6e522ae477",
+      "title": "活力風情賀慶典｜英文原文朗讀／英翻中",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "雜誌",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_MAGAZINE_DRILLS",
+      "words": 63,
+      "candidates": 26,
+      "occurrences": 27,
+      "processed": true
+    },
+    "sentence": "Down in the Southern Hemisphere, autumn descends on Sydney in a blaze of brilliant light installations—outshining even the stars.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "impossible",
+    "type": "word",
+    "ipa": "/ˌɪmˈpɑsəbəɫ/",
+    "stress": [
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "IH2 M P AA1 S AH0 B AH0 L",
+        "syllableCount": 4,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "ɪ",
+          "mpɑ",
+          "sə",
+          "bəl"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-448a08725a248457",
+      "title": "紐約時裝週｜英文原文朗讀／英翻中",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "雜誌",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_MAGAZINE_DRILLS",
+      "words": 65,
+      "candidates": 23,
+      "occurrences": 25,
+      "processed": true
+    },
+    "sentence": "Born in 1943 during World War II, it offered a stateside alternative when travel to Paris was impossible.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "called",
+    "type": "word",
+    "ipa": "/ˈkɔɫd/",
+    "stress": [
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "K AO1 L D",
+        "syllableCount": 1,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "kɔld"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-d5bdeff01bcacba5",
+      "title": "🚗 加拿大旅客・連假租車",
+      "airlines": [
+        "通用"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "index.html",
+      "collection": "STORY_LIBRARY",
+      "words": 107,
+      "candidates": 32,
+      "occurrences": 37,
+      "processed": true
+    },
+    "sentence": "I helped him find the rental office and, because it was a holiday period, I proactively called to check whether any cars were still available.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "commitments",
+    "type": "word",
+    "ipa": "/kəˈmɪtmənts/",
+    "stress": [
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "K AH0 M IH1 T M AH0 N T S",
+        "syllableCount": 3,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "kə",
+          "mɪ",
+          "tmənts"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-70dff8f059691529",
+      "title": "lab-0-0-3-0 · Service Information Workshop · 挑戰級",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "模擬朗讀",
+      "sourceFile": "reading-lab/data.js",
+      "collection": "ReadingLabData.questions",
+      "words": 110,
+      "candidates": 50,
+      "occurrences": 52,
+      "processed": true
+    },
+    "sentence": "Provided that readers distinguish illustrative proposals from verified commitments, the following hypothetical report offers an opportunity to interpret qualified statements whose implications depend on the evidence available.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "opportunity",
+    "type": "word",
+    "ipa": "/ˌɑpɝˈtunəti/",
+    "stress": [
+      [
+        3
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "AA2 P ER0 T UW1 N AH0 T IY0",
+        "syllableCount": 5,
+        "primaryStress": [
+          3
+        ],
+        "phoneticSyllables": [
+          "ɑ",
+          "pɚ",
+          "tu",
+          "nə",
+          "ti"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-d890ee826e403590",
+      "title": "請用3分鐘自我介紹，並結合過去經歷展現你的服務精神與穩定度。",
+      "airlines": [
+        "通用"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 165,
+      "candidates": 57,
+      "occurrences": 69,
+      "processed": true
+    },
+    "sentence": "During my studies, I took the opportunity to go on exchange in South Korea for a semester and joined a study program in Canada, building independence and cross-cultural communication skills.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "happiness",
+    "type": "word",
+    "ipa": "/ˈhæpinəs/",
+    "stress": [
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "HH AE1 P IY0 N AH0 S",
+        "syllableCount": 3,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "hæ",
+          "pi",
+          "nəs"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-162b85435a0f983a",
+      "title": "首屆公益羽球營與新林洋配",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "新聞稿",
+      "sourceFile": "ci-2025-data.js",
+      "collection": "CI_2025_NEWS_RELEASES",
+      "words": 88,
+      "candidates": 34,
+      "occurrences": 40,
+      "processed": true
+    },
+    "sentence": "Lin Jun-Yi encouraged participants to stay true to their passion and prioritize learning with happiness.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "heated",
+    "type": "word",
+    "ipa": "/ˈhitəd/；/ˈhitɪd/",
+    "stress": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "HH IY1 T AH0 D",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "hi",
+          "təd"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "HH IY1 T IH0 D",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "hi",
+          "tɪd"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-32b0c4cb4ddb38e6",
+      "title": "鄰座旅客激烈爭吵，你如何介入？",
+      "airlines": [
+        "通用"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 62,
+      "candidates": 18,
+      "occurrences": 21,
+      "processed": true
+    },
+    "sentence": "If still heated, I'd offer to reseat one of them — framing it as comfort, not punishment.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "obtain",
+    "type": "word",
+    "ipa": "/əbˈteɪn/",
+    "stress": [
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "AH0 B T EY1 N",
+        "syllableCount": 2,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "ə",
+          "bteɪn"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-d45d3ab01f89de9d",
+      "title": "lab-0-7-0-1 · A More Understandable Terminal · 初級",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "模擬朗讀",
+      "sourceFile": "reading-lab/data.js",
+      "collection": "ReadingLabData.questions",
+      "words": 156,
+      "candidates": 65,
+      "occurrences": 72,
+      "processed": true
+    },
+    "sentence": "When a facility is temporarily unavailable, the information should explain where a traveler can obtain an alternative service.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
+    "word": "occasionally",
+    "type": "word",
+    "ipa": "/əˈkeɪʒənəɫi/；/əˈkeɪʒənɫi/；/əˈkeɪʒnəɫi/",
+    "stress": [
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "AH0 K EY1 ZH AH0 N AH0 L IY0",
+        "syllableCount": 5,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "ə",
+          "keɪ",
+          "ʒə",
+          "nə",
+          "li"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "AH0 K EY1 ZH N AH0 L IY0",
+        "syllableCount": 4,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "ə",
+          "keɪ",
+          "ʒnə",
+          "li"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "AH0 K EY1 ZH AH0 N L IY0",
+        "syllableCount": 4,
+        "primaryStress": [
+          2
+        ],
+        "phoneticSyllables": [
+          "ə",
+          "keɪ",
+          "ʒə",
+          "nli"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-34b469dbc5ba30fd",
+      "title": "工作中最容易犯的小錯是什麼？",
+      "airlines": [
+        "通用"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "question-bank.js",
+      "collection": "__QUESTION_BANK__",
+      "words": 35,
+      "candidates": 9,
+      "occurrences": 10,
+      "processed": true
+    },
+    "sentence": "When handling multiple tasks at once, I've occasionally made small clerical errors, like entering the wrong date or room type.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  }
+]

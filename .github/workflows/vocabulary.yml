@@ -1,0 +1,41 @@
+name: Update extracted vocabulary
+on:
+  push:
+    branches: [main]
+    paths: ['**.js', '**.json', '**.html', '**.md', 'scripts/**', '.github/workflows/vocabulary.yml', '!generated/**', '!tests/**', '!reading-lab/README.md', '!README.md']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: vocabulary-main
+  cancel-in-progress: false
+jobs:
+  vocabulary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/cache@v4
+        with:
+          path: .cache/vocabulary
+          key: vocabulary-resources-v1-${{ hashFiles('scripts/vocabulary/resources.cjs') }}-${{ github.sha }}
+          restore-keys: vocabulary-resources-v1-${{ hashFiles('scripts/vocabulary/resources.cjs') }}-
+      - run: npm ci
+      - run: npm run build:vocabulary -- --refresh-lexicon
+      - run: npm test
+      - name: Commit generated artifacts and request Pages rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add generated
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update extracted vocabulary index'
+            git push origin HEAD:main
+            gh api --method POST repos/${GITHUB_REPOSITORY}/pages/builds
+          fi
