@@ -9,7 +9,7 @@
   const link=(url,label)=>`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
   const options=(values,current)=>values.map((v,i)=>{const [value,label]=Array.isArray(v)?v:[v,v];return `<option value="${esc(value)}"${String(value)===String(current)?" selected":""}>${esc(label)}</option>`;}).join("");
   const uid=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const initial=()=>({config:{airline:"華航",difficulty:"初級",band:0,preview:15,limit:60},learning:{airline:"華航",kind:"",hints:true,rate:1,accent:"en-US",voiceURI:"",pause:"natural"},words:Object.fromEntries(D.words.filter(w=>w.seed).map(w=>[w.id,{status:"pending",confirmed:false,attempts:0,updated:0}])),favorites:[],places:{},daily:{},draft:null});
+  const initial=()=>({config:{airline:"華航",difficulty:"初級",band:0,preview:15,limit:60,recognition:true},learning:{airline:"華航",kind:"",hints:true,rate:1,accent:"en-US",voiceURI:"",pause:"natural"},words:Object.fromEntries(D.words.filter(w=>w.seed).map(w=>[w.id,{status:"pending",confirmed:false,attempts:0,updated:0}])),favorites:[],places:{},daily:{},draft:null});
   let state=initial(),sessions=[],initialized=false,opening,view="home",phase="setup",blob=null,elapsed=0,clock,deadline=0,started=0,notice="",wordIndex=0,revealed=false,attempted=false,reviewOnly=false,placeCategory="全部",placeIndex=0,placeRevealed=false,sampleMode="",starting=false,saveQueue=Promise.resolve();
   const config=()=>state.config;
   const currentQuestion=()=>D.questions.find(q=>q.id===state.draft?.questionId);
@@ -23,6 +23,24 @@
     });
   }
   function persist(){const snapshot=structuredClone(state);saveQueue=saveQueue.catch(()=>{}).then(()=>DB.put("meta","state",snapshot));return saveQueue;}
+  function sessionRecord(d){
+    const old=sessions.find(s=>s.id===d.savedId);
+    return {id:d.savedId,ts:old?.ts||d.ts||Date.now(),questionId:d.questionId,title:d.title,difficulty:d.difficulty,original:d.original,transcript:d.transcript,duration:d.duration,errors:structuredClone(d.errors),notes:d.notes,reviewed:old?.reviewed||false,reviewSchedule:old?.reviewSchedule,assessment:T.safeAssessment(d.assessment),visual:{...d.visual},completedWords:d.completedWords,audioAnalysis:d.audioAnalysis,kind:d.kind,source:d.source,sourceUrl:d.sourceUrl,interrupted:!!d.interrupted};
+  }
+  function saveCheckpoint(audio){
+    const d=draft();if(!d.savedId)d.savedId=uid();
+    const record=sessionRecord(d),snapshot=structuredClone(state);
+    saveQueue=saveQueue.catch(()=>{}).then(()=>DB.checkpoint(record,snapshot,audio)).then(()=>{sessions=sessions.filter(s=>s.id!==record.id);sessions.push(record);});return saveQueue;
+  }
+  function showReading(){
+    // Full-page replacement can trigger browser scroll anchoring. Keep the same
+    // article position if visible; otherwise bring its beginning into view.
+    const original=el("labOriginal"),top=original?.getBoundingClientRect().top,innerScroll=original?.scrollTop||0;
+    render();const next=el("labOriginal");if(!next)return;
+    next.scrollTop=innerScroll;
+    if(top>=0&&top<innerHeight)window.scrollBy(0,next.getBoundingClientRect().top-top);
+    else next.scrollIntoView({block:"start",behavior:"instant"});
+  }
   const active=()=>recorder.active||phase==="recording"||phase==="preparing"||starting;
   function draft(){if(!state.draft)throw Error("請先載入一道題目。");return state.draft;}
   function markTask(key){const day=C.dayKey();const tasks={...(state.daily[day]?.tasks||{}),[key]:true};state.daily[day]={tasks,complete:["words","places","reading","review"].every(k=>tasks[k])};return persist();}
@@ -61,7 +79,7 @@
   function exam(){
     const q=currentQuestion(),d=state.draft,items=filteredQuestions();
     const busy=active()?" disabled":"";
-    shell(`<div class="card lab-exam-settings"><h3>選擇本輪練習</h3><p class="sub">288 個模擬訓練版本：8 類主題 × 3 家航空 × 4 個自訂難度 × 3 種篇幅。版本共用主題素材，不代表 288 篇獨立新聞。</p><div class="lab-fields"><label>航空公司<select id="labAirline"${busy}>${options([...D.airlines,"國泰"],config().airline)}</select></label><label>難度<select id="labDifficulty"${busy}>${options(D.levels,config().difficulty)}</select></label><label>篇幅<select id="labBand"${busy}>${options(D.bands.map(([a,b],i)=>[i,`${a}–${b} 字`]),config().band)}</select></label><label>預覽模式<select id="labPreview"${busy}>${options([[0,"立即朗讀"],[15,"15 秒準備"],[30,"30 秒準備"],[60,"60 秒準備"]],config().preview)}</select></label><label>朗讀時限<select id="labLimit"${busy}>${options([[0,"不限時"],[30,"30 秒"],[60,"60 秒"],[90,"90 秒"],[120,"120 秒"],[180,"180 秒"]],config().limit||0)}</select></label></div><label>指定題目<select id="labQuestion"${busy}>${options(items.map(x=>[x.id,`${x.topic} · ${x.words} 字`]),q?.id)}</select></label><div class="lab-actions">${button("choose","載入選定題目",busy)}${button("random","隨機抽模擬題",busy)}${button("source-random","隨機抽原站陌生文章",busy)}<p class="sub">原站文章難度依篇幅粗分，保留完整原稿、不套用模擬題篇幅篩選；國泰請使用原站文章抽題。</p></div></div>${d?`<div class="card"><h3>${esc(d.title)}</h3><p class="lab-badge">${esc(d.kind==="模擬稿"||!d.kind?"模擬稿 · 非官方新聞或面試題":d.kind+" · 沿用原站材料，非官方面試題")}</p><p class="sub">${esc(q?.topic||"已保存原稿")} · ${esc(d.difficulty)} · ${C.tokens(d.original).length} 個字詞 · 建立日期 ${D.date}</p><p class="sub">${esc(d.source||q?.source||"保存時的題目原稿")} ${link(d.sourceUrl||q?.sourceUrl||"https://github.com/xciv0904/fly-room-xciv","資料來源")}</p><div class="lab-countdown"><strong id="labTimer" role="timer" aria-label="練習計時">${phase==="preparing"?Math.max(0,Math.ceil((deadline-Date.now())/1000))+" 秒準備":elapsed+" 秒"}</strong><progress id="labPrepProgress" max="${Number(config().preview)||1}" value="0"${phase!=="preparing"?" hidden":""}>準備倒數</progress><progress id="labReadProgress" max="${config().limit||1}" value="${elapsed}"${!config().limit?' hidden':""}>朗讀時間進度</progress></div>${phase==="setup"?`<p>內文將在開始準備時顯示。</p>${button("prepare",Number(config().preview)?"開始準備倒數":"顯示原稿，立即朗讀")}`:`<div class="readblock en lab-original" id="labOriginal">${esc(d.original)}</div>`}<div class="lab-actions">${button("record","🔴 開始錄音",(phase==="setup"||active())?" disabled":"")}${button("manual-start","開始計時（不錄音）",(phase==="setup"||active())?" disabled":"")}${button("stop",phase==="preparing"?"取消倒數":"停止朗讀",active()&&!starting?"":" disabled")}${button("retry","重新練這一題",busy)}</div><label class="lab-check"><input id="labRecognition" type="checkbox"${busy}>選擇啟用瀏覽器語音辨識（可能將音訊送交瀏覽器的辨識服務；預設關閉）</label><p class="sub">不因停頓結束；設定時限到達才會停止。錄音每秒嘗試保存檢查點，但系統強制關閉仍可能損失最後片段。請保持螢幕開啟、完成後按停止。錄音不預設上傳。</p><div id="labPlayback"></div><label>匯入裝置錄音（上限 50 MB）<input id="labAudioFile" type="file" accept="audio/*,.webm,.m4a,.mp3,.wav,.ogg"${busy}></label><label>朗讀時間（秒，可更正匯入音檔的時間）<input id="labDuration" type="number" min="0" max="86400" value="${d.duration||0}"${busy}></label></div>${phase==="review"?A.panel(d,busy):""}<div class="card"><h3>原稿與逐字稿比對</h3><p class="section-note">貼上外部辨識結果或自行聽寫。不會自動上傳匯入的音檔；沒有辨識服務仍可完成練習。</p><label>我的英文逐字稿<textarea id="labTranscript" rows="6" maxlength="20000"${active()?" readonly":""}>${esc(d.transcript)}</textarea></label><div class="lab-actions">${button("analyze","比對原稿與逐字稿",busy)}</div><p class="sub">文字相似度不是發音品質，也不是航空公司面試分數。疑似差異需回聽後由你確認。重新比對會重設本輪尚未儲存的差異確認。</p><div id="labComparison">${d.analyzed?comparison():""}</div><label>個人練習筆記<textarea id="labNotes" rows="3" maxlength="5000">${esc(d.notes)}</textarea></label>${button("save-session",d.savedId?"更新這次練習紀錄":"儲存這次練習",busy)}</div>`:'<div class="card"><p>先載入指定題目或隨機抽題。原稿與作答草稿會保留到重新整理之後。</p></div>'}`);
+    shell(`<div class="card lab-exam-settings"><h3>選擇本輪練習</h3><p class="sub">288 個模擬訓練版本：8 類主題 × 3 家航空 × 4 個自訂難度 × 3 種篇幅。版本共用主題素材，不代表 288 篇獨立新聞。</p><div class="lab-fields"><label>航空公司<select id="labAirline"${busy}>${options([...D.airlines,"國泰"],config().airline)}</select></label><label>難度<select id="labDifficulty"${busy}>${options(D.levels,config().difficulty)}</select></label><label>篇幅<select id="labBand"${busy}>${options(D.bands.map(([a,b],i)=>[i,`${a}–${b} 字`]),config().band)}</select></label><label>預覽模式<select id="labPreview"${busy}>${options([[0,"立即朗讀"],[15,"15 秒準備"],[30,"30 秒準備"],[60,"60 秒準備"]],config().preview)}</select></label><label>朗讀時限<select id="labLimit"${busy}>${options([[0,"不限時"],[30,"30 秒"],[60,"60 秒"],[90,"90 秒"],[120,"120 秒"],[180,"180 秒"]],config().limit||0)}</select></label></div><label>指定題目<select id="labQuestion"${busy}>${options(items.map(x=>[x.id,`${x.topic} · ${x.words} 字`]),q?.id)}</select></label><div class="lab-actions">${button("choose","載入選定題目",busy)}${button("random","隨機抽模擬題",busy)}${button("source-random","隨機抽原站陌生文章",busy)}<p class="sub">原站文章難度依篇幅粗分，保留完整原稿、不套用模擬題篇幅篩選；國泰請使用原站文章抽題。</p></div></div>${d?`<div class="card"><h3>${esc(d.title)}</h3><p class="lab-badge">${esc(d.kind==="模擬稿"||!d.kind?"模擬稿 · 非官方新聞或面試題":d.kind+" · 沿用原站材料，非官方面試題")}</p><p class="sub">${esc(q?.topic||"已保存原稿")} · ${esc(d.difficulty)} · ${C.tokens(d.original).length} 個字詞 · 建立日期 ${D.date}</p><p class="sub">${esc(d.source||q?.source||"保存時的題目原稿")} ${link(d.sourceUrl||q?.sourceUrl||"https://github.com/xciv0904/fly-room-xciv","資料來源")}</p><div class="lab-countdown"><strong id="labTimer" role="timer" aria-label="練習計時">${phase==="preparing"?Math.max(0,Math.ceil((deadline-Date.now())/1000))+" 秒準備":elapsed+" 秒"}</strong><progress id="labPrepProgress" max="${Number(config().preview)||1}" value="0"${phase!=="preparing"?" hidden":""}>準備倒數</progress><progress id="labReadProgress" max="${config().limit||1}" value="${elapsed}"${!config().limit?' hidden':""}>朗讀時間進度</progress></div>${phase==="setup"?`<p>內文將在開始準備時顯示。</p>${button("prepare",Number(config().preview)?"開始準備倒數":"顯示原稿，立即朗讀")}`:`<div class="readblock en lab-original" id="labOriginal">${esc(d.original)}</div>`}<div class="lab-actions">${button("record","🔴 開始錄音",(phase==="setup"||active())?" disabled":"")}${button("manual-start","開始計時（不錄音）",(phase==="setup"||active())?" disabled":"")}${button("stop",phase==="preparing"?"取消倒數":"停止朗讀",active()&&!starting?"":" disabled")}${button("retry","重新練這一題",busy)}</div><label class="lab-check"><input id="labRecognition" type="checkbox"${config().recognition!==false?" checked":""}${busy}>自動產生逐字稿（預設開啟；可能將音訊送交瀏覽器的辨識服務，可關閉）</label><p class="sub">原稿、時間與錄音自動記錄，不必勾選逐字稿或另按儲存。不因停頓或辨識停止結束；設定時限到達才會停止，需完整自由朗讀可選「不限時」。錄音每秒嘗試保存檢查點，但系統強制關閉仍可能損失最後片段。請保持螢幕開啟、完成後按停止。錄音檔留在此裝置；若啟用逐字稿，音訊可能送交辨識服務。</p><div id="labPlayback"></div><label>匯入裝置錄音（上限 50 MB）<input id="labAudioFile" type="file" accept="audio/*,.webm,.m4a,.mp3,.wav,.ogg"${busy}></label><label>朗讀時間（秒，可更正匯入音檔的時間）<input id="labDuration" type="number" min="0" max="86400" value="${d.duration||0}"${busy}></label></div>${phase==="review"?A.panel(d,busy):""}<div class="card"><h3>原稿與逐字稿比對</h3><p class="section-note">貼上外部辨識結果或自行聽寫。不會自動上傳匯入的音檔；沒有辨識服務仍可完成練習。</p><label>我的英文逐字稿<textarea id="labTranscript" rows="6" maxlength="20000"${active()?" readonly":""}>${esc(d.transcript)}</textarea></label><div class="lab-actions">${button("analyze","比對原稿與逐字稿",busy)}</div><p class="sub">文字相似度不是發音品質，也不是航空公司面試分數。疑似差異需回聽後由你確認。重新比對會重設本輪尚未儲存的差異確認。</p><div id="labComparison">${d.analyzed?comparison():""}</div><label>個人練習筆記<textarea id="labNotes" rows="3" maxlength="5000">${esc(d.notes)}</textarea></label>${button("save-session",d.savedId?"更新這次練習紀錄":"儲存這次練習",busy)}</div>`:'<div class="card"><p>先載入指定題目或隨機抽題。原稿與作答草稿會保留到重新整理之後。</p></div>'}`);
     if(blob&&el("labPlayback"))recorder.play(el("labPlayback"),blob);
   }
   function comparison(){
@@ -88,39 +106,37 @@
     starting=true;
     try{
       if(withAudio){
-        const recognition=el("labRecognition")?.checked;
+        const recognition=config().recognition!==false;
         const target=state.draft;
         await recorder.start({recognition,onChunk:checkpoint=>{
           if(state.draft!==target)return;target.duration=checkpoint.duration;
-          const snapshot=structuredClone(state);
-          saveQueue=saveQueue.catch(()=>{}).then(()=>DB.put("audio","draft-reading",checkpoint.blob)).then(()=>DB.put("meta","state",snapshot));return saveQueue;
-        },onText:text=>{state.draft.transcript+=text;if(el("labTranscript"))el("labTranscript").value=state.draft.transcript;persist().catch(e=>notify(e.message));},onStatus:notify});
+          blob=checkpoint.blob;return saveCheckpoint(checkpoint.blob);
+        },onText:text=>{state.draft.transcript+=text;if(el("labTranscript"))el("labTranscript").value=state.draft.transcript;persist().catch(e=>notify(e.message));},onStatus:notify,onEnded:result=>stopReading(result)});
       }
       await DB.remove("audio","draft-reading");
-      started=Date.now();elapsed=0;phase="recording";blob=null;state.draft.savedId=null;state.draft.duration=0;state.draft.transcript="";state.draft.errors=[];state.draft.analyzed=false;state.draft.audioAnalysis=null;state.draft.completedWords=null;state.draft.started=true;state.draft.interrupted=true;starting=false;
-      await persist();
-      notice=withAudio?"錄音中；停頓不會自動停止。":"計時中（未錄音）。完成後可貼上逐字稿。";render();
+      started=Date.now();elapsed=0;phase="recording";blob=null;state.draft.savedId=uid();state.draft.ts=started;state.draft.duration=0;state.draft.transcript="";state.draft.errors=[];state.draft.analyzed=false;state.draft.audioAnalysis=null;state.draft.completedWords=null;state.draft.started=true;state.draft.interrupted=true;starting=false;
+      await saveCheckpoint();
+      notice=withAudio?"錄音中，已自動建立紀錄；停頓或辨識結束不會停止錄音。":"計時中（未錄音），紀錄自動保存。";showReading();
       clock=setInterval(()=>{
         elapsed=Math.floor((Date.now()-started)/1000);draft().duration=elapsed;
         if(el("labTimer"))el("labTimer").textContent=config().limit?`剩餘 ${Math.max(0,config().limit-elapsed)} 秒 · 已讀 ${elapsed} 秒`:`${elapsed} 秒${withAudio?" · 錄音中":" · 計時中"}`;
         if(el("labReadProgress"))el("labReadProgress").value=elapsed;
-        if(!withAudio&&elapsed%5===0)persist().catch(e=>notify(e.message));
+        if(!withAudio&&elapsed%5===0)saveCheckpoint().catch(e=>notify(e.message));
         if(config().limit&&elapsed>=config().limit)stopReading().catch(e=>notify(e.message));
       },250);
     }catch(error){if(recorder.active)await recorder.stop();starting=false;phase="ready";render();throw error;}
   }
-  async function stopReading(){
+  async function stopReading(interruption){
     clearInterval(clock);
     if(phase==="preparing"){phase="ready";notify("倒數已取消；可以直接開始朗讀。");render();return;}
     if(phase!=="recording")return;
     phase="review";
-    const recording=await recorder.stop();
+    const recording=interruption||await recorder.stop();
     await saveQueue.catch(()=>{});
     elapsed=recording?.duration??Math.round((Date.now()-started)/1000);
-    draft().duration=elapsed;draft().interrupted=false;blob=recording?.blob||null;
+    draft().duration=elapsed;draft().interrupted=!!recording?.interrupted;blob=recording?.blob||blob;
     try{
-      if(blob)await DB.put("audio","draft-reading",blob);
-      await persist();notice="本輪已停止。請回聽、貼上或修正逐字稿，再比對原稿。";
+      await saveCheckpoint(blob);await markTask("reading");notice=recording?.interrupted?"裝置錄音意外中斷，已自動保存原稿、時間與已錄片段。請先回聽；可重新錄製，不會覆蓋這筆紀錄。":"本輪已自動保存原稿、時間與錄音，不需要逐字稿也會留存。可回聽或修正逐字稿後比對。";
     }finally{render();}
   }
   const V=window.ReadingLabVocabulary;
@@ -180,9 +196,7 @@
   async function saveSession(){
     if(active())throw Error("請先停止錄音。");const d=draft();
     if(!d.started&&!blob&&!d.duration&&!d.transcript.trim())throw Error("請先實際朗讀、錄音或匯入逐字稿，再儲存練習。");
-    const old=sessions.find(s=>s.id===d.savedId),id=d.savedId||uid();
-    const record={id,ts:old?.ts||Date.now(),questionId:d.questionId,title:d.title,difficulty:d.difficulty,original:d.original,transcript:d.transcript,duration:d.duration,errors:structuredClone(d.errors),notes:d.notes,reviewed:old?.reviewed||false,reviewSchedule:old?.reviewSchedule,assessment:T.safeAssessment(d.assessment),visual:{...d.visual},completedWords:d.completedWords,audioAnalysis:d.audioAnalysis,kind:d.kind,source:d.source,sourceUrl:d.sourceUrl};
-    await DB.saveSession(record,blob);sessions=sessions.filter(s=>s.id!==id);sessions.push(record);d.savedId=id;
+    await saveCheckpoint(blob);
     await markTask("reading");notify("練習與原稿已儲存到此裝置。辨識差異僅計入你勾選確認的項目。");render();
   }
   async function loadSession(id){
@@ -341,6 +355,7 @@
   root.addEventListener("change",async event=>{
     const node=event.target;
     try{
+      if(node.id==="labRecognition"){state.config.recognition=node.checked;await persist();return;}
       if(node.dataset.labAssessment){draft().assessment||={};draft().assessment[node.dataset.labAssessment]=node.value;await persist();return;}
       if(node.id==="labCompletedWords"){const n=node.value===""?null:Number(node.value);if(n!==null&&(!Number.isInteger(n)||n<0||n>C.tokens(draft().original).length))throw Error("請填寫原稿範圍內的整數字數。");draft().completedWords=n;await persist();render();return;}
       if(node.id==="labVideoFile"){A.video(node.files[0],el("labVideoPreview"));return;}
@@ -361,7 +376,7 @@
       if(node.id==="labAudioFile"){
         const file=node.files[0];if(!file)return;if(file.size>50*1024*1024)throw Error("音檔超過 50 MB。");
         if(!file.type.startsWith("audio/")&&!/\.(mp3|wav|m4a|webm|ogg)$/i.test(file.name))throw Error("請選擇支援的錄音檔。");
-        blob=file;draft().savedId=null;phase="review";await DB.put("audio","draft-reading",blob);await persist();render();notify("已匯入音檔，可本機回聽；請填入朗讀時間與逐字稿。");
+        blob=file;draft().savedId=null;draft().ts=Date.now();phase="review";await DB.put("audio","draft-reading",blob);await persist();render();notify("已匯入音檔，可本機回聽；請填入朗讀時間與逐字稿。");
       }
     }catch(error){notify(error.message||"檔案讀取失敗。");}
   });

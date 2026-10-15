@@ -14,7 +14,7 @@
 #tab-readingLab input:not([type=checkbox]),#tab-readingLab select,#tab-readingLab textarea{font-weight:400}
 .lab-check{display:flex;align-items:flex-start;gap:9px;margin:12px 0;font-size:13px}
 .lab-check input{margin-top:4px;min-width:20px;min-height:20px;accent-color:var(--accent)}
-.lab-original{font-size:19px;line-height:1.9;max-height:60vh;overflow:auto;white-space:pre-wrap}
+.lab-original{font-size:19px;line-height:1.9;max-height:60vh;overflow:auto;white-space:pre-wrap;scroll-margin-top:88px}
 .lab-badge{display:inline-block;background:var(--gold-soft);color:var(--gold-deep);padding:5px 10px;border-radius:8px;margin:8px 0;font-size:13px}
 .lab-countdown{display:flex;align-items:center;gap:16px;margin:15px 0;color:var(--accent)}
 .lab-countdown strong{font-size:25px;font-variant-numeric:tabular-nums}
