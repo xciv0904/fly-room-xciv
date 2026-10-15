@@ -453,6 +453,8 @@
 <script src="eva-data.js"></script>
 <script src="ci-2025-data.js"></script>
 <script src="airline-data.js"></script>
+<script src="ci-reading.js"></script>
+<script src="ci-vocabulary.js"></script>
 <script>
 let DATA = [];
 
@@ -1025,13 +1027,18 @@ const PRONUNCIATION_META={
 let pronunciationWords = store.get("pronunciationWords",[]);
 if(!Array.isArray(pronunciationWords)) pronunciationWords=[];
 let pronunciationDueOnly=true;
-function pronunciationZh(word){ return PRONUNCIATION_ZH[(word||"").toLowerCase()]||""; }
+function pronunciationZh(word){ const key=(word||"").trim().toLowerCase().replace(/[’]/g,"'");return PRONUNCIATION_ZH[key]||CI_VOCABULARY_ZH[key]||""; }
 function pronunciationMeta(word){return PRONUNCIATION_META[(word||"").toLowerCase()]||["","回到原文重讀此字，確認重音、連音與句尾。"]}
 function savePronunciationWord(word, source="華航廣播", zh="", context=""){
   const clean=(word||"").trim().toLowerCase();
   if(!clean) return false;
   const found=pronunciationWords.find(x=>x.word===clean);
-  const meaning=(zh||pronunciationZh(clean)).trim();
+  const meaning=(zh||found?.zh||pronunciationZh(clean)).trim();
+  if(!meaning&&!(found&&found.zh)){
+    const entered=window.prompt(`請補上「${clean}」的中文意思，再加入字庫：`,"");
+    if(!entered||!entered.trim())return false;
+    return savePronunciationWord(clean,source,entered.trim(),context);
+  }
   if(found){ found.hits=(found.hits||0)+1; found.source=found.source||source; if(meaning) found.zh=meaning; if(context)found.context=context; }
   else pronunciationWords.unshift({word:clean,zh:meaning,source,context,addedAt:Date.now(),practice:0,hits:1,ivl:1,due:todayStr()});
   store.set("pronunciationWords",pronunciationWords);
@@ -1047,7 +1054,7 @@ function pronunciationRender(){
   pronunciationWords.forEach(x=>{if(!x.zh){const meaning=pronunciationZh(x.word);if(meaning){x.zh=meaning;migrated=true;}}if(!x.due){x.due=todayStr();x.ivl=x.ivl||1;migrated=true;}});
   if(migrated) store.set("pronunciationWords",pronunciationWords);
   const visible=pronunciationWords.filter(x=>!pronunciationDueOnly||!x.due||x.due<=todayStr()).sort((a,b)=>String(a.due||"").localeCompare(String(b.due||"")));
-  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">收藏漏讀或不熟的字，搭配中文、音標、原句與間隔複習。按慢速示範後自己重讀，再選「還不熟」或「已熟悉」。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（可選填）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><div class="chips"><button class="chip pronounce-filter ${pronunciationDueOnly?"on":""}" data-mode="due">今天要練（${pronunciationWords.filter(x=>!x.due||x.due<=todayStr()).length}）</button><button class="chip pronounce-filter ${!pronunciationDueOnly?"on":""}" data-mode="all">全部收藏（${pronunciationWords.length}）</button></div><p class="sub">自動中文與音標若未收錄，可直接手動補充；瀏覽器發音僅作練習輔助。</p></div>`+
+  el.innerHTML=`<div class="card"><h2>🗣 我的發音字庫</h2><p class="section-note">收藏漏讀或不熟的字，搭配中文、音標、原句與間隔複習。按慢速示範後自己重讀，再選「還不熟」或「已熟悉」。</p><div class="pronounce-add"><input id="pronounceInput" placeholder="英文單字或片語…"><input id="pronounceMeaning" placeholder="中文意思（已收錄會自動填入）"><button class="btn sec" id="pronounceAddBtn">＋加入字庫</button></div><div class="chips"><button class="chip pronounce-filter ${pronunciationDueOnly?"on":""}" data-mode="due">今天要練（${pronunciationWords.filter(x=>!x.due||x.due<=todayStr()).length}）</button><button class="chip pronounce-filter ${!pronunciationDueOnly?"on":""}" data-mode="all">全部收藏（${pronunciationWords.length}）</button></div><p class="sub">已收錄的單字會自動帶入中文；未收錄時請補填後儲存。舊字庫缺少的中文也會依內建詞表補齊；音標若未收錄則不顯示。</p></div>`+
     (visible.length?`<div class="card"><h3>📚 ${pronunciationDueOnly?"今天待練":"全部字庫"}</h3>${visible.map(x=>{const meta=pronunciationMeta(x.word),dueToday=!x.due||x.due<=todayStr();return `<div class="pronounce-row"><div><b>${esc(x.word)}</b><div class="pronounce-meta"><strong class="pronounce-meaning">${esc(x.zh||"尚未找到自動翻譯")}</strong>${meta[0]?`<span class="pronounce-ipa">${esc(meta[0])}</span>`:""}<span class="pronounce-due ${dueToday?"today":""}">${dueToday?"今天複習":`下次 ${esc(x.due)}`}</span></div><div class="pronounce-example">${esc(x.context||meta[1])}</div><div class="pronounce-edit"><input class="pronounce-meaning-input" data-word="${esc(x.word)}" value="${esc(x.zh||"")}" placeholder="輸入中文意思"><button class="chip pronounce-save-meaning" data-word="${esc(x.word)}">儲存中文</button></div><span class="sub">${esc(x.source||"手動加入")} · 加入 ${x.hits||1} 次 · 練習 ${x.practice||0} 次</span></div><div class="chips"><span class="pronounce-say">${sayBtn(x.word,"en-US","🔊 Listen")}${sayBtn(x.word,"en-US","🐢 慢速",0.65)}</span><button class="chip pronounce-grade" data-known="0" data-word="${esc(x.word)}">還不熟</button><button class="chip pronounce-grade" data-known="1" data-word="${esc(x.word)}">✓ 已熟悉</button><button class="chip pronounce-remove" data-word="${esc(x.word)}">移除</button></div></div>`}).join("")}</div>`:`<div class="card"><p class="sub">${pronunciationWords.length?"今天沒有到期單字，切到「全部收藏」仍可自由練習。":"目前還沒有單字。從華航廣播逐句檢查加入，或在上方手動輸入。"}</p></div>`);
   const add=$("#pronounceAddBtn");
   if(add) add.addEventListener("click",()=>{const input=$("#pronounceInput"),meaning=$("#pronounceMeaning");if(savePronunciationWord(input.value,"手動加入",meaning.value)){input.value="";meaning.value="";pronunciationRender();}});
@@ -1070,7 +1077,7 @@ document.addEventListener("click", e=>{
 document.addEventListener("click", e=>{
   const save=e.target.closest(".ci-save-word");
   if(save){
-    savePronunciationWord(save.dataset.word,"華航廣播","",decodeURIComponent(save.dataset.context||""));
+    if(!savePronunciationWord(save.dataset.word,"華航廣播","",decodeURIComponent(save.dataset.context||"")))return;
     save.textContent="✅ 已加入字庫"; save.disabled=true;
     return;
   }
@@ -1087,7 +1094,7 @@ document.addEventListener("click", e=>{
   const saveMeaning=e.target.closest(".pronounce-save-meaning");
   if(saveMeaning){
     const item=pronunciationWords.find(x=>x.word===saveMeaning.dataset.word), input=saveMeaning.parentElement.querySelector(".pronounce-meaning-input");
-    if(item && input){item.zh=input.value.trim();store.set("pronunciationWords",pronunciationWords);pronunciationRender();}
+    if(item && input){if(!input.value.trim()){input.setCustomValidity("請填入中文意思");input.reportValidity();input.addEventListener("input",()=>input.setCustomValidity(""),{once:true});return;}item.zh=input.value.trim();store.set("pronunciationWords",pronunciationWords);pronunciationRender();}
   }
 });
 
@@ -1362,7 +1369,7 @@ function renderCIBroadcast(){
   const el = $("#ciBroadcastBody");
   if(!el) return;
   el.innerHTML = `<div class="card"><h2>一、這一關的正確練法</h2><p class="section-note">機上雜誌廣播詞會直接給一段原文，重點是陌生英文的完整朗讀與理解，不是把文章改寫成另一種廣播稿。</p><div class="quicknav"><button data-ci-random="mag">🎲 隨機抽 1 題雜誌朗讀</button><button data-ci-random="news">📰 隨機抽 1 題新聞</button><button data-ci-year="2025">📅 只看 2025</button><button data-ci-year="all">顯示全部年份</button></div><div class="tip" id="ciFilterStatus">目前共有 <b>${CI_PDF_DRILLS.length}</b> 題機上雜誌英文朗讀、<b>${CI_NEWS_RELEASES.length}</b> 題 CAL NEWS；抽題後會自動展開並捲到該題。</div><ul class="tight"><li>第一遍：原文朗讀，不停下、不自行換字、不把長句拆成短句重寫。</li><li>第二遍：現場英翻中，先抓主幹，再處理插入資訊、年份、數字與專有名詞。</li><li>第三遍：回頭修正節奏、重音與句尾，不追求播音腔。</li></ul></div>`+
-    `<div class="card"><h2>二、英文原文朗讀／英翻中 <span class="count">${CI_PDF_DRILLS.length} 題</span></h2><p class="section-note">已從你提供的 2024–2026《Dynasty》PDF 精選英文原文，並保留原文句子；中文只作翻譯核對，不取代現場理解。每段都可以直接錄音，完成後會進入回聽與分析。</p>${CI_PDF_DRILLS.map((d,i)=>`<details${i===0?" open":""} data-ci-kind="mag" data-ci-index="${i}" data-ci-year-value="${ciYearOf(d)}"><summary>${i+1}. <span class="tag cat">${ciYearOf(d)}</span>${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(d.trace||CI_SOURCE_TRACE[i]||d.source||"Dynasty 機上雜誌")}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ci-${i}">🔊 聽原文示範</button></div>${ciRecordingBtn("ci-pdf-"+i,d.text,d.title)}<details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
+    `<div class="card"><h2>二、英文原文朗讀／英翻中 <span class="count">${CI_PDF_DRILLS.length} 題</span></h2><p class="section-note">已從你提供的 2024–2026《Dynasty》PDF 精選英文原文，並保留原文句子；中文只作翻譯核對，不取代現場理解。每段都可以直接錄音，完成後會進入回聽與分析。</p>${CI_PDF_DRILLS.map(ciMagazineHtml).join("")}</div>`+
     `<div class="card"><h2>三、PDF 新聞稿原文 <span class="count">${CI_NEWS_RELEASES.length} 題</span></h2><p class="section-note">這些是 PDF 裡的 CAL NEWS 原文摘錄，不是另寫的模擬新聞。先讀英文，再看中文核對；新增題另附新聞理解題，確認你不是只把聲音念完。</p>${CI_NEWS_RELEASES.map((d,i)=>`<details data-ci-kind="news" data-ci-index="${i}" data-ci-year-value="${ciYearOf(d)}"><summary>${i+1}. <span class="tag cat">${ciYearOf(d)}</span>${esc(d.title)}</summary><div class="body"><p class="sub">來源：${esc(d.source)}</p><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="news-${i}">🔊 聽新聞稿原文</button></div>${ciRecordingBtn("ci-news-"+i,d.text,d.title)}<details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details>${d.q?`<details><summary>新聞理解題</summary><div class="body"><p><b>問題：</b>${esc(d.q)}</p><div class="ansbox"><b>核對答案：</b>${esc(d.a)}</div></div></details>`:""}<div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
     `<div class="card"><h2>四、外部參考：五段機上廣播</h2><p class="section-note">這五段來自外部面試教材，以原文為底供朗讀與英翻中練習；括號欄位與少數排版瑕疵已整理，部分句子也不一定是華航現行標準用語，請不要把它當成官方稿。來源：${esc(CI_EXTERNAL_SOURCE)}</p>${CI_EXTERNAL_BROADCASTS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.title)}</summary><div class="body"><div class="readblock en">${esc(d.text)}</div><div class="chips"><button class="chip say" data-sid="ext-${i}">🔊 聽原文示範</button></div>${ciRecordingBtn("ci-ext-"+i,d.text,d.title)}<details><summary>現場英翻中參考</summary><div class="body"><div class="readblock">${esc(d.translation)}</div></div></details><div class="tip">💡 ${esc(d.focus)}</div></div></details>`).join("")}</div>`+
     `<div class="card"><h2>五、這類廣播讀完後的追問</h2><p class="section-note">來源同上。朗讀後可能被問「這段是在什麼時候播放？」或抽問專業字彙，所以不能只練聲音，還要知道每段的情境與意思。</p>${CI_EXTERNAL_FOLLOWUPS.map((d,i)=>`<details><summary>${i+1}. ${esc(d.q)}</summary><div class="body"><div class="ansbox"><b>參考回答：</b>${esc(d.a)}</div></div></details>`).join("")}</div>`+
@@ -1491,7 +1498,7 @@ function mdb(){ return new Promise(res=>{
   r.onsuccess = e => res(e.target.result);
   r.onerror = () => res(null);
 });}
-async function mSave(rec){ bump("mock"); const db = await mdb(); if(!db) return false;
+async function mSave(rec){ if(!rec.originalText&&rec.ciReview?.original)rec.originalText=rec.ciReview.original;bump("mock"); const db = await mdb(); if(!db) return false;
   return await new Promise(res=>{ const tx=db.transaction("recs","readwrite"); tx.objectStore("recs").add(rec); tx.oncomplete=()=>{db.close();res(true)}; tx.onerror=()=>{db.close();res(false)}; }); }
 async function mList(){ const db = await mdb(); if(!db) return [];
   return new Promise(res=>{ const out=[]; const tx=db.transaction("recs","readonly");
@@ -1859,7 +1866,7 @@ function mShowResult(transcript){
     const savedAnswerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(t,M.q,lang) : null;
     await mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, lang,
                   dur: M.dur, transcript: t, fb: analyze(t, M.dur, lang, M.q).map(x=>x[1]),
-                  ciReview: savedCiReview, answerReview: savedAnswerReview, audio: M.blob });
+                  originalText: savedCiReview?M.q.q_en:"", ciReview: savedCiReview, answerReview: savedAnswerReview, audio: M.blob });
     if((M.air==="華航"||airsOf(M.q).includes("華航"))&&M.q.cat!=="華航初試・廣播朗讀"&&typeof window.markCIProgress==="function")window.markCIProgress("final");
     $("#mSaveBtn").textContent = "✅ 已儲存"; $("#mSaveBtn").disabled = true;
     renderMHistory();
@@ -1895,14 +1902,15 @@ async function renderMHistory(){
   const all = await mList(),airSel=$("#mHistAir"),search=$("#mHistSearch");
   if(airSel){const current=airSel.value,airs=[...new Set(all.map(x=>x.air).filter(Boolean))];airSel.innerHTML=`<option value="">全部航空公司</option>`+airs.map(x=>`<option ${x===current?"selected":""}>${esc(x)}</option>`).join("");}
   const air=airSel?airSel.value:"",kw=search?search.value.trim().toLowerCase():"";
-  const list=all.filter(x=>(!air||x.air===air)&&(!kw||`${x.q||""} ${x.transcript||""}`.toLowerCase().includes(kw)));
+  const list=all.filter(x=>(!air||x.air===air)&&(!kw||`${x.q||""} ${x.originalText||x.ciReview?.original||""} ${x.transcript||""}`.toLowerCase().includes(kw)));
   if(!all.length){ $("#mHistory").innerHTML = `<p class="sub">還沒有紀錄——完成第一次模擬後按「存入紀錄」。</p>`; return; }
   if(!list.length){ $("#mHistory").innerHTML = `<p class="sub">找不到符合篩選條件的紀錄。</p>`; return; }
   $("#mHistory").innerHTML = list.map(r=>{
     const d = new Date(r.ts);
     const when = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
-    const legacyCi = !r.ciReview && r.air==="華航" && r.transcript && r.q ? Object.values(CI_RECORDING_PROMPTS).find(x=>r.q.includes(x.title)) : null;
-    const savedCiReview = r.ciReview || (legacyCi ? ciBroadcastReview(r.transcript,{q_en:legacyCi.text,cat:"華航初試・廣播朗讀"}) : null);
+    const legacyCi = !r.ciReview && !r.originalText && r.air==="華航" && r.q ? [...CI_PDF_DRILLS,...CI_NEWS_RELEASES,...CI_EXTERNAL_BROADCASTS].find(x=>r.q==="請朗讀以下華航廣播詞："+x.title) : null;
+    const originalText=r.originalText||r.ciReview?.original||legacyCi?.text||"";
+    const savedCiReview = r.ciReview || (originalText ? ciBroadcastReview(r.transcript,{q_en:originalText,cat:"華航初試・廣播朗讀"}) : null);
     const previous=all.find(x=>x.id!==r.id&&x.ts<r.ts&&x.q===r.q&&x.lang===r.lang&&x.air===r.air);
     const headline=r.answerReview&&r.answerReview.summary?r.answerReview.summary:(savedCiReview?`原文詞彙命中率約 ${savedCiReview.similarity||0}%；${savedCiReview.missing&&savedCiReview.missing.length?`優先重讀 ${savedCiReview.missing.slice(0,3).join("、")}。`:"主要詞彙大致都有辨識到。"}`:"");
     return `<div class="hist" data-id="${r.id}">
@@ -1911,7 +1919,8 @@ async function renderMHistory(){
       ${historyTrendHtml(r,previous)}
       ${headline?`<div class="tip" style="margin-top:7px">🧭 ${esc(headline)}</div>`:""}
       <div class="histaudio"></div>
-      <details><summary>逐字稿與建議</summary><div class="body">
+      <details><summary>${originalText?"原稿、逐字稿與建議":"逐字稿與建議"}</summary><div class="body">
+        ${originalText?`<h4>📄 朗讀原稿${!r.originalText&&!r.ciReview?.original?"（依目前題庫找回）":""}</h4><div class="readblock en">${esc(originalText)}</div><h4>📝 我的逐字稿</h4>`:""}
         ${r.transcript?`<p style="margin-bottom:6px">${esc(r.transcript)}</p>`:`<p class="sub">（無逐字稿）</p>`}
         ${(r.fb||[]).map(f=>`<div class="fb ${f.startsWith("🎀 有")||f.startsWith("🧹 幾")||f.includes("理想")||f.includes("穩定")||f.includes("讚")||f.includes("清楚")||f.includes("清晰")||f.includes("說服力")?"good":"warn"}">${esc(f)}</div>`).join("")}
         ${r.answerReview?answerComparisonHtml(r.answerReview):""}
@@ -2606,7 +2615,7 @@ function cleanImportedRecord(r){
   const clean={
     ts:Number.isFinite(Number(r.ts))?Number(r.ts):Date.now(),
     air:text(r.air).slice(0,30), q:text(r.q).slice(0,1000), lang:r.lang==="en"?"en":"zh",
-    dur:Math.max(1,Math.min(3600,Number(r.dur)||1)), transcript:text(r.transcript),
+    dur:Math.max(1,Math.min(3600,Number(r.dur)||1)), transcript:text(r.transcript), originalText:text(r.originalText),
     fb:Array.isArray(r.fb)?r.fb.filter(x=>typeof x==="string").slice(0,30).map(text):[]
   };
   if(r.ciReview && typeof r.ciReview==="object") clean.ciReview=r.ciReview;
@@ -2617,7 +2626,7 @@ $("#expBtn").addEventListener("click", async ()=>{
   const data = {_v:2, _date:new Date().toISOString()};
   BK_KEYS.forEach(k=> data[k] = store.get(k, null));
   const recs = await mList();
-  data.mockRecs = recs.map(r=>({ts:r.ts, air:r.air, q:r.q, lang:r.lang, dur:r.dur, transcript:r.transcript, fb:r.fb, ciReview:r.ciReview, answerReview:r.answerReview}));
+  data.mockRecs = recs.map(r=>({ts:r.ts, air:r.air, q:r.q, lang:r.lang, dur:r.dur, transcript:r.transcript, originalText:r.originalText, fb:r.fb, ciReview:r.ciReview, answerReview:r.answerReview}));
   const blob = new Blob([JSON.stringify(data)], {type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
