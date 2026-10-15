@@ -23,6 +23,11 @@
   const put=(store,key,value)=>transaction([store],"readwrite",tx=>tx.objectStore(store).put(value,key));
   const list=store=>transaction([store],"readonly",(tx,done)=>{tx.objectStore(store).getAll().onsuccess=e=>done(e.target.result);});
   const remove=(store,key)=>transaction([store],"readwrite",tx=>tx.objectStore(store).delete(key));
+  const checkpoint=(session,state,blob)=>transaction(["meta","sessions","audio"],"readwrite",tx=>{
+    tx.objectStore("meta").put(state,"state");
+    tx.objectStore("sessions").put(session,session.id);
+    if(blob){tx.objectStore("audio").put(blob,session.id);tx.objectStore("audio").put(blob,"draft-reading");}
+  });
   async function saveSession(session,blob){
     return transaction(["sessions","audio"],"readwrite",tx=>{
       tx.objectStore("sessions").put(session,session.id);
@@ -39,5 +44,5 @@
       for(const [id,blob]of audio)tx.objectStore("audio").put(blob,id);
     });
   }
-  root.ReadingLabDB={get,put,list,remove,saveSession,removeSession,clear,importData};
+  root.ReadingLabDB={get,put,list,remove,checkpoint,saveSession,removeSession,clear,importData};
 })(window);

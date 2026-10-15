@@ -3,7 +3,7 @@
   class LabRecorder{
     constructor(){this.active=false;this.urls=new Map();this.generation=0;}
     cancelPending(){this.generation++;}
-    async start({recognition=false,onText=()=>{},onStatus=()=>{},onChunk=()=>{}}={}){
+    async start({recognition=false,onText=()=>{},onStatus=()=>{},onChunk=()=>{},onEnded=()=>{}}={}){
       if(this.active)throw Error("請先停止目前的錄音。");
       if(!navigator.mediaDevices?.getUserMedia||!root.MediaRecorder)throw Error("此瀏覽器不支援錄音。可匯入裝置錄音檔，或貼上逐字稿繼續練習。");
       const generation=++this.generation;
@@ -15,7 +15,14 @@
       try{
         this.recorder=new MediaRecorder(this.stream);
         this.recorder.ondataavailable=e=>{if(e.data.size){this.chunks.push(e.data);Promise.resolve(onChunk({blob:new Blob(this.chunks,{type:this.recorder.mimeType||"audio/webm"}),duration:Math.round((Date.now()-this.started)/1000)})).catch(()=>onStatus("錄音檢查點無法儲存，請保持此頁並按停止後匯出備份。"));}};
-        this.finished=new Promise(resolve=>{this.recorder.onstop=()=>{this.stream.getTracks().forEach(t=>t.stop());resolve({blob:new Blob(this.chunks,{type:this.recorder.mimeType||"audio/webm"}),duration:Math.round((Date.now()-this.started)/1000)});};});
+        this.finished=new Promise(resolve=>{this.recorder.onstop=()=>{
+          const unexpected=this.active;this.active=false;clearTimeout(this.restart);try{this.speech?.abort?.();}catch{}
+          this.stream.getTracks().forEach(t=>t.stop());
+          const result={blob:new Blob(this.chunks,{type:this.recorder.mimeType||"audio/webm"}),duration:Math.round((Date.now()-this.started)/1000),interrupted:unexpected};resolve(result);
+          if(unexpected)Promise.resolve(onEnded(result)).catch(()=>onStatus("錄音已中斷，請保留此頁並回聽或下載已錄片段。"));
+        };});
+        this.recorder.onerror=()=>{onStatus("裝置錄音引擎發生錯誤，正在保存已錄片段。請勿重新整理。");if(this.recorder.state!=="inactive")try{this.recorder.stop();}catch{}};
+        for(const track of this.stream.getTracks())track.addEventListener?.('ended',()=>{if(this.active&&this.recorder.state!=="inactive")this.recorder.stop();},{once:true});
         this.recorder.start(1000);
       }catch(error){this.active=false;this.stream.getTracks().forEach(t=>t.stop());throw Error("無法啟動錄音，請改匯入音檔或使用另一個瀏覽器。");}
       const Speech=root.SpeechRecognition||root.webkitSpeechRecognition;

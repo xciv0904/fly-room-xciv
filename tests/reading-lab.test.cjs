@@ -58,6 +58,21 @@ test("IndexedDB round trips audio and snapshots, imports atomically, and deletes
   await db.removeSession("two");assert.equal(await db.get("audio","two"),undefined);assert.equal((await db.list("sessions")).length,1);
   await db.clear();assert.equal((await db.list("sessions")).length,0);
 });
+test("recording checkpoints atomically retain history, draft audio and original without a transcript",async()=>{
+  const {IDBFactory}=require("fake-indexeddb"),db=load("db.js",{indexedDB:new IDBFactory(),Blob}).ReadingLabDB;
+  const record={id:"auto",original:"Complete original",transcript:"",errors:[],duration:15},state={draft:{savedId:"auto",interrupted:true}};
+  await db.checkpoint(record,state,new Blob(["first and final chunks"]));
+  assert.equal((await db.get("sessions","auto")).transcript,"");assert.equal((await db.get("meta","state")).draft.savedId,"auto");
+  assert.equal(await (await db.get("audio","auto")).text(),"first and final chunks");assert.equal(await (await db.get("audio","draft-reading")).text(),"first and final chunks");
+  await db.checkpoint({...record,duration:20},state,new Blob(["full recording"]));assert.equal((await db.list("sessions")).length,1);assert.equal((await db.get("sessions","auto")).duration,20);
+});
+test("unexpected recorder stop returns retained audio and ends active state independently of speech",async()=>{
+  class Recorder{constructor(){this.state="inactive";this.mimeType="audio/webm";}start(){this.state="recording";}stop(){this.state="inactive";this.ondataavailable({data:new Blob(["retained audio"])});this.onstop();}}
+  const s=load("media.js",{Blob,Date,URL,setTimeout,clearTimeout,MediaRecorder:Recorder,navigator:{mediaDevices:{getUserMedia:async()=>({getTracks:()=>[{stop(){}}]})}}});
+  let ended;const recorder=new s.LabRecorder();await recorder.start({onEnded:r=>{ended=r;}});recorder.recorder.stop();
+  assert.equal(recorder.active,false);assert.equal(ended.interrupted,true);assert.equal(await ended.blob.text(),"retained audio");
+  ended=null;await recorder.start({onEnded:r=>{ended=r;}});const normal=await recorder.stop();assert.equal(ended,null);assert.equal(normal.interrupted,false);
+});
 test("recorder never ends on silence; recognition is opt-in and permission denial is actionable",async()=>{
   let stopped=0,speechStarts=0;
   class Recorder{constructor(){this.state="inactive";this.mimeType="audio/webm";}start(){this.state="recording";}stop(){this.state="inactive";this.ondataavailable({data:new Blob(["sample"])});queueMicrotask(()=>this.onstop());}}
