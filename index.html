@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="eva-mode.css">
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="mobile-a11y.css">
+<link rel="stylesheet" href="reading-lab/lab.css">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要內容</a>
@@ -99,6 +100,7 @@
       <summary><span><b>完整衝刺計畫</b><small id="ciSprintPlanSummary">查看目前階段與後續安排</small></span></summary>
       <div id="ciSprintPlan"></div>
     </details>
+    <div class="card"><h2>🎧 英文朗讀實驗室</h2><p class="section-note">每日 20 分鐘：陌生單字、地名、即席朗讀及回聽修正。保留原稿與自己的練習紀錄。</p><button class="btn sec" data-go="readingLab">進入 English Reading Lab →</button></div>
   </div>
 </section>
 
@@ -109,6 +111,7 @@
     <p class="section-note">主要練習留在首頁、練習、模擬與成果；查資料或整理答案時再進入這裡。</p>
   </div>
   <div class="more-grid">
+    <button class="more-card" data-go="readingLab"><b>🎧 英文朗讀實驗室</b><span>即席考場、錄音比對、解碼與個人弱點複習。</span></button>
     <button class="more-card" data-go="tools"><b>🧰 答題與故事工具</b><span>答題骨架、句型、故事庫與發音字庫。</span></button>
     <button class="more-card" data-go="airlines"><b>📚 公司資料參考</b><span>公司知識題、品牌重點與面試策略。</span></button>
     <button class="more-card" data-go="review"><b>📋 面試回顧</b><span>實戰題目、當下回答與中英文優化版本。</span></button>
@@ -120,6 +123,8 @@
 </section>
 
 <!-- ============ 精選 50 題 ============ -->
+<section id="tab-readingLab" class="hidden" aria-label="英文朗讀實驗室"><div id="readingLabRoot"></div></section>
+
 <section id="tab-p50" class="hidden">
   <div class="card">
     <h2>⭐ 精選 50 題</h2>
@@ -1113,7 +1118,7 @@ document.addEventListener("click", e=>{
 });
 
 /* ================= 分頁與路徑 ================= */
-const TAB_LABELS={eva:"🌸 華航 › 招考首頁",practice:"🌸 華航 › 題庫練習",mock:"🌸 華航 › 模擬面試",stats:"🌸 華航 › 成果與複習",more:"更多工具與資料",p50:"練習 › 精選 50",daily:"練習 › 每日十分鐘",bank:"更多 › 完整題庫",weak:"成果 › 弱點清單",reading:"更多 › 朗讀練習",safety:"更多 › 安全知識",review:"更多 › 面試回顧",sprint:"更多 › 衝刺計畫",tools:"更多 › 答題與故事工具",stage:"更多 › 其他公司關卡封存",ciBroadcast:"🌸 華航 › 初試 › 廣播詞",airlines:"更多 › 公司資料參考"};
+const TAB_LABELS={readingLab:"🎧 英文朗讀實驗室",eva:"🌸 華航 › 招考首頁",practice:"🌸 華航 › 題庫練習",mock:"🌸 華航 › 模擬面試",stats:"🌸 華航 › 成果與複習",more:"更多工具與資料",p50:"練習 › 精選 50",daily:"練習 › 每日十分鐘",bank:"更多 › 完整題庫",weak:"成果 › 弱點清單",reading:"更多 › 朗讀練習",safety:"更多 › 安全知識",review:"更多 › 面試回顧",sprint:"更多 › 衝刺計畫",tools:"更多 › 答題與故事工具",stage:"更多 › 其他公司關卡封存",ciBroadcast:"🌸 華航 › 初試 › 廣播詞",airlines:"更多 › 公司資料參考"};
 let activeTab="eva", tabHistory=[];
 function setUXContext(label,canBack=true){
   const path=$("#contextPath"), back=$("#contextBack");
@@ -1125,7 +1130,7 @@ function showTab(t,options={}){
   const target = $("#tab-"+t); if(!target) return;
   if(t!==activeTab && options.remember!==false) tabHistory.push(activeTab);
   activeTab=t;
-  const navT = {p50:"practice",daily:"practice",weak:"stats",bank:"more",reading:"more",safety:"more",review:"more",sprint:"more",tools:"more",stage:"more",ciBroadcast:"eva",airlines:"more"}[t] || t;
+  const navT = {readingLab:"practice",p50:"practice",daily:"practice",weak:"stats",bank:"more",reading:"more",safety:"more",review:"more",sprint:"more",tools:"more",stage:"more",ciBroadcast:"eva",airlines:"more"}[t] || t;
   $$("#nav button").forEach(x=>{const on=x.dataset.t===navT;x.classList.toggle("on",on);if(on)x.setAttribute("aria-current","page");else x.removeAttribute("aria-current")});
   $$("main > section").forEach(s=>s.classList.add("hidden"));
   target.classList.remove("hidden");
@@ -1135,6 +1140,7 @@ function showTab(t,options={}){
   if(t==="daily") dgStreakPaint();
   if(t==="sprint") spPaint();
   if(t==="stats") renderDash();
+  if(t==="readingLab") window.ReadingLab?.open();
   if(t==="p50") scheduleIdle(p50Paint);
   if(t==="eva"&&!options.preserveSubroute){setSprintAir("ci");if(typeof window.renderCI==="function")window.renderCI();}
   if(t==="ciBroadcast" && !$("#ciBroadcastBody").childElementCount) scheduleIdle(renderCIBroadcast);
@@ -2706,6 +2712,12 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 </script>
 <script src="eva-mode.js"></script>
 <script src="ci-mode.js"></script>
+<script src="reading-lab/data.js"></script>
+<script src="reading-lab/ci-destinations.js"></script>
+<script src="reading-lab/core.js"></script>
+<script src="reading-lab/db.js"></script>
+<script src="reading-lab/media.js"></script>
+<script src="reading-lab/app.js"></script>
 <script src="app-accessibility.js"></script>
 <script src="app-router.js"></script>
 </body>

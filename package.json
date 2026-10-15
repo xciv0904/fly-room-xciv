@@ -1,0 +1,12 @@
+{
+  "name": "fly-room-xciv",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "test:browser": "node tests/reading-lab-browser.cjs"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "6.2.5",
+    "playwright": "1.64.1"
+  }
+}
