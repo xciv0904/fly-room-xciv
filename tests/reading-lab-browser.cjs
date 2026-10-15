@@ -44,6 +44,19 @@ const server=http.createServer((request,response)=>{
     await view("words");assert.equal(await page.locator('[data-lab-action="word-reveal"]').isDisabled(),true);
     await click("sample-record");await page.waitForFunction(()=>document.querySelector('#labStatus')?.textContent.includes('嘗試錄音中'));await page.waitForTimeout(350);await click("sample-stop");await page.locator('#labSamplePlayback audio').waitFor();
     await click("word-attempt");await click("word-reveal");await page.locator('#labSamplePlayback audio').waitFor();await page.locator('[data-lab-action="word-grade"][data-grade="unsure"]').click();await click("done-words");
+    await view("words");
+    const generatedCount=await page.evaluate(()=>ReadingLabVocabulary.index.report.vocabularyCount);
+    assert.equal(await page.evaluate(()=>ReadingLabData.words.length),await page.evaluate(()=>ReadingLabVocabulary.index.report.cardCount));assert.ok(generatedCount>33);
+    assert.equal(await page.locator('.lab-answer').count(),0);
+    await page.locator('[data-vocab-filter="airline"]').selectOption('長榮');await page.locator('#labWordSearch').fill('sustainability');assert.match(await page.locator('.lab-word').textContent(),/sustainability/i);
+    assert.equal(await page.locator('.lab-answer').count(),0);assert.equal(await page.locator('[data-lab-action="word-reveal"]').isDisabled(),true);
+    await click('word-attempt');await click('word-reveal');assert.match(await page.locator('.lab-answer').textContent(),/音節.*重音/);
+    await page.locator('.lab-word-sources summary').click();await click('word-source');await page.locator('.lab-source-article').waitFor();assert.match(await page.locator('.lab-source-article').textContent(),/sustainability/i);
+    await click('word-reset');const articleId=await page.locator('[data-vocab-filter="article"] option').nth(1).getAttribute('value');await page.locator('[data-vocab-filter="article"]').selectOption(articleId);assert.ok(await page.locator('.lab-word').count());
+    await click('word-attempt');await click('word-reveal');await page.locator('.lab-word-sources summary').click();await click('word-source');await page.locator('.lab-source-article').waitFor();
+    await click('word-reset');await page.locator('[data-vocab-filter="type"]').selectOption('model');await click('word-random');assert.equal(await page.locator('.lab-answer').count(),0);
+    await page.locator('#labWordSearch').fill('notawordinthiscorpus');assert.equal(await page.locator('.lab-word').count(),0);await click('word-reset');
+    await page.locator('[data-vocab-filter="status"]').selectOption('review');assert.ok(await page.locator('.lab-word').count());await click('word-reset');
     await view("places");await click("place-reveal");await click("place-grade");await click("place-favorite");await click("done-places");
     await page.getByText("今天四項訓練已完成。",{exact:true}).waitFor();
     await view("places");await page.locator('#labPlaceCategory').selectOption("華航航點與延伸地名");await page.locator('#labPlaceGroup').selectOption("東南亞");await page.locator('#labPlaceSearch').fill("DPS");
@@ -58,6 +71,8 @@ const server=http.createServer((request,response)=>{
     assert.equal(await page.evaluate(()=>localStorage.getItem("fa_legacy_lab_test")),JSON.stringify({keep:"existing settings"}));
     await click("review-session");await page.locator('#labOriginal').waitFor();
     for(const width of [390,768,1280]){
+      await page.setViewportSize({width,height:900});await view('words');await page.screenshot({path:path.join(output,`vocabulary-${width}.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`vocabulary overflow at ${width}`);
+      if(width===390){await click('sample-record');await page.waitForFunction(()=>document.querySelector('#labStatus')?.textContent.includes('嘗試錄音中'));await page.waitForTimeout(350);await click('sample-stop');await page.locator('#labSamplePlayback audio').waitFor();}
       await page.setViewportSize({width,height:900});await view("places");if(!await page.locator('.lab-destination-group').first().evaluate(node=>node.open))await page.locator('.lab-destination-group summary').first().click();await page.screenshot({path:path.join(output,`destinations-${width}.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`destination overflow at ${width}`);
       await page.setViewportSize({width,height:900});await view("exam");await page.screenshot({path:path.join(output,`lab-${width}.png`),fullPage:true});
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`horizontal overflow at ${width}`);
