@@ -96,10 +96,19 @@
     shell(`<div class="card"><h3>陌生長單字解碼</h3><p>先試讀，再揭曉；不確定和需要重練的詞會留在複習清單。</p><div class="lab-actions">${button("word-mode",reviewOnly?"顯示全部字庫":"只看待確認／需複習")}</div>${w?`<p class="sub">${wordIndex+1}/${pool.length} · 來源：${esc(w.source)} · ${state.words[w.id]?.status==="pending"?"辨識落差待確認，並非已確定發音錯誤":({mastered:"已掌握",unsure:"不確定",retry:"需要重練"}[state.words[w.id]?.status]||"尚未練習")}</p><div class="lab-word" lang="en">${esc(w.word)}</div><div class="lab-actions">${button("sample-record","🔴 錄下我的嘗試",'data-mode="word"')}${button("sample-stop","停止錄音",sampleMode==="word"?"":" disabled")}${button("word-attempt","我已先猜讀一次")}</div><div id="labSamplePlayback"></div>${revealed?`<div class="lab-answer"><b>${esc(w.ipa||"此地名未設定標準英語 IPA，請參考下方近似提示")}</b><p>${esc(w.syllables)}</p><p>${esc(w.zh)}</p><p class="sub">${esc(w.note)}</p>${link(w.url,"詞典／地名參考")}${button("say","🔊 合成音示範",`data-text="${esc(w.word)}"`)}<p class="sub">瀏覽器合成音不是官方標準錄音；請配合詞典核對。</p></div><div class="lab-actions">${[["mastered","已掌握"],["unsure","不確定"],["retry","需要重練"]].map(([status,label])=>button("word-grade",label,`data-grade="${status}"`)).join("")}</div>`:button("word-reveal","揭曉發音",attempted?"":" disabled")}<div class="lab-actions">${button("word-prev","上一字",wordIndex?"":" disabled")}${button("word-next","下一字",wordIndex<pool.length-1?"":" disabled")}</div>`:"<p>目前沒有待複習的詞，可以切回全部字庫繼續練習。</p>"}</div><div class="card"><h3>字尾規則練習</h3><p class="sub">規則是解碼線索，不能只靠拼字保證正確發音。</p><label>選擇字尾<select id="labRule">${options(D.rules.map((x,i)=>[i,x.suffix]),0)}</select></label><div id="labRuleBody">${ruleBody(D.rules[0])}</div></div><div class="card">${button("done-words","完成今天的單字訓練")}</div>`);
   }
   function ruleBody(r){return `<p>先想一個這種字尾的單字，試讀並猜重音。</p><details><summary>揭曉規則、示例與例外</summary><div class="body"><p>${esc(r.rule)}</p><p lang="en">${esc(r.example)}</p><p class="lab-caution">${esc(r.exception)}</p>${button("say","聽示例中的單字",`data-text="${esc(r.example.split(' →')[0].split(' /')[0])}"`)}${link("https://dictionary.cambridge.org/help/phonetics.html","音標核對說明")}</div></details>`;}
-  function placePool(){return D.places.filter(p=>placeCategory==="全部"||(placeCategory==="我的收藏"?state.favorites.includes(p.id):p.category===placeCategory));}
+  let placeGroup="全部地區",placeSearch="";
+  function placePool(){
+    const query=placeSearch.trim().toLowerCase();
+    return D.places.filter(p=>(placeCategory==="全部"||(placeCategory==="我的收藏"?state.favorites.includes(p.id):(p.categories||[p.category]).includes(placeCategory)))&&(placeGroup==="全部地區"||p.group===placeGroup)&&(!query||[p.en,p.zh,p.region,p.group,...(p.codes||[])].join(" ").toLowerCase().includes(query)));
+  }
+  function destinationTables(pool){
+    const present=new Set(pool.map(p=>p.group||"其他地名與航空用語"));
+    const groups=[...(D.ciDestinationGroups||[]).filter(g=>present.has(g)),...[...present].filter(g=>!(D.ciDestinationGroups||[]).includes(g))];
+    return `<div class="card"><h3>地名與唸法速查（${pool.length} 項）</h3><p class="sub">點地名可切換上方自測卡；表內拼讀沿用你提供的資料，是記憶輔助，不是 IPA 或官方錄音。</p>${groups.map(group=>{const rows=pool.filter(p=>(p.group||"其他地名與航空用語")===group);return `<details class="lab-destination-group"${placeSearch||placeGroup!=="全部地區"?" open":""}><summary>${esc(group)} · ${rows.length} 項</summary><table class="lab-destination-table"><caption class="visually-hidden">${esc(group)}地名、代碼與近似拼讀</caption><thead><tr><th>地名／自測</th><th>代碼</th><th>近似拼讀</th></tr></thead><tbody>${rows.map(p=>`<tr><td><button type="button" class="lab-place-pick" data-lab-action="place-pick" data-id="${esc(p.id)}"><b>${esc(p.zh)}</b><span lang="en">${esc(p.en)}</span></button></td><td>${esc(p.codes?.join(" / ")||"—")}</td><td lang="en">${esc(p.hint)}</td></tr>`).join("")}</tbody></table></details>`;}).join("")||"<p>找不到符合條件的地名，請更換分類、地區或搜尋字詞。</p>"}</div>`;
+  }
   function places(){
     const pool=placePool();placeIndex=Math.min(placeIndex,Math.max(0,pool.length-1));const p=pool[placeIndex];
-    shell(`<div class="card"><h3>航空地名與專有名詞</h3><label>分類<select id="labPlaceCategory">${options(["全部","我的收藏",...new Set(D.places.map(p=>p.category))],placeCategory)}</select></label><p class="sub">實際航點只列已核對的代表項目，非完整航網；查核日期 ${D.date}。英文近似拼讀只供練習，不是官方音標，必要時請再核對參考來源。</p>${p?`<p class="sub">${placeIndex+1}/${pool.length} · ${esc(p.category)} · ${esc(p.region)}</p><div class="lab-word" lang="en">${esc(p.en)}</div><p>${esc(p.zh)}</p><p class="readblock en">${esc(p.example)}</p>${placeRevealed?`<div class="lab-answer"><b>${esc(p.hint)}</b>${p.local?`<p>${esc(p.local)}</p>`:""}<p>${link(p.url,"名稱／航點來源")} · ${link(p.pronunciationUrl,"英文拼讀核對入口")}</p>${button("say","🔊 英文合成音示範",`data-text="${esc(p.en)}"`)}<p class="sub">示範由裝置語音引擎合成，不代表當地語言或官方標準讀法。</p></div>`:button("place-reveal","我已自測，揭曉讀法")}<div class="lab-actions">${button("place-favorite",state.favorites.includes(p.id)?"★ 取消收藏":"☆ 收藏")}${button("place-grade","記錄這次自測",placeRevealed?"":" disabled")}${button("place-next","下一個",pool.length>1?"":" disabled")}</div><p class="sub">已自測 ${state.places[p.id]?.attempts||0} 次；讀法是否正確請配合來源自行核對。</p>`:"<p>這個分類目前沒有項目。可先到其他分類收藏。</p>"}</div><div class="card">${button("done-places","完成今天的地名訓練")}</div>`);
+    shell(`<div class="card"><h3>航空地名與專有名詞</h3><div class="lab-fields"><label>分類<select id="labPlaceCategory">${options(["全部","我的收藏",...new Set(D.places.flatMap(p=>p.categories||[p.category]))],placeCategory)}</select></label><label>地區<select id="labPlaceGroup">${options(["全部地區",...(D.ciDestinationGroups||[])],placeGroup)}</select></label></div><label>搜尋中文、英文或機場代碼<input id="labPlaceSearch" type="search" value="${esc(placeSearch)}" placeholder="例如：西雅圖、Phnom Penh、DPS"></label>${button("place-reset","清除搜尋與篩選")}<p class="sub">已收錄你提供的七張發音表共 ${D.ciDestinations?.length||0} 項。清單含主要航點、集團／季節／歷史航點與延伸城市，不代表目前全部為華航自營直飛。拼讀為英語記憶提示，非 IPA。</p>${p?`<p class="sub">${placeIndex+1}/${pool.length} · ${esc((p.categories||[p.category]).join("／"))} · ${esc(p.region)}</p><div class="lab-word" lang="en">${esc(p.en)}</div><p class="lab-place-codes">${esc(p.codes?.join(" / ")||"城市／名稱，未列個別機場代碼")}</p><p>${esc(p.zh)}${p.group?` · ${esc(p.group)}`:""}</p>${p.routeStatus?`<p class="lab-badge">華航清單身分：${esc(p.routeStatus)}</p>`:""}<p class="readblock en">${esc(p.example)}</p>${placeRevealed?`<div class="lab-answer"><b>${esc(p.hint)}</b>${p.note?`<p class="lab-caution">${esc(p.note)}</p>`:""}${p.hintSource?`<p class="sub">${esc(p.hintSource)}</p>`:""}${p.local?`<p>${esc(p.local)}</p>`:""}<p>${link(p.url,"名稱／航點來源")} · ${link(p.pronunciationUrl,"英文拼讀核對入口")}${p.networkUrl?` · ${link(p.networkUrl,"華航全球航點")}`:""}</p>${button("say","🔊 英文合成音示範",`data-text="${esc(p.en)}"`)}<p class="sub">示範由裝置語音引擎合成，不代表當地語言或官方標準讀法。</p></div>`:button("place-reveal","我已自測，揭曉讀法")}<div class="lab-actions">${button("place-favorite",state.favorites.includes(p.id)?"★ 取消收藏":"☆ 收藏")}${button("place-grade","記錄這次自測",placeRevealed?"":" disabled")}${button("place-prev","上一個",pool.length>1?"":" disabled")}${button("place-next","下一個",pool.length>1?"":" disabled")}${button("place-random","隨機自測",pool.length>1?"":" disabled")}</div><p class="sub">已自測 ${state.places[p.id]?.attempts||0} 次；讀法是否正確請配合來源自行核對。</p>`:"<p>這個分類目前沒有項目。可先到其他分類收藏。</p>"}</div>${destinationTables(pool)}<div class="card">${button("done-places","完成今天的地名訓練")}</div>`);
   }
   function historyView(){
     const confirmed=sessions.flatMap(s=>s.errors.filter(e=>e.confirmed).map(e=>({...e,session:s}))),ranking={};
@@ -194,13 +203,18 @@
     if(action==="sample-record")return sampleStart(node.dataset.mode);
     if(action==="sample-stop")return sampleStop();
     if(action==="place-reveal"){placeRevealed=true;render();return;}
+    if(action==="place-reset"){placeCategory="全部";placeGroup="全部地區";placeSearch="";placeIndex=0;placeRevealed=false;render();return;}
     if(action==="place-favorite"){
       const p=placePool()[placeIndex];state.favorites=state.favorites.includes(p.id)?state.favorites.filter(id=>id!==p.id):[...state.favorites,p.id];await persist();render();return;
     }
     if(action==="place-grade"){
       const p=placePool()[placeIndex];state.places[p.id]={attempts:(state.places[p.id]?.attempts||0)+1,updated:Date.now()};await persist();render();notify("自測次數已儲存。");return;
     }
-    if(action==="place-next"){placeIndex=(placeIndex+1)%placePool().length;placeRevealed=false;render();return;}
+    if(["place-prev","place-next","place-random","place-pick"].includes(action)){
+      const pool=placePool();if(!pool.length)return;
+      placeIndex=action==="place-pick"?pool.findIndex(p=>p.id===node.dataset.id):action==="place-random"?Math.floor(Math.random()*pool.length):(placeIndex+(action==="place-prev"?-1:1)+pool.length)%pool.length;
+      placeIndex=Math.max(0,placeIndex);placeRevealed=false;render();root.querySelector(".lab-word")?.scrollIntoView({block:"center",behavior:"smooth"});return;
+    }
     if(action==="done-words"){
       if(!Object.values(state.words).some(p=>p.attempts>0&&C.dayKey(p.updated)===C.dayKey()))throw Error("請先完成一字的試讀、揭曉與自評，再勾選今日訓練。");await markTask("words");return changeView("home");
     }
@@ -234,6 +248,9 @@
   });
   root.addEventListener("input",event=>{
     const node=event.target;
+    if(node.id==="labPlaceSearch"){
+      const caret=node.selectionStart;placeSearch=node.value;placeIndex=0;placeRevealed=false;render();el("labPlaceSearch").focus({preventScroll:true});el("labPlaceSearch").setSelectionRange(caret,caret);return;
+    }
     if(node.id==="labTranscript"){draft().transcript=node.value;draft().analyzed=false;draft().errors=[];if(el("labComparison"))el("labComparison").replaceChildren();}
     else if(node.id==="labNotes")draft().notes=node.value;
     else if(node.dataset.labError!==undefined){const e=draft().errors[Number(node.dataset.labError)];e[node.dataset.field]=node.type==="checkbox"?node.checked:node.value;}
@@ -247,6 +264,7 @@
       if(fields[node.id]){state.config[fields[node.id]]=["labBand","labPreview"].includes(node.id)?Number(node.value):node.value;await persist();render();}
       if(node.id==="labRule")el("labRuleBody").innerHTML=ruleBody(D.rules[Number(node.value)]);
       if(node.id==="labPlaceCategory"){placeCategory=node.value;placeIndex=0;placeRevealed=false;render();}
+      if(node.id==="labPlaceGroup"){placeGroup=node.value;placeIndex=0;placeRevealed=false;render();}
       if(node.id==="labDuration"){const value=Number(node.value);if(!Number.isFinite(value)||value<0||value>86400)throw Error("秒數需介於 0 到 86400。");draft().duration=value;await persist();}
       if(node.id==="labImport")await importBackup(node.files[0]);
       if(node.id==="labAudioFile"){

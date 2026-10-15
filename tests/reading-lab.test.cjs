@@ -1,6 +1,7 @@
 const test=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs"),vm=require("node:vm"),path=require("node:path");
 const C=require("../reading-lab/core.js");
 require("../reading-lab/data.js");
+require("../reading-lab/ci-destinations.js");
 const D=global.ReadingLabData;
 const load=(file,sandbox)=>{sandbox.window=sandbox;vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path.join(__dirname,"../reading-lab",file),"utf8"),sandbox);return sandbox;};
 test("question matrix is complete, identifiable and within all requested length bands",()=>{
@@ -8,6 +9,17 @@ test("question matrix is complete, identifiable and within all requested length 
   for(const q of D.questions){const [min,max]=D.bands[q.band];assert.ok(q.words>=min&&q.words<=max,q.id);assert.equal(q.kind,"模擬稿");assert.ok(q.date&&q.source&&q.sourceUrl);}
   for(const air of D.airlines)for(const level of D.levels)for(let band=0;band<3;band++)assert.equal(D.questions.filter(q=>q.airline===air&&q.difficulty===level&&q.band===band).length,8);
   assert.equal(D.words.filter(w=>w.seed).length,24);assert.equal(D.rules.length,10);assert.ok(D.rules.every(r=>r.exception));
+});
+test("all seven screenshot regions are integrated without duplicate places or lost legacy IDs",()=>{
+  assert.equal(D.ciDestinations.length,80);assert.equal(D.places.length,95);
+  assert.deepEqual(D.ciDestinationGroups.map(group=>D.ciDestinations.filter(p=>p.group===group).length),[19,5,16,17,11,7,5]);
+  assert.equal(new Set(D.places.map(p=>p.id)).size,95);assert.equal(new Set(D.places.map(p=>p.en)).size,95);
+  assert.equal(D.places.find(p=>p.en==="Seattle").id,"place-0");assert.equal(D.places.find(p=>p.en==="Paris").id,"place-3");
+  for(const p of D.ciDestinations){assert.ok(p.en&&p.zh&&p.hint&&p.region&&p.routeStatus&&p.hintSource);assert.ok(p.codes.every(c=>/^[A-Z]{3}$/.test(c)));assert.ok(p.categories.includes("華航航點與延伸地名"));}
+  for(const name of ["Paris","Munich","Athens","Dublin","Madrid","Christchurch"])assert.match(D.places.find(p=>p.en===name).routeStatus,/非自營/);
+  assert.equal(D.places.filter(p=>p.codes?.includes("DPS")).length,2);
+  assert.match(D.places.find(p=>p.en==="Ontario").note,/不是加拿大/);
+  assert.ok(D.places.find(p=>p.en==="Vienna").categories.includes("長榮實際航點"));
 });
 test("diff labels substitutions, omissions, additions and endings without inferring audio quality",()=>{
   const result=C.compare("the fuselage exemplifies the aesthetics","the Furious is spent 5 and aesthetic");
@@ -29,7 +41,8 @@ test("daily completion and local calendar streaks depend on all four actual task
 });
 test("backup validation rejects invalid input and preserves only human-confirmed errors",()=>{
   const data={kind:"fly-room-reading-lab",version:1,state:{words:{"word-0":{status:"pending",confirmed:false}},places:{"place-0":{updated:10,attempts:2}},daily:{},favorites:["place-0"]},sessions:[{id:"one",ts:1,duration:40,title:"Test",original:"Original",transcript:"Heard",errors:[{category:"stress",confirmed:true,original:"example"},{category:"long",confirmed:false,original:"pending"}]}]};
-  const clean=C.validateBackup(data);assert.equal(clean.sessions[0].errors.filter(e=>e.confirmed).length,1);assert.equal(clean.state.places["place-0"].attempts,2);
+  data.state.places["place-ci-phnom-penh"]={updated:20,attempts:3};
+  const clean=C.validateBackup(data);assert.equal(clean.sessions[0].errors.filter(e=>e.confirmed).length,1);assert.equal(clean.state.places["place-0"].attempts,2);assert.equal(clean.state.places["place-ci-phnom-penh"].attempts,3);
   assert.throws(()=>C.validateBackup({}));assert.throws(()=>C.validateBackup({...data,sessions:[...data.sessions,...data.sessions]}));
   assert.throws(()=>C.validateBackup({...data,sessions:[{...data.sessions[0],duration:Infinity}]}));
 });

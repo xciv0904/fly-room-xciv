@@ -7,6 +7,7 @@ Fly Room 的獨立前端功能。入口是首頁「英文朗讀實驗室」或�
 | 檔案 | 職責 |
 | --- | --- |
 | `data.js` | 8 類主題、288 個模擬訓練版本、33 個單字（含 24 個起始待確認詞）、10 個字尾規則、19 個地名與專有名詞 |
+| `ci-destinations.js` | 整合使用者七張截圖的 80 個地名、代碼、近似拼讀及易錯提示；與既有資料合併後共 95 項，保留既有 ID 與收藏／自測紀錄 |
 | `core.js` | 逐詞編輯距離、差異分類、人工確認資料、日期／連續天數／七日統計、備份驗證與合併 |
 | `db.js` | 獨立 IndexedDB：`fly-room-reading-lab`，stores：`meta`、`sessions`、`audio` |
 | `media.js` | MediaRecorder、選擇性 Web Speech 辨識、停止與釋放麥克風、Blob 播放 |
@@ -32,6 +33,7 @@ Fly Room 的獨立前端功能。入口是首頁「英文朗讀實驗室」或�
 - 新題庫全部是 Fly Room 原創**模擬稿**。288 是 8 主題 × 3 航空 × 4 難度 × 3 篇幅的組合版本，**不是 288 篇獨立官方新聞**。同一主題的版本共用部分內容，可能再次讀到相同句子。不同難度以導入句法及篇幅調整，未經正式 CEFR 或考試難度校準。
 - 每個版本提供建立日期、來源與模擬稿標籤。未冒充航空公司已發布的航線、合作、永續成果或安全程序；未聲稱是官方面試題目。既有官方／雜誌練習仍在原頁。
 - 華航代表航點採[官方全球航點圖](https://www.china-airlines.com/at/en/Images/全球航點_260131_tcm283-57777.pdf)的東京、西雅圖；西雅圖另可核對[官方航線說明](https://www.china-airlines.com/en-us/noa_20240308_seatpe)。長榮代表航點巴黎、維也納核對[官方業務／航網資料](https://www.evaair.com/en-global/about-eva-air/about-us/market-and-sales-overview/main-business-and-services/)。查核日期為 2026-10-15，並非完整航網、不保證未來班表。
+- 使用者後續提供的七張截圖另整合 80 項：日本 19、韓國 5、東南亞 16、港澳／中國大陸與其他亞洲 17、歐洲 11、北美洲 7、大洋洲 5。東京、西雅圖、維也納、巴黎與原資料合併，不重建既有 ID。名稱、代碼、拼讀來自使用者提供的表格；營運方式另連結[華航官方時刻表](https://booking.china-airlines.com/Flightschedule/)與[全球航點](https://www.china-airlines.com/tw/en/itinerary-booking/flight-information/global-destinations)。這不是 80 個現行華航自營直飛航點的宣稱；日本清單保留集團／季節／歷史地名註記，巴黎等歐洲延伸城市與基督城明確標為延伸參考。可按地區、中文、英文、機場代碼篩選，亦可由速查表切換到自測卡、收藏或隨機自測。
 - 單字 IPA／重音為人工整理的常見讀法，提供 Cambridge 詞典核對入口；例如 [fuselage](https://dictionary.cambridge.org/us/pronunciation/english/fuselage)、[commemorative](https://dictionary.cambridge.org/pronunciation/english/commemorative)。`exquisite` 有不同重音讀法，不能把其中一個當成唯一正解。
 - 二延平與 Karlovy Vary 未假造標準英語 IPA，以清楚標示的近似讀音提示及地名來源提供練習。地名分別顯示英文提示與必要的當地語言差異。Collins 搜尋入口供使用者核對，不宣稱每個複合名稱都有獨立詞條。
 - 全部站內示範按鈕使用裝置 TTS，**不是官方標準音檔**。裝置聲音、支援的語音與地方名讀法可能不同；無 TTS 時提供參考連結。
@@ -55,4 +57,4 @@ npm run test:browser
 
 `npm test` 包含原有 63 篇／1,904 個字詞覆蓋回歸，以及題庫矩陣、差異類型、每日資料、備份、真實 IndexedDB API（測試替身）、錄音生命週期等測試。瀏覽器測試使用 Playwright 虛擬麥克風，不接觸私人錄音；涵蓋開始／停止／本機播放、倒數、手機／平板／電腦、貼稿、人工確認、備份含音檔往返、逐項每日完成及原站回歸。權限拒絕和不支援錄音時的流程亦有測試。實體 iPhone／iPad Safari、Android Chrome 及真人麥克風仍建議在合併前由使用者做一次試錄。
 
-以 `codex/english-reading-lab` 提供 Pull Request。審閱後合併至 `main`，既有 GitHub Pages 流程即可部署，無建置步驟；正式入口將是 `https://xciv0904.github.io/fly-room-xciv/#readingLab`。分支未合併前，正式站不會出現新功能。Service Worker 快取名稱已更新為 v11。
+以 `codex/english-reading-lab` 提供 Pull Request。審閱後合併至 `main`，既有 GitHub Pages 流程即可部署，無建置步驟；正式入口將是 `https://xciv0904.github.io/fly-room-xciv/#readingLab`。分支未合併前，正式站不會出現新功能。Service Worker 快取名稱已更新為 v12。

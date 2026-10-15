@@ -46,6 +46,11 @@ const server=http.createServer((request,response)=>{
     await click("word-attempt");await click("word-reveal");await page.locator('#labSamplePlayback audio').waitFor();await page.locator('[data-lab-action="word-grade"][data-grade="unsure"]').click();await click("done-words");
     await view("places");await click("place-reveal");await click("place-grade");await click("place-favorite");await click("done-places");
     await page.getByText("今天四項訓練已完成。",{exact:true}).waitFor();
+    await view("places");await page.locator('#labPlaceCategory').selectOption("華航航點與延伸地名");await page.locator('#labPlaceGroup').selectOption("東南亞");await page.locator('#labPlaceSearch').fill("DPS");
+    assert.equal(await page.locator('.lab-destination-table tbody tr').count(),2);
+    await page.locator('[data-lab-action="place-pick"][data-id="place-ci-denpasar"]').click();assert.equal(await page.locator('.lab-word').textContent(),"Denpasar");await click("place-reveal");assert.match(await page.locator('.lab-answer').textContent(),/den-PAH-sar/);await click("place-grade");await click("place-favorite");
+    await page.locator('#labPlaceSearch').fill("找不到的地點");assert.equal(await page.locator('.lab-place-pick').count(),0);await page.locator('#labPlaceSearch').fill("");
+    await click("place-reset");assert.equal(await page.locator('#labPlaceGroup').inputValue(),"全部地區");assert.equal(await page.locator('.lab-place-pick').count(),95);await page.locator('#labPlaceGroup').selectOption("東南亞");
     await view("history");await click("clear-lab");await view("history");assert.equal(await page.locator('.lab-history').count(),0);
     await page.locator('#labImport').setInputFiles({name:"lab-backup.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(backup))});await page.locator('.lab-history summary').waitFor();
     await page.locator('.lab-history summary').click();await click("play-session");await page.locator('.lab-history audio').waitFor();
@@ -53,6 +58,7 @@ const server=http.createServer((request,response)=>{
     assert.equal(await page.evaluate(()=>localStorage.getItem("fa_legacy_lab_test")),JSON.stringify({keep:"existing settings"}));
     await click("review-session");await page.locator('#labOriginal').waitFor();
     for(const width of [390,768,1280]){
+      await page.setViewportSize({width,height:900});await view("places");if(!await page.locator('.lab-destination-group').first().evaluate(node=>node.open))await page.locator('.lab-destination-group summary').first().click();await page.screenshot({path:path.join(output,`destinations-${width}.png`),fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`destination overflow at ${width}`);
       await page.setViewportSize({width,height:900});await view("exam");await page.screenshot({path:path.join(output,`lab-${width}.png`),fullPage:true});
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`horizontal overflow at ${width}`);
     }

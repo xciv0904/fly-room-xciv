@@ -69,7 +69,7 @@
       if(!/^[a-z0-9-]+$/i.test(id)||!p||!["pending","unsure","retry","mastered"].includes(p.status))continue;
       words[id]={status:p.status,confirmed:p.confirmed===true,updated:Number(p.updated)||0,attempts:Math.max(0,Number(p.attempts)||0)};
     }
-    const places={};for(const [id,p]of Object.entries(input.state.places||{}))if(/^place-\d+$/.test(id)&&p&&Number.isFinite(p.updated)&&Number.isFinite(p.attempts))places[id]={updated:p.updated,attempts:Math.max(0,p.attempts)};
+    const places={};for(const [id,p]of Object.entries(input.state.places||{}))if(/^place-(?:\d+|ci-[a-z0-9-]+)$/.test(id)&&p&&Number.isFinite(p.updated)&&Number.isFinite(p.attempts))places[id]={updated:p.updated,attempts:Math.max(0,p.attempts)};
     const daily={};for(const [date,v]of Object.entries(input.state.daily||{}))if(/^\d{4}-\d{2}-\d{2}$/.test(date)&&v?.tasks){const tasks={};for(const k of ["words","places","reading","review"])tasks[k]=v.tasks[k]===true;daily[date]={tasks,complete:Object.values(tasks).every(Boolean)};}
     const sessions=input.sessions.map(s=>{
       if(!s||!Number.isFinite(s.ts)||!Number.isFinite(s.duration)||s.duration<0||s.duration>86400)throw Error("備份含有無效的練習時間。");
