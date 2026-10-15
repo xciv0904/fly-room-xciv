@@ -1,0 +1,57 @@
+#tab-readingLab{--lab-soft:#f1f5fa}
+#tab-readingLab .lab-heading{border-top:4px solid var(--gold)}
+#tab-readingLab .lab-heading h2{font-size:24px}
+#tab-readingLab .lab-heading .ci-eyebrow{color:var(--accent)}
+.lab-nav,.lab-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.lab-nav .chip{min-height:42px}
+.lab-actions .btn{margin:0;min-height:44px;white-space:normal}
+#tab-readingLab button:disabled{opacity:.5;cursor:not-allowed}
+.lab-status{color:var(--accent);font-size:14px;min-height:1.6em;white-space:pre-wrap}
+.lab-fields,.lab-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#tab-readingLab label:not(.lab-check){display:block;font-size:13px;font-weight:600;margin:10px 0}
+#tab-readingLab input:not([type=checkbox]),#tab-readingLab select,#tab-readingLab textarea{display:block;box-sizing:border-box;width:100%;margin-top:5px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--ink);background:white;min-height:44px}
+#tab-readingLab textarea{resize:vertical;font-size:16px;line-height:1.6}
+#tab-readingLab input:not([type=checkbox]),#tab-readingLab select,#tab-readingLab textarea{font-weight:400}
+.lab-check{display:flex;align-items:flex-start;gap:9px;margin:12px 0;font-size:13px}
+.lab-check input{margin-top:4px;min-width:20px;min-height:20px;accent-color:var(--accent)}
+.lab-original{font-size:19px;line-height:1.9;max-height:60vh;overflow:auto;white-space:pre-wrap}
+.lab-badge{display:inline-block;background:var(--gold-soft);color:var(--gold-deep);padding:5px 10px;border-radius:8px;margin:8px 0;font-size:13px}
+.lab-countdown{display:flex;align-items:center;gap:16px;margin:15px 0;color:var(--accent)}
+.lab-countdown strong{font-size:25px;font-variant-numeric:tabular-nums}
+.lab-countdown progress{flex:1;max-width:250px;accent-color:var(--accent)}
+.lab-diff{line-height:2.5;padding:14px;background:var(--lab-soft);border-radius:10px;overflow-wrap:anywhere}
+.lab-diff b{font-size:11px}
+.lab-diff-replace,.lab-diff-missing,.lab-diff-extra{display:inline;padding:3px;border:1px solid;border-radius:4px}
+.lab-diff-replace{background:#fff5e1;border-color:#9c6719;color:#69420a}
+.lab-diff-missing{background:#ffeded;border-color:#bd4a4a;color:#802525}
+.lab-diff-extra{background:#eaf1ff;border-color:#557cbd;color:#254b88}
+.lab-error-row,.lab-review-item{padding:12px 0;border-bottom:1px solid var(--line)}
+.lab-word{font-size:clamp(25px,5vw,40px);font-weight:700;color:var(--accent);text-align:center;padding:30px 0;overflow-wrap:anywhere}
+.lab-answer{padding:16px;border-radius:12px;background:var(--lab-soft);margin:12px 0;line-height:1.9}
+.lab-answer b{font-size:19px}
+.lab-caution{color:#81520e}
+.lab-success{color:var(--good);font-weight:700}
+.lab-task-list>div{display:grid;grid-template-columns:55px 1fr auto auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.lab-minute{font-weight:700;color:var(--accent)}
+.lab-category-counts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.lab-category-counts span{background:var(--lab-soft);padding:6px;border-radius:8px;font-size:12px}
+.lab-trend{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.lab-trend th,.lab-trend td{padding:8px 4px;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.lab-trend td:nth-child(2){position:relative}
+.lab-bar{display:inline-block;height:8px;background:#b9cce6;margin-right:5px;border-radius:3px}
+#tab-readingLab audio{width:100%;margin:12px 0}
+.lab-history .readblock{white-space:pre-wrap;overflow-wrap:anywhere;max-height:350px;overflow:auto}
+#tab-readingLab a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+#tab-readingLab h4{margin:12px 0 5px}
+@media(max-width:600px){
+  .lab-columns{grid-template-columns:1fr}
+  .lab-fields{gap:8px}
+  .lab-task-list>div{grid-template-columns:48px 1fr auto}
+  .lab-task-list>div>.btn{grid-column:2/4;justify-self:start}
+  .lab-actions .btn{flex:1 1 140px;padding:10px;font-size:14px}
+  .lab-nav{gap:5px}.lab-nav .chip{font-size:12px;padding:6px 10px}
+  .lab-original{font-size:18px;max-height:none}
+  #tab-readingLab .card{padding:14px}
+  #tab-readingLab input:not([type=checkbox]),#tab-readingLab select{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){#tab-readingLab *{scroll-behavior:auto}}
