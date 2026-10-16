@@ -91,3 +91,8 @@ test("leaving during a pending permission request releases late microphone acces
   const recorder=new s.LabRecorder(),pending=recorder.start();recorder.cancelPending();resolveStream({getTracks:()=>[{stop(){stopped=true;}}]});
   await assert.rejects(pending,/已取消/);assert.equal(stopped,true);assert.equal(recorder.active,false);
 });
+test("stop retains the recognition service final result instead of invalidating it",async()=>{
+  class Recorder{constructor(){this.state='inactive';this.mimeType='audio/webm';}start(){this.state='recording';}stop(){this.state='inactive';this.ondataavailable({data:new Blob(['full audio'])});queueMicrotask(()=>this.onstop());}}
+  class Speech{start(){}stop(){setTimeout(()=>{this.onresult({resultIndex:0,results:[Object.assign([{transcript:'final words'}],{isFinal:true})]});this.onend();},20);}}
+  const s=load('media.js',{Blob,Date,URL,setTimeout,clearTimeout,MediaRecorder:Recorder,SpeechRecognition:Speech,navigator:{mediaDevices:{getUserMedia:async()=>({getTracks:()=>[{stop(){}}]})}}});let text='';const recorder=new s.LabRecorder();await recorder.start({recognition:true,onText:t=>{text+=t;}});const result=await recorder.stop();assert.equal(text.trim(),'final words');assert.ok(result.blob.size);
+});

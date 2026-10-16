@@ -8,6 +8,12 @@
   function pool(config){const kind=kinds.includes(config.kind)?config.kind:'';return (V.index?.articles||[]).filter(a=>kinds.includes(a.kind)&&(!config.airline||a.airlines.includes(config.airline))&&(!kind||a.kind===kind));}
   function selected(config){const items=pool(config);return items.find(a=>a.id===config.articleId)||items[0];}
   function text(a){return a?.sentences.join('\n')||'';}
+  function examPool(config={}){
+    return pool({airline:'華航',kind:config.kind}).map(a=>{
+      const original=text(a),words=root.ReadingLabCore.tokens(original).length;
+      return {id:a.id,title:a.title,text:original,words,airline:'華航',kind:a.kind,source:a.source,sourceUrl:a.sourceUrl,difficulty:words<130?'初級':words<180?'中級':words<230?'高級':'挑戰級'};
+    }).filter(q=>q.words>0&&q.words<=1000&&(!config.difficulty||q.difficulty===config.difficulty));
+  }
   function markup(config){
     const items=pool(config),a=selected(config),hints=config.hints!==false;
     const known=new Map(D.words.map(w=>[w.normalized,w]));
@@ -26,5 +32,5 @@
     }
     lastWord={...w,word:spelling,normalized:key};holder.innerHTML=`<h4>${esc(spelling)}</h4>${V.answer(w)}<button class="btn sec" data-lab-action="learn-save-word" data-word="${esc(key)}">加入需要複習</button>`;holder.focus({preventScroll:true});
   }
-  root.ReadingLabLearning={pool,selected,text,markup,word,get lastWord(){return lastWord;}};
+  root.ReadingLabLearning={pool,selected,text,examPool,markup,word,get lastWord(){return lastWord;}};
 })(window);
