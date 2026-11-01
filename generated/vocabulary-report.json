@@ -82,7 +82,7 @@
   ],
   "failures": [],
   "excluded": {
-    "count": 212,
+    "count": 242,
     "reason": "短問句、非英文、翻譯／UI 文案不作文章；程式、測試、字典與衍生檔案不重複掃描"
   },
   "articles": [

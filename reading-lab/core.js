@@ -3,6 +3,47 @@
   const categories={long:"Long Words 多音節單字",stress:"Word Stress 重音",final:"Final Consonants 詞尾子音",proper:"Proper Nouns 專有名詞",skipped:"Skipped Words 漏讀",fluency:"Fluency 流暢度",intonation:"Intonation 語調",other:"其他文字差異（待人工分類）"};
   function scheduleValue(s){return s&&Number.isFinite(s.due)&&Number.isFinite(s.reviewedAt)?{due:s.due,reviewedAt:s.reviewedAt,days:Math.max(1,Math.min(60,Number(s.days)||1)),stage:Math.max(0,Math.min(4,Number(s.stage)||0))}:undefined;}
   function assessmentValue(a){return Object.fromEntries(['tone','volume','fluency','accuracy','pausing','eye'].map(k=>[k,['pending','good','retry'].includes(a?.[k])?a[k]:'pending']));}
+  const referenceValue=value=>typeof value==='string'&&/^[a-z0-9][a-z0-9_.:@-]{0,159}$/i.test(value)?value:'';
+  function workflowValue(value){
+    const targetIssueIds=[...new Set((Array.isArray(value?.targetIssueIds)?value.targetIssueIds:[]).map(referenceValue).filter(Boolean))].slice(0,3);
+    const results=new Map();
+    for(const item of (Array.isArray(value?.reviewResults)?value.reviewResults:[]).slice(0,100)){
+      const issueId=referenceValue(item?.issueId);
+      if(!issueId||!targetIssueIds.includes(issueId)||!['resolved','retry','pending'].includes(item.status))continue;
+      results.set(issueId,{issueId,status:item.status,note:typeof item.note==='string'?item.note.slice(0,1000):''});
+    }
+    return {baselineId:referenceValue(value?.baselineId),practiceType:['initial','retry','transfer'].includes(value?.practiceType)?value.practiceType:'initial',targetIssueIds,reviewResults:[...results.values()]};
+  }
+  function sourceReadingsValue(value){
+    const result={};
+    for(const [id,item]of Object.entries(value&&typeof value==='object'?value:{}).slice(0,1000)){
+      if(!referenceValue(id)||!item||typeof item!=='object')continue;
+      const row={};for(const key of ['openedAt','completedAt'])if(Number.isFinite(item[key])&&item[key]>=0)row[key]=item[key];
+      if(Object.keys(row).length)result[id]=row;
+    }
+    return result;
+  }
+  function reconcileErrors(previous=[],incoming=[]){
+    const old=(Array.isArray(previous)?previous:[]).filter(e=>e&&typeof e==='object').slice(0,1000),next=(Array.isArray(incoming)?incoming:[]).filter(e=>e&&typeof e==='object').slice(0,1000);
+    const key=e=>JSON.stringify([e.type||'',e.original||'',e.heard||'']),queues=new Map(),used=new Set();
+    old.forEach((error,index)=>{const signature=key(error);if(!queues.has(signature))queues.set(signature,[]);queues.get(signature).push(index);});
+    const rows=next.map(error=>{
+      let queue=queues.get(key(error));
+      // Older backups omitted ASR operation types; their pair still identifies
+      // the same occurrence, including a manually added missing-word issue.
+      if(!queue?.length&&error.type)queue=queues.get(key({...error,type:''}));
+      const index=queue?.shift(),prior=index===undefined?null:old[index],row={...error};
+      delete row.historical;
+      if(prior){used.add(index);for(const field of ['id','category','note','confirmed'])if(prior[field]!==undefined)row[field]=prior[field];}
+      return {row,known:prior?.confirmed===true};
+    });
+    old.forEach((error,index)=>{if(error.confirmed===true&&!used.has(index))rows.push({row:{...error,historical:true},known:true});});
+    // Keep all existing confirmed evidence within the existing 1,000-row limit;
+    // additional recognition candidates may be omitted when the limit is full.
+    const keep=new Set(rows.map((entry,index)=>entry.known?index:-1).filter(index=>index>=0));
+    for(let index=0;index<rows.length&&keep.size<1000;index++)keep.add(index);
+    return rows.filter((entry,index)=>keep.has(index)).map(entry=>entry.row);
+  }
   function audioValue(a){
     if(!a||!['duration','rmsDb','peakDb','clippedPercent','quietSeconds','thresholdDb'].every(k=>Number.isFinite(a[k]))||!Array.isArray(a.pauses)||a.duration<0||a.duration>600)return undefined;
     return {duration:a.duration,rmsDb:a.rmsDb,peakDb:a.peakDb,clippedPercent:Math.max(0,Math.min(100,a.clippedPercent)),quietSeconds:Math.max(0,Math.min(a.duration,a.quietSeconds)),thresholdDb:a.thresholdDb,pauses:a.pauses.filter(p=>p&&Number.isFinite(p.start)&&Number.isFinite(p.end)&&p.end>=p.start&&p.start>=0&&p.end<=a.duration&&Number.isFinite(p.duration)).slice(0,1000).map(p=>({start:p.start,end:p.end,duration:p.duration})),imported:true,method:'imported-not-recomputed'};
@@ -56,6 +97,11 @@
   function mergeState(current,incoming){
     const next=structuredClone(current);
     next.wordCards={...(current.wordCards||{}),...(incoming.wordCards||{})};
+    next.sourceReadings=sourceReadingsValue(current.sourceReadings);
+    for(const [id,item]of Object.entries(sourceReadingsValue(incoming.sourceReadings))){
+      const row={...(next.sourceReadings[id]||{})};for(const [key,value]of Object.entries(item))row[key]=Math.max(row[key]||0,value);
+      if(next.sourceReadings[id]||Object.keys(next.sourceReadings).length<1000)next.sourceReadings[id]=row;
+    }
     for(const [id,p]of Object.entries(incoming.words||{}))if(!next.words[id]||(p.updated||0)>(next.words[id].updated||0))next.words[id]=p;
     next.favorites=[...new Set([...(current.favorites||[]),...(incoming.favorites||[])])];
     next.places={...(current.places||{})};
@@ -82,12 +128,12 @@
     const daily={};for(const [date,v]of Object.entries(input.state.daily||{}))if(/^\d{4}-\d{2}-\d{2}$/.test(date)&&v?.tasks){const tasks={};for(const k of ["words","places","reading","review"])tasks[k]=v.tasks[k]===true;daily[date]={tasks,complete:Object.values(tasks).every(Boolean)};}
     const sessions=input.sessions.map(s=>{
       if(!s||!Number.isFinite(s.ts)||!Number.isFinite(s.duration)||s.duration<0||s.duration>86400)throw Error("備份含有無效的練習時間。");
-      return {id:safeString(s.id,100),ts:s.ts,title:safeString(s.title,300),questionId:safeString(s.questionId,100),difficulty:safeString(s.difficulty,30),original:safeString(s.original),transcript:safeString(s.transcript),duration:s.duration,assessment:assessmentValue(s.assessment),visual:{eye:s.visual?.eye===true,expression:s.visual?.expression===true,posture:s.visual?.posture===true},completedWords:Number.isInteger(s.completedWords)&&s.completedWords>=0?Math.min(tokens(s.original).length,s.completedWords):null,audioAnalysis:audioValue(s.audioAnalysis),reviewSchedule:scheduleValue(s.reviewSchedule),kind:safeString(s.kind,50),source:safeString(s.source,1000),sourceUrl:/^https:\/\//.test(s.sourceUrl||"")?safeString(s.sourceUrl,2000):"",notes:safeString(s.notes,5000),errors:(Array.isArray(s.errors)?s.errors:[]).slice(0,1000).map(e=>({original:safeString(e.original,150),heard:safeString(e.heard,150),category:categories[e.category]?e.category:"long",confirmed:e.confirmed===true,note:safeString(e.note,1000)})),reviewed:s.reviewed===true};
+      return {id:safeString(s.id,100),ts:s.ts,title:safeString(s.title,300),questionId:safeString(s.questionId,100),difficulty:safeString(s.difficulty,30),original:safeString(s.original),transcript:safeString(s.transcript),duration:s.duration,assessment:assessmentValue(s.assessment),visual:{eye:s.visual?.eye===true,expression:s.visual?.expression===true,posture:s.visual?.posture===true},completedWords:Number.isInteger(s.completedWords)&&s.completedWords>=0?Math.min(tokens(s.original).length,s.completedWords):null,audioAnalysis:audioValue(s.audioAnalysis),reviewSchedule:scheduleValue(s.reviewSchedule),kind:safeString(s.kind,50),source:safeString(s.source,1000),sourceUrl:/^https:\/\//.test(s.sourceUrl||"")?safeString(s.sourceUrl,2000):"",notes:safeString(s.notes,5000),errors:(Array.isArray(s.errors)?s.errors:[]).filter(e=>e&&typeof e==='object').slice(0,1000).map(e=>({...(referenceValue(e.id)?{id:referenceValue(e.id)}:{}),...(['replace','missing','extra'].includes(e.type)?{type:e.type}:{}),...(e.historical===true?{historical:true}:{}),original:safeString(e.original,150),heard:safeString(e.heard,150),category:categories[e.category]?e.category:"long",confirmed:e.confirmed===true,note:safeString(e.note,1000)})),reviewed:s.reviewed===true,...workflowValue(s),...(typeof s.started==='boolean'?{started:s.started}:{}),...(typeof s.interrupted==='boolean'?{interrupted:s.interrupted}:{})};
     });
     if(sessions.some(s=>!s.id||!s.original)||new Set(sessions.map(s=>s.id)).size!==sessions.length)throw Error("備份紀錄缺少原稿或有重複識別碼。");
     if(sessions.some(s=>tokens(s.original).length>1000||tokens(s.transcript).length>1000))throw Error("備份包含超過比對上限的原稿或逐字稿。");
-    return {sessions,state:{words,wordCards,places,daily,favorites:(Array.isArray(input.state.favorites)?input.state.favorites:[]).filter(x=>typeof x==="string").slice(0,1000)},audio:input.audio||[]};
+    return {sessions,state:{words,wordCards,places,daily,sourceReadings:sourceReadingsValue(input.state.sourceReadings),favorites:(Array.isArray(input.state.favorites)?input.state.favorites:[]).filter(x=>typeof x==="string").slice(0,1000)},audio:input.audio||[]};
   }
-  root.ReadingLabCore={categories,tokens,compare,dayKey,streak,trends,mergeState,validateBackup,assessmentValue,audioValue,scheduleValue};
+  root.ReadingLabCore={categories,tokens,compare,dayKey,streak,trends,mergeState,validateBackup,assessmentValue,audioValue,scheduleValue,referenceValue,workflowValue,sourceReadingsValue,reconcileErrors};
   if(typeof module!=="undefined")module.exports=root.ReadingLabCore;
 })(typeof window!=="undefined"?window:globalThis);

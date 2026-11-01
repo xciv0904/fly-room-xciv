@@ -1,6 +1,6 @@
 (function(){
   "use strict";
-  const D=window.ReadingLabData,C=window.ReadingLabCore,DB=window.ReadingLabDB,T=window.ReadingTraining,L=window.ReadingLabLearning,A=window.ReadingLabAnalysis,S=window.ReadingLabSpeech;
+  const D=window.ReadingLabData,C=window.ReadingLabCore,DB=window.ReadingLabDB,T=window.ReadingTraining,L=window.ReadingLabLearning,A=window.ReadingLabAnalysis,S=window.ReadingLabSpeech,M=window.ReadingCurriculum,U=window.ReadingCurriculumUI;
   const root=document.getElementById("readingLabRoot"),recorder=new LabRecorder();
   if(!root)return;
   const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -9,8 +9,9 @@
   const link=(url,label)=>`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;
   const options=(values,current)=>values.map((v,i)=>{const [value,label]=Array.isArray(v)?v:[v,v];return `<option value="${esc(value)}"${String(value)===String(current)?" selected":""}>${esc(label)}</option>`;}).join("");
   const uid=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const initial=()=>({config:{airline:"華航",difficulty:"",kind:"",preview:15,limit:60,recognition:true},learning:{airline:"華航",kind:"",hints:true,rate:1,accent:"en-US",voiceURI:"",pause:"natural"},words:Object.fromEntries(D.words.filter(w=>w.seed).map(w=>[w.id,{status:"pending",confirmed:false,attempts:0,updated:0}])),favorites:[],places:{},daily:{},draft:null});
+  const initial=()=>({config:{airline:"華航",difficulty:"",kind:"",topic:"",preview:15,limit:60,recognition:true},learning:{airline:"華航",kind:"",topic:"",hints:true,rate:1,accent:"en-US",voiceURI:"",pause:"natural"},words:Object.fromEntries(D.words.filter(w=>w.seed).map(w=>[w.id,{status:"pending",confirmed:false,attempts:0,updated:0}])),favorites:[],places:{},daily:{},sourceReadings:{},draft:null});
   let state=initial(),sessions=[],initialized=false,opening,view="home",phase="setup",blob=null,elapsed=0,clock,deadline=0,started=0,notice="",wordIndex=0,revealed=false,attempted=false,reviewOnly=false,placeCategory="全部",placeIndex=0,placeRevealed=false,sampleMode="",starting=false,saveQueue=Promise.resolve();
+  let issueLimit=20;
   const config=()=>state.config;
   const currentQuestion=()=>L.examPool().find(q=>q.id===state.draft?.questionId);
   function notify(message){notice=message;const node=el("labStatus");if(node)node.textContent=message;}
@@ -24,7 +25,7 @@
   function persist(){const snapshot=structuredClone(state);saveQueue=saveQueue.catch(()=>{}).then(()=>DB.put("meta","state",snapshot));return saveQueue;}
   function sessionRecord(d){
     const old=sessions.find(s=>s.id===d.savedId);
-    return {id:d.savedId,ts:old?.ts||d.ts||Date.now(),questionId:d.questionId,title:d.title,difficulty:d.difficulty,original:d.original,transcript:d.transcript,duration:d.duration,errors:structuredClone(d.errors),notes:d.notes,reviewed:old?.reviewed||false,reviewSchedule:old?.reviewSchedule,assessment:T.safeAssessment(d.assessment),visual:{...d.visual},completedWords:d.completedWords,audioAnalysis:d.audioAnalysis,kind:d.kind,source:d.source,sourceUrl:d.sourceUrl,interrupted:!!d.interrupted};
+    return {id:d.savedId,ts:old?.ts||d.ts||Date.now(),questionId:d.questionId,title:d.title,difficulty:d.difficulty,original:d.original,transcript:d.transcript,duration:d.duration,errors:structuredClone(d.errors),notes:d.notes,reviewed:old?.reviewed||false,reviewSchedule:old?.reviewSchedule,assessment:T.safeAssessment(d.assessment),visual:{...d.visual},completedWords:d.completedWords,audioAnalysis:d.audioAnalysis,kind:d.kind,source:d.source,sourceUrl:d.sourceUrl,started:d.started,...C.workflowValue(d),interrupted:!!d.interrupted};
   }
   function saveCheckpoint(audio){
     const d=draft();if(!d.savedId)d.savedId=uid();
@@ -43,14 +44,14 @@
   const active=()=>recorder.active||phase==="recording"||phase==="preparing"||starting;
   function draft(){if(!state.draft)throw Error("請先載入一道題目。");return state.draft;}
   function markTask(key){const day=C.dayKey();const tasks={...(state.daily[day]?.tasks||{}),[key]:true};state.daily[day]={tasks,complete:["words","places","reading","review"].every(k=>tasks[k])};return persist();}
-  function filteredQuestions(){return L.examPool({kind:config().kind,difficulty:config().difficulty});}
-  function freshQuestion(q){
+  function filteredQuestions(){return L.examPool({kind:config().kind,difficulty:config().difficulty,topic:config().topic});}
+  function freshQuestion(q,workflow={}){
     if(active())throw Error("請先停止目前的錄音或倒數。");
     if(!L.examPool().some(item=>item.id===q.id))throw Error("正式模擬只使用已收錄的華航雜誌、新聞稿與廣播詞；其他材料僅保留舊紀錄。 ");
     if(state.draft&&!state.draft.savedId&&(state.draft.transcript||blob)&&!confirm("載入新題會取代目前草稿。要繼續嗎？可先取消並儲存這次練習。"))return;
     if(C.tokens(q.text).length>1000)throw Error("這篇超過單次 1,000 字詞上限，請先在學習模式分段練習。");
-    state.draft={questionId:q.id,title:q.title,difficulty:q.difficulty,original:q.text,transcript:"",duration:0,errors:[],notes:"",analyzed:false,savedId:null,assessment:T.safeAssessment(),visual:{},kind:q.kind||"模擬稿",source:q.source,sourceUrl:q.sourceUrl,started:false};
-    state.view="exam";
+    state.draft={questionId:q.id,title:q.title,difficulty:q.difficulty,original:q.text,transcript:"",duration:0,errors:[],notes:"",analyzed:false,savedId:null,assessment:T.safeAssessment(),visual:{},kind:q.kind||"模擬稿",source:q.source,sourceUrl:q.sourceUrl,started:false,...C.workflowValue(workflow)};
+    state.view="exam";view="exam";
     blob=null;elapsed=0;phase="setup";notice="題目已載入；準備時間開始前不顯示內文。";
     return DB.remove("audio","draft-reading").then(persist).then(render);
   }
@@ -60,8 +61,9 @@
     root.innerHTML=`<div class="card lab-heading"><p class="ci-eyebrow">ENGLISH READING LAB</p><h2>英文朗讀訓練中心</h2><p class="section-note">為空服員即席英文朗讀設計 · 個人訓練，不是官方面試評分</p><div class="lab-nav" role="navigation" aria-label="朗讀實驗室導覽">${tabs.map(([id,label])=>`<button class="chip ${view===id?"on":""}" data-lab-action="view" data-view="${id}"${active()?" disabled":""}${view===id?' aria-current="page"':""}>${label}</button>`).join("")}</div><p id="labStatus" class="lab-status" role="status" aria-live="polite">${esc(notice)}</p></div>${content}`;
   }
   function home(){
+    const recommended=M.recommend(L.examPool(),sessions,{}, {draftId:state.draft?.questionId})[0]?.article;
     const today=state.daily[C.dayKey()]||{tasks:{}},tasks=[["words",5,"陌生長單字","words"],["places",3,"地名與專有名詞","places"],["reading",7,"全新新聞稿朗讀","exam"],["review",5,"錯誤回聽與修正","history"]];
-    shell(`<div class="card"><h3>今天練 20 分鐘</h3><p>連續完成 ${C.streak(state.daily)} 天 · 今天 ${Object.values(today.tasks).filter(Boolean).length}/4 項</p><p class="sub">分鐘數是時間分配建議，不要求刷滿題數。完成一輪實際練習後即可勾選該項。</p><div class="lab-task-list">${tasks.map(([id,min,label,target])=>`<div><span class="lab-minute">${min} 分</span><b>${label}</b><span>${today.tasks[id]?"✓ 已完成":"待完成"}</span>${button("view","開始／繼續",`data-view="${target}"`)}</div>`).join("")}</div>${today.complete?'<p class="lab-success">今天四項訓練已完成。</p>':""}</div><div class="card"><h3>你的起始待確認清單</h3><p>已放入 Pikachu Jet、2025 Calendar、Marathon Starlight Night Run 的 24 個詞。它們來自你提供的辨識落差，尚未被認定為發音錯誤。</p>${button("review-words","複習不確定與待確認字詞")}</div>${reviewPanel()}${weekly()}`);
+    shell(`${U.plan(L.pool({airline:"華航"}),sessions,state)}<div class="card"><h3>今天練 20 分鐘</h3><p>連續完成 ${C.streak(state.daily)} 天 · 今天 ${Object.values(today.tasks).filter(Boolean).length}/4 項</p><p class="sub">分鐘數是時間分配建議，不要求刷滿題數。完成一輪實際練習後即可勾選該項。</p><div class="lab-task-list">${tasks.map(([id,min,label,target])=>`<div><span class="lab-minute">${min} 分</span><b>${label}</b><span>${today.tasks[id]?"✓ 已完成":"待完成"}</span>${recommended&&id==="words"?button("plan-words","練今日文章的詞",`data-id="${recommended.id}"`):recommended&&id==="reading"?button("plan-reading","練今日原稿",`data-id="${recommended.id}"`):id==="review"?button("plan-review","回聽並處理問題"):button("view","開始／繼續",`data-view="${target}"`)}</div>`).join("")}</div>${today.complete?'<p class="lab-success">今天四項訓練已完成。</p>':""}</div><div class="card"><h3>你的起始待確認清單</h3><p>已放入 Pikachu Jet、2025 Calendar、Marathon Starlight Night Run 的 24 個詞。它們來自你提供的辨識落差，尚未被認定為發音錯誤。</p>${button("review-words","複習不確定與待確認字詞")}</div>${U.progress(L.pool({airline:"華航"}),sessions)}${U.coverage(L.pool({airline:"華航"}),sessions,state.sourceReadings)}${reviewPanel()}${weekly()}`);
   }
   function weekly(){
     const rows=C.trends(sessions),max=Math.max(1,...rows.map(x=>x.sessions));
@@ -72,20 +74,20 @@
     return `<p class="sub">${m.wordsPerMinute===null?"語速待確認":`${m.wordsPerMinute} WPM（${esc(m.rateSource)}）`} · ${m.completion===null?"完成度待人工填寫":`自填完成度 ${m.completion}%`} · ${s.audioAnalysis?`${s.audioAnalysis.pauses.length} 個波形安靜區間（不是流暢度評分）`:"停頓待人工確認"}</p>`;
   }
   function reviewPanel(){
-    const now=Date.now(),items=T.reviewItems(sessions,state,now),future=[...Object.values(state.words),...Object.values(state.places)].filter(p=>p.schedule?.due>now&&p.schedule.due<=now+7*T.DAY).length;
+    const now=Date.now(),items=T.reviewItems(sessions,state,now),transfers=T.transferDueItems?.(sessions,now)||[],future=[...Object.values(state.words),...Object.values(state.places)].filter(p=>p.schedule?.due>now&&p.schedule.due<=now+7*T.DAY).length;
     const rows=C.trends(sessions),max=Math.max(1,...sessions.map(s=>T.textMetrics(s.original,s.transcript,s.duration,s.completedWords).wordsPerMinute||0));
-    return `<div class="card"><h3>隔日／每週複習</h3><p>今天到期 ${items.length} 項 · 未來七天 ${future} 個字詞到期。需要重練排隔日，掌握後排 7／14／30／60 天；這是練習提醒，不是發音診斷。</p><div class="lab-actions">${items.slice(0,12).map(item=>{const word=D.words.find(w=>w.id===item.id)||state.wordCards?.[item.id],place=D.places.find(p=>p.id===item.id);return button("review-due",esc(item.title||word?.word||place?.en||"待確認單字"),`data-kind="${item.kind}" data-id="${esc(item.id)}"`);}).join("")||"目前沒有到期題；仍可自行練習。"}</div><details><summary>字數／時間趨勢（僅描述，非 AI 進步分數）</summary><p class="sub">比較不同文章的 WPM 不能直接斷定進步；逐字稿字數與自填字數也不同。重點是回看同題與人工確認問題。</p><table class="lab-trend"><caption>七日字數／時間與安靜區間</caption><thead><tr><th>日期</th><th>平均 WPM</th><th>安靜區間</th></tr></thead><tbody>${rows.map(r=>{const same=sessions.filter(s=>C.dayKey(s.ts)===r.day),rates=same.map(s=>T.textMetrics(s.original,s.transcript,s.duration,s.completedWords).wordsPerMinute).filter(Number.isFinite),avg=rates.length?Math.round(rates.reduce((n,x)=>n+x,0)/rates.length):null,audio=same.filter(s=>s.audioAnalysis);return `<tr><th>${r.day.slice(5)}</th><td>${avg===null?"待確認":`<span class="lab-bar" style="width:${Math.min(70,avg/max*70)}%"></span>${avg}`}</td><td>${audio.length?audio.reduce((n,s)=>n+s.audioAnalysis.pauses.length,0):"待確認"}</td></tr>`;}).join("")}</tbody></table></details></div>`;
+    return `<div class="card"><h3>隔日／每週複習</h3><p>今天到期 ${items.length+transfers.length} 項 · 未來七天 ${future} 個字詞到期。需要重練排隔日，掌握後排 7／14／30／60 天；這是練習提醒，不是發音診斷。</p>${transfers.length?`<h4>隔日換文複驗</h4><div class="lab-actions">${transfers.map(item=>button("issue-transfer",esc(item.title),`data-issue="${esc(item.issueId)}"`)).join("")}</div>`:""}<div class="lab-actions">${items.slice(0,12).map(item=>{const word=D.words.find(w=>w.id===item.id)||state.wordCards?.[item.id],place=D.places.find(p=>p.id===item.id);return button("review-due",esc(item.title||word?.word||place?.en||"待確認單字"),`data-kind="${item.kind}" data-id="${esc(item.id)}"`);}).join("")||"目前沒有到期題；仍可自行練習。"}</div><details><summary>字數／時間趨勢（僅描述，非 AI 進步分數）</summary><p class="sub">比較不同文章的 WPM 不能直接斷定進步；逐字稿字數與自填字數也不同。重點是回看同題與人工確認問題。</p><table class="lab-trend"><caption>七日字數／時間與安靜區間</caption><thead><tr><th>日期</th><th>平均 WPM</th><th>安靜區間</th></tr></thead><tbody>${rows.map(r=>{const same=sessions.filter(s=>C.dayKey(s.ts)===r.day),rates=same.map(s=>T.textMetrics(s.original,s.transcript,s.duration,s.completedWords).wordsPerMinute).filter(Number.isFinite),avg=rates.length?Math.round(rates.reduce((n,x)=>n+x,0)/rates.length):null,audio=same.filter(s=>s.audioAnalysis);return `<tr><th>${r.day.slice(5)}</th><td>${avg===null?"待確認":`<span class="lab-bar" style="width:${Math.min(70,avg/max*70)}%"></span>${avg}`}</td><td>${audio.length?audio.reduce((n,s)=>n+s.audioAnalysis.pauses.length,0):"待確認"}</td></tr>`;}).join("")}</tbody></table></details></div>`;
   }
   function exam(){
     const q=currentQuestion(),d=state.draft,items=filteredQuestions();
     const busy=active()?" disabled":"";
-    shell(`<div class="card lab-exam-settings"><h3>華航原稿朗讀模擬</h3><p class="sub">只使用已收錄的華航雜誌、新聞稿與廣播詞，不使用自製模擬稿。依原稿篇幅粗分難度，不為湊字數改寫；廣播歡迎詞保持完整。</p><div class="lab-fields"><label>航空公司<select id="labAirline" disabled>${options(['華航'],'華航')}</select></label><label>材料分類<select id="labExamKind"${busy}>${options([['','全部'],...['雜誌','新聞稿','廣播詞'].map(k=>[k,k])],config().kind||'')}</select></label><label>難度（依篇幅粗分）<select id="labDifficulty"${busy}>${options([['','全部'],...D.levels],config().difficulty||'')}</select></label><label>預覽模式<select id="labPreview"${busy}>${options([[0,'立即朗讀'],[15,'15 秒準備'],[30,'30 秒準備'],[60,'60 秒準備']],config().preview)}</select></label><label>朗讀時限<select id="labLimit"${busy}>${options([[0,'不限時'],[30,'30 秒'],[60,'60 秒'],[90,'90 秒'],[120,'120 秒'],[180,'180 秒']],config().limit||0)}</select></label></div><label>指定原稿（${items.length} 篇）<select id="labQuestion"${busy}>${options(items.map(x=>[x.id,`${x.kind} · ${x.title} · ${x.words} 字`]),q?.id)}</select></label><div class="lab-actions">${button('choose','載入選定原稿',busy||(!items.length?' disabled':''))}${button('random','隨機抽華航原稿',busy||(!items.length?' disabled':''))}</div>${!items.length?'<p>此篩選沒有原稿，請選全部難度或更換分類；不會用自製稿補題。</p>':''}</div>${d?`<div class="card"><h3>${esc(d.title)}</h3><p class="lab-badge">${esc(q?d.kind+" · 沿用原站材料，非官方面試題":"封存紀錄 · 不再提供抽題或重練")}</p><p class="sub">${esc(q?.topic||"已保存原稿")} · ${esc(d.difficulty)} · ${C.tokens(d.original).length} 個字詞 · 建立日期 ${D.date}</p><p class="sub">${esc(d.source||q?.source||"保存時的題目原稿")} ${link(d.sourceUrl||q?.sourceUrl||"https://github.com/xciv0904/fly-room-xciv","資料來源")}</p><div class="lab-countdown"><strong id="labTimer" role="timer" aria-label="練習計時">${phase==="preparing"?Math.max(0,Math.ceil((deadline-Date.now())/1000))+" 秒準備":elapsed+" 秒"}</strong><progress id="labPrepProgress" max="${Number(config().preview)||1}" value="0"${phase!=="preparing"?" hidden":""}>準備倒數</progress><progress id="labReadProgress" max="${config().limit||1}" value="${elapsed}"${!config().limit?' hidden':""}>朗讀時間進度</progress></div>${phase==="setup"?`<p>內文將在開始準備時顯示。</p>${button("prepare",Number(config().preview)?"開始準備倒數":"顯示原稿，立即朗讀")}`:`<div class="readblock en lab-original" id="labOriginal">${esc(d.original)}</div>`}<div class="lab-actions">${button("record","🔴 開始錄音",(!q||phase==="setup"||active())?" disabled":"")}${button("manual-start","開始計時（不錄音）",(!q||phase==="setup"||active())?" disabled":"")}${button("stop",phase==="preparing"?"取消倒數":"停止並自動保存",active()&&!starting?"":" disabled")}${q?button("retry","重新練這一題",busy):""}</div><label class="lab-check"><input id="labRecognition" type="checkbox"${config().recognition!==false?" checked":""}${busy}>自動產生逐字稿（預設開啟；可能將音訊送交瀏覽器的辨識服務，可關閉）</label><p class="sub">原稿、時間與錄音自動記錄，不必勾選逐字稿或另按儲存。不因停頓或辨識停止結束；設定時限到達才會停止，需完整自由朗讀可選「不限時」。錄音每秒嘗試保存檢查點，但系統強制關閉仍可能損失最後片段。請保持螢幕開啟、完成後按停止。錄音檔留在此裝置；若啟用逐字稿，音訊可能送交辨識服務。</p><div id="labPlayback"></div><label>匯入裝置錄音（上限 50 MB）<input id="labAudioFile" type="file" accept="audio/*,.webm,.m4a,.mp3,.wav,.ogg"${busy}></label><label>朗讀時間（秒，可更正匯入音檔的時間）<input id="labDuration" type="number" min="0" max="86400" value="${d.duration||0}"${busy}></label></div>${phase==="review"?A.panel(d,busy):""}<div class="card"><h3>原稿與逐字稿比對</h3><p class="section-note">貼上外部辨識結果或自行聽寫。不會自動上傳匯入的音檔；沒有辨識服務仍可完成練習。</p><label>我的英文逐字稿<textarea id="labTranscript" rows="6" maxlength="20000"${active()?" readonly":""}>${esc(d.transcript)}</textarea></label><div class="lab-actions">${button("analyze",active()?"停止並比對原稿":"比對原稿與逐字稿",starting?" disabled":"")}</div><p class="sub">文字相似度不是發音品質，也不是航空公司面試分數。疑似差異需回聽後由你確認。重新比對會重設本輪尚未儲存的差異確認。</p><div id="labComparison">${d.analyzed?comparison():""}</div><label>個人練習筆記<textarea id="labNotes" rows="3" maxlength="5000">${esc(d.notes)}</textarea></label>${button("save-session",active()?"停止並儲存錄音與紀錄":d.savedId?"更新這次練習紀錄":"儲存這次練習",starting?" disabled":"")}</div>`:'<div class="card"><p>先載入指定題目或隨機抽題。原稿與作答草稿會保留到重新整理之後。</p></div>'}`);
+    shell(`<div class="card lab-exam-settings"><h3>華航原稿朗讀模擬</h3><p class="sub">使用已收錄的華航完整原稿；延伸閱讀另於文章學習提供。篇幅與文字負擔分開呈現，抽題優先未練原文，再補足主題與已確認弱點。</p><div class="lab-fields"><label>航空公司<select id="labAirline" disabled>${options(['華航'],'華航')}</select></label><label>材料分類<select id="labExamKind"${busy}>${options([['','全部'],...['雜誌','新聞稿','廣播詞'].map(k=>[k,k])],config().kind||'')}</select></label><label>篇幅標籤（依字數）<select id="labDifficulty"${busy}>${options([['','全部'],...D.levels],config().difficulty||'')}</select></label>${U.topicSelect("labExamTopic",config().topic||"",busy)}<label>預覽模式<select id="labPreview"${busy}>${options([[0,'立即朗讀'],[15,'15 秒準備'],[30,'30 秒準備'],[60,'60 秒準備']],config().preview)}</select></label><label>朗讀時限<select id="labLimit"${busy}>${options([[0,'不限時'],[30,'30 秒'],[60,'60 秒'],[90,'90 秒'],[120,'120 秒'],[180,'180 秒']],config().limit||0)}</select></label></div><label>指定原稿（${items.length} 篇）<select id="labQuestion"${busy}>${options(items.map(x=>[x.id,`${x.kind} · ${x.title} · ${x.words} 字`]),q?.id)}</select></label><div class="lab-actions">${button('choose','載入選定原稿',busy||(!items.length?' disabled':''))}${button('random','依缺口安排原稿',busy||(!items.length?' disabled':''))}</div>${!items.length?'<p>此篩選沒有原稿，請選全部難度或更換分類；不會用自製稿補題。</p>':''}</div>${d?`<div class="card"><h3>${esc(d.title)}</h3><p class="lab-badge">${esc(q?d.kind+" · 沿用原站材料，非官方面試題":"封存紀錄 · 不再提供抽題或重練")}</p><p class="sub">${esc((q?.topics||[]).map(U.topicLabel).join("／")||"已保存原稿")} · ${esc(d.difficulty)} · ${C.tokens(d.original).length} 個字詞</p><p class="sub">${esc(d.source||q?.source||"保存時的題目原稿")} ${link(d.sourceUrl||q?.sourceUrl||"https://github.com/xciv0904/fly-room-xciv","資料來源")}</p>${q?U.source(q):""}${q&&!active()?U.burden(q,phase!=="setup"):""}${d.recommendationReason?`<p class="lab-reason">安排原因：${esc(d.recommendationReason)}</p>`:""}<div class="lab-countdown"><strong id="labTimer" role="timer" aria-label="練習計時">${phase==="preparing"?Math.max(0,Math.ceil((deadline-Date.now())/1000))+" 秒準備":elapsed+" 秒"}</strong><progress id="labPrepProgress" max="${Number(config().preview)||1}" value="0"${phase!=="preparing"?" hidden":""}>準備倒數</progress><progress id="labReadProgress" max="${config().limit||1}" value="${elapsed}"${!config().limit?' hidden':""}>朗讀時間進度</progress></div>${phase==="setup"?`<p>內文將在開始準備時顯示。</p>${button("prepare",Number(config().preview)?"開始準備倒數":"顯示原稿，立即朗讀")}`:`<div class="readblock en lab-original" id="labOriginal">${esc(d.original)}</div>`}<div class="lab-actions">${button("record","🔴 開始錄音",(!q||phase==="setup"||active())?" disabled":"")}${button("manual-start","開始計時（不錄音）",(!q||phase==="setup"||active())?" disabled":"")}${button("stop",phase==="preparing"?"取消倒數":"停止並自動保存",active()&&!starting?"":" disabled")}${q?button("retry","重新練這一題",busy):""}</div><label class="lab-check"><input id="labRecognition" type="checkbox"${config().recognition!==false?" checked":""}${busy}>自動產生逐字稿（預設開啟；可能將音訊送交瀏覽器的辨識服務，可關閉）</label><p class="sub">原稿、時間與錄音自動記錄，不必勾選逐字稿或另按儲存。不因停頓或辨識停止結束；設定時限到達才會停止，需完整自由朗讀可選「不限時」。錄音每秒嘗試保存檢查點，但系統強制關閉仍可能損失最後片段。請保持螢幕開啟、完成後按停止。錄音檔留在此裝置；若啟用逐字稿，音訊可能送交辨識服務。</p><div id="labPlayback"></div><label>匯入裝置錄音（上限 50 MB）<input id="labAudioFile" type="file" accept="audio/*,.webm,.m4a,.mp3,.wav,.ogg"${busy}></label><label>朗讀時間（秒，可更正匯入音檔的時間）<input id="labDuration" type="number" min="0" max="86400" value="${d.duration||0}"${busy}></label></div>${phase==="review"?A.panel(d,busy)+U.workflow(d,sessions):""}<div class="card"><h3>原稿與逐字稿比對</h3><p class="section-note">貼上外部辨識結果或自行聽寫。不會自動上傳匯入的音檔；沒有辨識服務仍可完成練習。</p><label>我的英文逐字稿<textarea id="labTranscript" rows="6" maxlength="20000"${active()?" readonly":""}>${esc(d.transcript)}</textarea></label><div class="lab-actions">${button("analyze",active()?"停止並比對原稿":"比對原稿與逐字稿",starting?" disabled":"")}</div><p class="sub">文字相似度不是發音品質，也不是航空公司面試分數。疑似差異需回聽後由你確認。重新比對會更新辨識差異，保留已確認問題與歷史標記。</p><div id="labComparison">${d.analyzed?comparison():""}</div><label>個人練習筆記<textarea id="labNotes" rows="3" maxlength="5000">${esc(d.notes)}</textarea></label>${button("save-session",active()?"停止並儲存錄音與紀錄":d.savedId?"更新這次練習紀錄":"儲存這次練習",starting?" disabled":"")}</div>`:'<div class="card"><p>先載入指定題目或依主題涵蓋安排原稿。原稿與作答草稿會保留到重新整理之後。</p></div>'}`);
     if(blob&&el("labPlayback"))recorder.play(el("labPlayback"),blob);
   }
   function comparison(){
     const d=draft(),result=C.compare(d.original,d.transcript);
     const labels={replace:"替換詞",missing:"疑似遺漏",extra:"多餘詞"};
-    return `<p class="lab-badge">文字相似度 ${result.similarity}% · 僅供原稿辨識比對</p><div class="lab-diff" aria-label="逐詞差異">${result.ops.map(op=>op.type==="equal"?`<span>${esc(op.original)}</span>`:`<span class="lab-diff-${op.type}"><b>${labels[op.type]}</b> ${esc(op.original||"∅")} → ${esc(op.heard||"∅")}${op.ending?"（疑似字尾差異）":op.proper?"（疑似專有名詞錯辨）":""}</span>`).join(" ")}</div><h4>回聽後確認實際問題</h4><p class="sub">未勾選的辨識落差不會算作你的發音錯誤。重音、流暢度、語調只接受人工標記。</p>${d.errors.map((e,i)=>`<div class="lab-error-row"><label class="lab-check"><input type="checkbox" data-lab-error="${i}" data-field="confirmed"${e.confirmed?" checked":""}>確認這是我的實際問題：${esc(e.original||"∅")} → ${esc(e.heard||"∅")}</label><label>分類<select data-lab-error="${i}" data-field="category">${options(Object.entries(C.categories),e.category)}</select></label><label>更正或回聽備註<input data-lab-error="${i}" data-field="note" value="${esc(e.note||"")}" maxlength="1000"></label></div>`).join("")}<details><summary>人工加入重音、流暢度、語調或其他問題</summary><div class="body"><label>單字／要練的片段<input id="labManualWord" maxlength="150"></label><label>分類<select id="labManualCategory">${options(Object.entries(C.categories),"stress")}</select></label><label>自己的觀察<input id="labManualNote" maxlength="1000"></label>${button("add-error","加入已確認問題")}</div></details>`;
+    return `<p class="lab-badge">文字相似度 ${result.similarity}% · 僅供原稿辨識比對</p><div class="lab-diff" aria-label="逐詞差異">${result.ops.map(op=>op.type==="equal"?`<span>${esc(op.original)}</span>`:`<span class="lab-diff-${op.type}"><b>${labels[op.type]}</b> ${esc(op.original||"∅")} → ${esc(op.heard||"∅")}${op.ending?"（疑似字尾差異）":op.proper?"（疑似專有名詞錯辨）":""}</span>`).join(" ")}</div><h4>回聽後確認實際問題</h4><p class="sub">未勾選的辨識落差不會算作你的發音錯誤。重音、流暢度、語調只接受人工標記。</p>${d.errors.map((e,i)=>`<div class="lab-error-row"><label class="lab-check"><input type="checkbox" data-lab-error="${i}" data-field="confirmed"${e.confirmed?" checked":""}>確認這是我的實際問題：${esc(e.original||"∅")} → ${esc(e.heard||"∅")}${e.historical?"（保留的已確認標記）":""}</label><label>分類<select data-lab-error="${i}" data-field="category">${options(Object.entries(C.categories),e.category)}</select></label><label>更正或回聽備註<input data-lab-error="${i}" data-field="note" value="${esc(e.note||"")}" maxlength="1000"></label></div>`).join("")}<details><summary>人工加入重音、流暢度、語調或其他問題</summary><div class="body"><label>單字／要練的片段<input id="labManualWord" maxlength="150"></label><label>分類<select id="labManualCategory">${options(Object.entries(C.categories),"stress")}</select></label><label>自己的觀察<input id="labManualNote" maxlength="1000"></label>${button("add-error","加入已確認問題")}</div></details>`;
   }
   async function prepare(){
     if(active())return;
@@ -171,10 +173,10 @@
   function historyView(){
     const confirmed=sessions.flatMap(s=>s.errors.filter(e=>e.confirmed).map(e=>({...e,session:s}))),ranking={};
     for(const e of confirmed){const key=e.original||e.heard||"未指定單字";ranking[key]=(ranking[key]||0)+1;}
-    shell(`${weekly()}${reviewPanel()}<div class="card"><h3>個人弱點與錯誤複習</h3><p class="sub">排行只計入你人工確認的問題。重音、流暢度及語調沒有自動音訊評分。</p><div class="lab-category-counts">${Object.entries(C.categories).map(([key,label])=>`<span>${label}：${confirmed.filter(e=>e.category===key).length}</span>`).join("")}</div><h4>常見待修正字詞</h4><div class="chips">${Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([word,n])=>`<span class="chip">${esc(word)} · ${n} 次</span>`).join("")||"尚無人工確認問題。"}</div>${button("review-words","進入待確認／重練單字")}${confirmed.slice(-20).reverse().map(e=>`<div class="lab-review-item"><b>${esc(e.original||e.heard||"本輪朗讀")}</b> · ${esc(C.categories[e.category])}<p>${esc(e.note||"回聽原錄音並確認修正方式。")}</p>${button("review-session","回看原稿並修正",`data-id="${esc(e.session.id)}"`)}</div>`).join("")}</div><div class="card"><h3>我的朗讀紀錄（${sessions.length} 筆）</h3>${sessions.length?sessions.slice().sort((a,b)=>b.ts-a.ts).map(s=>`<details class="lab-history"><summary>${esc(s.title)} · ${C.dayKey(s.ts)} · ${s.duration} 秒</summary><div class="body"><p>${esc(s.difficulty)} · ${s.errors.filter(e=>e.confirmed).length} 個已確認問題${s.reviewed?" · 已回聽複習":""}</p><div class="lab-columns"><div><h4>保存時的原稿</h4><p class="readblock en">${esc(s.original)}</p></div><div><h4>我的逐字稿</h4><p class="readblock en">${esc(s.transcript||"未提供")}</p></div></div>${sessionMetrics(s)}<p>個人筆記：${esc(s.notes||"尚無")}</p><div class="lab-actions">${button("play-session","載入錄音回聽",`data-id="${esc(s.id)}"`)}${button("review-session","更正／確認問題",`data-id="${esc(s.id)}"`)}${button("reviewed-session","記錄已回聽修正",`data-id="${esc(s.id)}"`)}${button("delete-audio","只刪除這筆錄音",`data-id="${esc(s.id)}"`)}${button("delete-session","刪除整筆紀錄",`data-id="${esc(s.id)}"`)}</div><div data-lab-audio="${esc(s.id)}"></div></div></details>`).join(""):"<p>還沒有儲存的練習。完成朗讀後按「儲存這次練習」。</p>"}</div><div class="card"><h3>備份與個人資料</h3><p class="sub">這是獨立的朗讀實驗室備份；原站備份功能與資料保持原樣。備份包含已儲存紀錄，尚未儲存的草稿不包含。</p><label class="lab-check"><input id="labExportAudio" type="checkbox">匯出時包含已儲存的朗讀錄音（檔案可能較大）</label><div class="lab-actions">${button("export","匯出實驗室紀錄")}</div><label>匯入實驗室備份（上限 100 MB）<input type="file" id="labImport" accept="application/json,.json"></label><p class="sub">匯入會合併紀錄，不取代目前作答草稿或原站資料。</p>${button("clear-lab","刪除實驗室全部個人資料")}</div>`);
+    shell(`${U.progress(L.pool({airline:"華航"}),sessions)}${U.coverage(L.pool({airline:"華航"}),sessions,state.sourceReadings)}${U.issueList(sessions,issueLimit)}${weekly()}${reviewPanel()}<div class="card"><h3>歷史問題與錯誤複習</h3><p class="sub">排行只計入你人工確認的問題。重音、流暢度及語調沒有自動音訊評分。</p><div class="lab-category-counts">${Object.entries(C.categories).map(([key,label])=>`<span>${label}：${confirmed.filter(e=>e.category===key).length}</span>`).join("")}</div><h4>常見待修正字詞</h4><div class="chips">${Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([word,n])=>`<span class="chip">${esc(word)} · ${n} 次</span>`).join("")||"尚無人工確認問題。"}</div>${button("review-words","進入待確認／重練單字")}${confirmed.slice(-20).reverse().map(e=>`<div class="lab-review-item"><b>${esc(e.original||e.heard||"本輪朗讀")}</b> · ${esc(C.categories[e.category])}<p>${esc(e.note||"回聽原錄音並確認修正方式。")}</p>${button("review-session","回看原稿並修正",`data-id="${esc(e.session.id)}"`)}</div>`).join("")}</div><div class="card"><h3>我的朗讀紀錄（${sessions.length} 筆）</h3>${sessions.length?sessions.slice().sort((a,b)=>b.ts-a.ts).map(s=>`<details class="lab-history"><summary>${esc(s.title)} · ${C.dayKey(s.ts)} · ${s.duration} 秒</summary><div class="body"><p>${esc(s.difficulty)} · ${s.errors.filter(e=>e.confirmed).length} 個已確認問題${s.reviewed?" · 已回聽複習":""}</p><div class="lab-columns"><div><h4>保存時的原稿</h4><p class="readblock en">${esc(s.original)}</p></div><div><h4>我的逐字稿</h4><p class="readblock en">${esc(s.transcript||"未提供")}</p></div></div>${sessionMetrics(s)}<p>個人筆記：${esc(s.notes||"尚無")}</p><div class="lab-actions">${button("play-session","載入錄音回聽",`data-id="${esc(s.id)}"`)}${button("review-session","更正／確認問題",`data-id="${esc(s.id)}"`)}${button("reviewed-session","記錄已回聽",`data-id="${esc(s.id)}"`)}${button("delete-audio","只刪除這筆錄音",`data-id="${esc(s.id)}"`)}${button("delete-session","刪除整筆紀錄",`data-id="${esc(s.id)}"`)}</div><div data-lab-audio="${esc(s.id)}"></div></div></details>`).join(""):"<p>還沒有儲存的練習。完成朗讀後按「儲存這次練習」。</p>"}</div><div class="card"><h3>備份與個人資料</h3><p class="sub">這是獨立的朗讀實驗室備份；原站備份功能與資料保持原樣。備份包含已儲存紀錄，尚未儲存的草稿不包含。</p><label class="lab-check"><input id="labExportAudio" type="checkbox">匯出時包含已儲存的朗讀錄音（檔案可能較大）</label><div class="lab-actions">${button("export","匯出實驗室紀錄")}</div><label>匯入實驗室備份（上限 100 MB）<input type="file" id="labImport" accept="application/json,.json"></label><p class="sub">匯入會合併紀錄，不取代目前作答草稿或原站資料。</p>${button("clear-lab","刪除實驗室全部個人資料")}</div>`);
   }
   function render(){
-    S.speaker.stop();recorder.release();A.release();({home,learn:()=>shell(L.markup(state.learning)),exam,words,places,history:historyView}[view]||home)();
+    S.speaker.stop();recorder.release();A.release();({home,learn:()=>shell(L.markup(state.learning,state.sourceReadings)),exam,words,places,history:historyView}[view]||home)();
     if(view==="words"){
       const w=wordPool()[wordIndex],holder=el("labSamplePlayback");
       if(w&&holder)DB.get("audio",`word-${w.id}`).then(b=>{if(b&&holder.isConnected)recorder.play(holder,b);}).catch(error=>notify(error.message));
@@ -188,12 +190,43 @@
   }
   async function sampleStart(mode){
     if(active())throw Error("請先停止目前錄音。");
-    starting=true;try{await recorder.start();sampleMode=mode;attempted=true;notify("嘗試錄音中，請完成後按停止錄音。");const stop=root.querySelector('[data-lab-action="sample-stop"]');if(stop)stop.disabled=false;}finally{starting=false;}
+    starting=true;root.querySelectorAll('input,select,textarea').forEach(node=>{if(!node.disabled){node.disabled=true;node.dataset.sampleLocked='true';}});
+    try{await recorder.start();sampleMode=mode;attempted=true;notify("嘗試錄音中，請完成後按停止錄音。");const stop=root.querySelector('[data-lab-action="sample-stop"]');if(stop)stop.disabled=false;}finally{starting=false;if(!sampleMode)unlockSampleInputs();}
   }
+  function unlockSampleInputs(){root.querySelectorAll('[data-sample-locked]').forEach(node=>{node.disabled=false;delete node.dataset.sampleLocked;});}
   async function sampleStop(){
-    const result=await recorder.stop();sampleMode="";
-    if(result){const w=wordPool()[wordIndex];if(w)await DB.put("audio",`word-${w.id}`,result.blob);const holder=el("labSamplePlayback");if(holder)recorder.play(holder,result.blob);}
+    const mode=sampleMode,result=await recorder.stop();sampleMode="";unlockSampleInputs();
+    if(result){const w=wordPool()[wordIndex];if(mode==='word'&&w)await DB.put("audio",`word-${w.id}`,result.blob);const holder=el("labSamplePlayback");if(holder)recorder.play(holder,result.blob);}
     attempted=true;const reveal=root.querySelector('[data-lab-action="word-reveal"]');if(reveal)reveal.disabled=false;notify("嘗試已錄下，可回聽後揭曉讀法。");
+  }
+  function selectedIssueIds(){
+    const d=draft(),confirmed=d.errors.map((e,i)=>({e,id:T.issueId({id:d.savedId,questionId:d.questionId},e,i)})).filter(x=>x.e.confirmed);
+    return (d.focusIssueIds||confirmed.slice(0,3).map(x=>x.id)).filter(id=>confirmed.some(x=>x.id===id)).slice(0,3);
+  }
+  async function retryCurrent(){
+    const q=currentQuestion(),d=draft();if(!q)throw Error('舊模擬稿已封存，請重新抽取華航原稿。');
+    if(d.started||d.duration||blob)await saveCheckpoint(blob);
+    const focus=selectedIssueIds(),targets=focus.length?focus:(d.targetIssueIds||[]);
+    const issue=T.issueHistory(sessions).find(i=>i.id===targets[0]);
+    const practiceType=issue&&M.passageKey(q)!==M.passageKey(issue.session)?'transfer':d.savedId?'retry':'initial';
+    return freshQuestion(q,{baselineId:issue?.sessionId||d.savedId||'',practiceType,targetIssueIds:targets});
+  }
+  async function practicePhrases(){
+    const d=draft();if(d.started||d.duration||blob)await saveCheckpoint(blob);
+    const ids=selectedIssueIds();if(!ids.length)throw Error('先選擇 1–3 個已確認問題。');
+    const issues=T.issueHistory(sessions).filter(i=>ids.includes(i.id));
+    const sentences=currentQuestion()?.sentences||d.original.split(/(?<=[.!?])\s+/);
+    const holder=el('labPhrasePractice');if(!holder)return;
+    holder.innerHTML=`<h4>局部練習</h4><p class="sub">先讀原句、核對目標詞，再試錄回聽。局部試錄可下載；完整重錄另存為一筆歷史紀錄。</p>${issues.map(i=>{const phrase=sentences.find(s=>T.containsPhrase(s,i.original))||i.original||i.note;return `<div class="lab-phrase"><p lang="en">${esc(phrase)}</p><p>${esc(i.note||'留意你剛才標記的問題。')}</p>${button('say','聽裝置合成音',`data-text="${esc(phrase)}"`)}</div>`;}).join('')}<div class="lab-actions">${button('sample-record','錄下局部試讀','data-mode="phrase"')}${button('sample-stop','停止局部試錄','disabled')}</div><div id="labSamplePlayback"></div>`;
+    holder.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+  async function transferIssue(id){
+    const issue=T.issueHistory(sessions).find(i=>i.id===id);if(!issue)throw Error('找不到這個已確認問題。');
+    const candidates=L.examPool().filter(q=>q.id!==issue.questionId&&M.passageKey(q)!==M.passageKey(issue.session)&&T.containsPhrase(q.text,issue.original));
+    const next=M.recommend(candidates,sessions)[0];
+    if(!next)throw Error('目前完整原稿中沒有另一篇包含這個完整片段；保留「換文待複驗」，可先做同題重錄或練其他問題。');
+    await freshQuestion(next.article,{baselineId:issue.sessionId,practiceType:'transfer',targetIssueIds:[id]});
+    state.draft.recommendationReason=`換文複驗「${issue.original}」；使用另一篇含相同片段的原文。`;await persist();render();
   }
   async function saveSession(){
     if(active())await stopReading();const d=draft();
@@ -208,7 +241,7 @@
   async function exportBackup(){
     const audio=[];
     if(el("labExportAudio").checked){let total=0;for(const s of sessions){const b=await DB.get("audio",s.id);if(!b)continue;total+=b.size;if(total>60*1024*1024)throw Error("音檔合計超過 60 MB，請取消包含錄音，或先刪除不需要的音檔。");const data=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(b);});audio.push({id:s.id,data});}}
-    const file=new Blob([JSON.stringify({kind:"fly-room-reading-lab",version:1,exportedAt:new Date().toISOString(),state:{words:state.words,wordCards:state.wordCards||{},places:state.places,favorites:state.favorites,daily:state.daily},sessions,audio})],{type:"application/json"});
+    const file=new Blob([JSON.stringify({kind:"fly-room-reading-lab",version:1,exportedAt:new Date().toISOString(),state:{words:state.words,wordCards:state.wordCards||{},places:state.places,favorites:state.favorites,daily:state.daily,sourceReadings:state.sourceReadings||{}},sessions,audio})],{type:"application/json"});
     const a=document.createElement("a"),url=URL.createObjectURL(file);a.href=url;a.download=`fly-room-reading-lab-${C.dayKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify("已產生備份檔；請確認瀏覽器下載完成。");
   }
   async function importBackup(file){
@@ -227,6 +260,19 @@
   }
   async function act(action,node){
     if(action==="view")return changeView(node.dataset.view);
+    if(action==='more-issues'){issueLimit+=20;render();return;}
+    if(action==='load-frequency'){await L.loadDictionary();render();notify('詞頻資料已載入；可展開文字負擔查看。');return;}
+    if(action==='topic-study'){state.learning={...state.learning,airline:'華航',kind:'',topic:node.dataset.topic,articleId:''};return changeView('learn');}
+    if(action==='source-study'){state.learning={...state.learning,airline:'華航',kind:'',topic:'',articleId:node.dataset.id};state.sourceReadings||={};state.sourceReadings[node.dataset.id]={...state.sourceReadings[node.dataset.id],openedAt:Date.now()};return changeView('learn');}
+    if(action==='source-complete'){const article=L.allArticles().find(a=>a.id===node.dataset.id&&a.studyOnly);if(!article)throw Error('找不到這篇延伸閱讀。');state.sourceReadings||={};state.sourceReadings[article.id]={...state.sourceReadings[article.id],completedAt:Date.now()};await persist();render();notify('已記錄原文閱讀與自測；正式錄音練習另計。');return;}
+    if(action==='plan-words'){await V.load(state);wordFilters={airline:'華航',article:node.dataset.id};reviewOnly=false;wordIndex=0;revealed=false;attempted=false;return changeView('words');}
+    if(action==='plan-reading'){const q=L.examPool().find(q=>q.id===node.dataset.id);if(!q)throw Error('原稿尚未載入，請重試。');const suggestion=M.recommend([q],sessions)[0];await freshQuestion(q);state.draft.recommendationReason=suggestion?.reasons.join('；')||'今日原稿練習';await persist();render();return;}
+    if(action==='plan-review'){await changeView('history');el('readingLabRoot')?.scrollIntoView();root.querySelector('.lab-issue-list')?.scrollIntoView({block:'start',behavior:'smooth'});return;}
+    if(action==='issue-retry'){const issue=T.issueHistory(sessions).find(i=>i.id===node.dataset.issue);if(!issue)throw Error('找不到原始紀錄。');await loadSession(issue.sessionId);draft().focusIssueIds=[issue.id];await persist();render();return practicePhrases();}
+    if(action==='issue-transfer')return transferIssue(node.dataset.issue);
+    if(action==='practice-phrases')return practicePhrases();
+    if(action==='save-review'){const d=draft();if(!T.hasPracticed(sessionRecord(d)))throw Error('請先完成這輪朗讀，再回聽與記錄複驗結果。');await saveCheckpoint(blob);await markTask('review');render();notify('已儲存人工複驗結果；前次紀錄與錄音保留。');return;}
+    if(action==='play-comparison'){const audio=await DB.get('audio',node.dataset.id);if(!audio)throw Error('前次未錄音或音檔已刪除；原稿及自評仍保留。');recorder.play(el(node.dataset.holder),audio);return;}
     if(action==="learn-random"){const items=L.pool(state.learning);if(!items.length)throw Error("此分類沒有文章");state.learning.articleId=items[Math.floor(Math.random()*items.length)].id;await persist();render();return;}
     if(action==="learn-word")return L.word(node.dataset.word,el("labLearnWord"));
     if(action==="learn-stop"){S.speaker.stop();root.querySelectorAll('.lab-speaking').forEach(p=>p.classList.remove('lab-speaking'));speechStatus("已停止播放，後續句子不會繼續排隊。");return;}
@@ -257,22 +303,22 @@
       await V.load(state);reviewOnly=false;wordFilters={};wordIndex=Math.max(0,wordPool().findIndex(w=>w.id===node.dataset.id));revealed=false;attempted=false;return changeView("words");
     }
     if(action==="choose"||action==="random"){
-      await V.load(state);const all=filteredQuestions(),seen=new Set(sessions.map(s=>s.questionId)),unseen=all.filter(q=>!seen.has(q.id)&&q.id!==state.draft?.questionId),other=all.filter(q=>q.id!==state.draft?.questionId),items=unseen.length?unseen:other.length?other:all;
-      const q=action==="choose"?all.find(q=>q.id===el("labQuestion").value):items[Math.floor(Math.random()*items.length)];
-      if(q)return freshQuestion(q);throw Error("沒有符合條件的題目。");
+      await V.load(state);const all=filteredQuestions(),suggestion=M.recommend(all,sessions,{}, {draftId:state.draft?.questionId,random:Math.random})[0];
+      const q=action==="choose"?all.find(q=>q.id===el("labQuestion").value):suggestion?.article;
+      if(q){await freshQuestion(q);if(action==="random"){state.draft.recommendationReason=suggestion.reasons.join("；");await persist();render();}return;}throw Error("沒有符合條件的題目。");
     }
     if(action==="prepare")return prepare();
     if(action==="record")return beginReading(true);
     if(action==="manual-start")return beginReading(false);
     if(action==="stop")return stopReading();
-    if(action==="retry"){const q=currentQuestion();if(!q)throw Error("舊模擬稿已封存，請重新抽取華航原稿。");return freshQuestion(q);}
+    if(action==="retry")return retryCurrent();
     if(action==="analyze"){
       if(active())await stopReading();const d=draft();if(!d.transcript.trim()){notify("錄音已保存，但沒有取得逐字稿。請貼上辨識文字或自行聽寫後再比對。");el("labTranscript")?.focus({preventScroll:true});el("labTranscript")?.scrollIntoView({block:"center"});return;}
-      const result=C.compare(d.original,d.transcript);d.errors=result.ops.filter(x=>x.type!=="equal").map(x=>({...x,confirmed:false,note:""}));d.analyzed=true;phase="review";await persist();render();return;
+      const result=C.compare(d.original,d.transcript);d.errors=C.reconcileErrors(d.errors.map((e,i)=>({...e,id:T.issueId({id:d.savedId,questionId:d.questionId},e,i)})),result.ops.filter(x=>x.type!=="equal").map(x=>({...x,id:uid(),confirmed:false,note:""})));d.analyzed=true;phase="review";await persist();render();return;
     }
     if(action==="add-error"){
       const word=el("labManualWord").value.trim(),note=el("labManualNote").value.trim();if(!word&&!note)throw Error("請填入要練的字詞或回聽觀察。");
-      draft().errors.push({original:word,heard:"",category:el("labManualCategory").value,confirmed:true,note});await persist();render();return;
+      draft().errors.push({id:uid(),original:word,heard:"",category:el("labManualCategory").value,confirmed:true,note});await saveCheckpoint(blob);render();return;
     }
     if(action==="save-session")return saveSession();
     if(action==="say"){
@@ -315,7 +361,7 @@
       const b=await DB.get("audio",node.dataset.id);if(!b)throw Error("這筆紀錄沒有錄音檔，或錄音已刪除；仍可查看原稿及逐字稿。");recorder.play(root.querySelector(`[data-lab-audio="${CSS.escape(node.dataset.id)}"]`),b);return;
     }
     if(action==="reviewed-session"){
-      const s=sessions.find(s=>s.id===node.dataset.id);s.reviewed=true;s.reviewSchedule=T.schedule(s.reviewSchedule,"mastered");await DB.put("sessions",s.id,s);await markTask("review");notice="已記錄回聽修正；下次依間隔複習提醒。";render();return;
+      const s=sessions.find(s=>s.id===node.dataset.id);s.reviewed=true;s.reviewSchedule=T.schedule(s.reviewSchedule,"mastered");await DB.put("sessions",s.id,s);await markTask("review");notice="已記錄回聽；問題仍保留，完成重錄複驗後再記錄結果。";render();return;
     }
     if(action==="delete-audio"){
       if(!confirm("只刪除這筆錄音？刪除後無法還原，原稿與筆記會保留。"))return;await DB.remove("audio",node.dataset.id);if(state.draft?.savedId===node.dataset.id){blob=null;await DB.remove("audio","draft-reading");}recorder.release();notify("已刪除此筆錄音，原稿及逐字稿仍保留。");return;
@@ -345,7 +391,7 @@
     if(node.id==="labPlaceSearch"){
       const caret=node.selectionStart;placeSearch=node.value;placeIndex=0;placeRevealed=false;render();el("labPlaceSearch").focus({preventScroll:true});el("labPlaceSearch").setSelectionRange(caret,caret);return;
     }
-    if(node.id==="labTranscript"){draft().transcript=node.value;draft().analyzed=false;draft().errors=[];if(el("labComparison"))el("labComparison").replaceChildren();}
+    if(node.id==="labTranscript"){draft().transcript=node.value;draft().analyzed=false;if(el("labComparison"))el("labComparison").replaceChildren();}
     else if(node.id==="labNotes")draft().notes=node.value;
     else if(node.dataset.labError!==undefined){const e=draft().errors[Number(node.dataset.labError)];e[node.dataset.field]=node.type==="checkbox"?node.checked:node.value;}
     else return;
@@ -354,17 +400,25 @@
   root.addEventListener("change",async event=>{
     const node=event.target;
     try{
+      if(sampleMode||starting){notify('請先停止目前的局部／單字錄音，再變更設定。');return;}
+      if(node.dataset.labFocus){
+        const d=draft(),ids=selectedIssueIds();
+        if(node.checked&&!ids.includes(node.dataset.labFocus)){if(ids.length>=3){node.checked=false;throw Error('每輪最多選三個修正目標。');}ids.push(node.dataset.labFocus);}
+        d.focusIssueIds=node.checked?ids:ids.filter(id=>id!==node.dataset.labFocus);await persist();return;
+      }
+      if(node.dataset.labReviewResult){const d=draft();d.reviewResults=(d.reviewResults||[]).filter(r=>r.issueId!==node.dataset.labReviewResult);d.reviewResults.push({issueId:node.dataset.labReviewResult,status:node.value});await persist();return;}
+      if(node.dataset.labError!==undefined){if(draft().savedId)await saveCheckpoint(blob);render();return;}
       if(node.id==="labRecognition"){state.config.recognition=node.checked;await persist();return;}
       if(node.dataset.labAssessment){draft().assessment||={};draft().assessment[node.dataset.labAssessment]=node.value;await persist();return;}
       if(node.id==="labCompletedWords"){const n=node.value===""?null:Number(node.value);if(n!==null&&(!Number.isInteger(n)||n<0||n>C.tokens(draft().original).length))throw Error("請填寫原稿範圍內的整數字數。");draft().completedWords=n;await persist();render();return;}
       if(node.id==="labVideoFile"){A.video(node.files[0],el("labVideoPreview"));return;}
-      const learnFields={labLearnAirline:"airline",labLearnKind:"kind",labLearnArticle:"articleId",labLearnHints:"hints",labLearnRate:"rate",labSpeechAccent:"accent",labSpeechVoice:"voiceURI",labSpeechPause:"pause"};
-      if(learnFields[node.id]){S.speaker.stop();state.learning[learnFields[node.id]]=node.type==="checkbox"?node.checked:node.id==="labLearnRate"?Number(node.value):node.value;if(node.id==="labSpeechAccent")state.learning.voiceURI="";if(["labLearnAirline","labLearnKind"].includes(node.id))state.learning.articleId="";await persist();render();return;}
+      const learnFields={labLearnAirline:"airline",labLearnKind:"kind",labLearnTopic:"topic",labLearnArticle:"articleId",labLearnHints:"hints",labLearnRate:"rate",labSpeechAccent:"accent",labSpeechVoice:"voiceURI",labSpeechPause:"pause"};
+      if(learnFields[node.id]){S.speaker.stop();state.learning[learnFields[node.id]]=node.type==="checkbox"?node.checked:node.id==="labLearnRate"?Number(node.value):node.value;if(node.id==="labSpeechAccent")state.learning.voiceURI="";if(["labLearnAirline","labLearnKind","labLearnTopic"].includes(node.id))state.learning.articleId="";await persist();render();return;}
       if(node.dataset.vocabFilter){
         if(sampleMode){node.value=wordFilters[node.dataset.vocabFilter]||"";notify("請先停止單字錄音再篩選。");return;}
         wordFilters[node.dataset.vocabFilter]=node.value;if(["airline","kind"].includes(node.dataset.vocabFilter))wordFilters.article="";wordIndex=0;revealed=false;attempted=false;render();return;
       }
-      const fields={labDifficulty:"difficulty",labExamKind:"kind",labPreview:"preview",labLimit:"limit"};
+      const fields={labDifficulty:"difficulty",labExamKind:"kind",labExamTopic:"topic",labPreview:"preview",labLimit:"limit"};
       if(fields[node.id]){state.config[fields[node.id]]=["labBand","labPreview","labLimit"].includes(node.id)?Number(node.value):node.value;await persist();render();}
       if(node.id==="labRule")el("labRuleBody").innerHTML=ruleBody(D.rules[Number(node.value)]);
       if(node.id==="labPlaceCategory"){placeCategory=node.value;placeIndex=0;placeRevealed=false;render();}
@@ -375,7 +429,7 @@
       if(node.id==="labAudioFile"){
         const file=node.files[0];if(!file)return;if(file.size>50*1024*1024)throw Error("音檔超過 50 MB。");
         if(!file.type.startsWith("audio/")&&!/\.(mp3|wav|m4a|webm|ogg)$/i.test(file.name))throw Error("請選擇支援的錄音檔。");
-        blob=file;draft().savedId=null;draft().ts=Date.now();phase="review";await DB.put("audio","draft-reading",blob);await persist();render();notify("已匯入音檔，可本機回聽；請填入朗讀時間與逐字稿。");
+        blob=file;draft().savedId=uid();draft().ts=Date.now();draft().started=true;draft().interrupted=false;phase="review";await saveCheckpoint(blob);render();notify("已匯入音檔，可本機回聽；請填入朗讀時間與逐字稿。");
       }
     }catch(error){notify(error.message||"檔案讀取失敗。");}
   });
