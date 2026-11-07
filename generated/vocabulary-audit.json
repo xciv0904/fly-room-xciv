@@ -690,8 +690,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 70,
-      "candidates": 22,
-      "occurrences": 25,
+      "candidates": 20,
+      "occurrences": 23,
       "processed": true
     },
     "sentence": "Because it was a holiday, I called ahead and found there were none available.",
@@ -782,8 +782,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 70,
-      "candidates": 25,
-      "occurrences": 33,
+      "candidates": 24,
+      "occurrences": 32,
       "processed": true
     },
     "sentence": "Rather than blame him for being in a hurry, I apologised and explained the benefits when I had another opportunity, then checked what he needed.",

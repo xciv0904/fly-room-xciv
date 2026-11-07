@@ -4,10 +4,10 @@
   "uniqueTextCount": 975,
   "processed": 1007,
   "withCandidates": 1006,
-  "vocabularyCount": 3344,
-  "cardCount": 3345,
-  "pronunciationPending": 536,
-  "translationPending": 227,
+  "vocabularyCount": 3315,
+  "cardCount": 3316,
+  "pronunciationPending": 426,
+  "translationPending": 119,
   "counts": {
     "華航": {
       "雜誌": 39,
@@ -68,9 +68,9 @@
       "pendingChinese": 30
     },
     "word": {
-      "total": 2949,
-      "pendingIPA": 306,
-      "pendingChinese": 168
+      "total": 2920,
+      "pendingIPA": 196,
+      "pendingChinese": 60
     }
   },
   "zeroCandidateArticles": [
@@ -530,8 +530,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 12,
-      "candidates": 4,
-      "occurrences": 4,
+      "candidates": 3,
+      "occurrences": 3,
       "processed": true
     },
     {
@@ -544,8 +544,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 57,
-      "candidates": 14,
-      "occurrences": 16,
+      "candidates": 13,
+      "occurrences": 15,
       "processed": true
     },
     {
@@ -614,8 +614,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 64,
-      "candidates": 22,
-      "occurrences": 27,
+      "candidates": 21,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -642,8 +642,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 68,
-      "candidates": 26,
-      "occurrences": 29,
+      "candidates": 23,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -684,8 +684,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 17,
-      "candidates": 3,
-      "occurrences": 3,
+      "candidates": 2,
+      "occurrences": 2,
       "processed": true
     },
     {
@@ -698,8 +698,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 62,
-      "candidates": 23,
-      "occurrences": 26,
+      "candidates": 20,
+      "occurrences": 23,
       "processed": true
     },
     {
@@ -740,8 +740,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 20,
-      "candidates": 7,
-      "occurrences": 7,
+      "candidates": 6,
+      "occurrences": 6,
       "processed": true
     },
     {
@@ -754,8 +754,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 68,
-      "candidates": 18,
-      "occurrences": 21,
+      "candidates": 17,
+      "occurrences": 20,
       "processed": true
     },
     {
@@ -810,8 +810,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 63,
-      "candidates": 30,
-      "occurrences": 32,
+      "candidates": 29,
+      "occurrences": 31,
       "processed": true
     },
     {
@@ -852,8 +852,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 64,
-      "candidates": 35,
-      "occurrences": 39,
+      "candidates": 32,
+      "occurrences": 36,
       "processed": true
     },
     {
@@ -880,8 +880,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 67,
-      "candidates": 21,
-      "occurrences": 25,
+      "candidates": 20,
+      "occurrences": 24,
       "processed": true
     },
     {
@@ -936,8 +936,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 71,
-      "candidates": 30,
-      "occurrences": 30,
+      "candidates": 29,
+      "occurrences": 29,
       "processed": true
     },
     {
@@ -992,8 +992,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 69,
-      "candidates": 27,
-      "occurrences": 30,
+      "candidates": 26,
+      "occurrences": 29,
       "processed": true
     },
     {
@@ -1062,8 +1062,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 70,
-      "candidates": 25,
-      "occurrences": 33,
+      "candidates": 24,
+      "occurrences": 32,
       "processed": true
     },
     {
@@ -1090,8 +1090,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 63,
-      "candidates": 23,
-      "occurrences": 26,
+      "candidates": 22,
+      "occurrences": 25,
       "processed": true
     },
     {
@@ -1104,8 +1104,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 70,
-      "candidates": 22,
-      "occurrences": 25,
+      "candidates": 20,
+      "occurrences": 23,
       "processed": true
     },
     {
@@ -1188,8 +1188,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 68,
-      "candidates": 24,
-      "occurrences": 26,
+      "candidates": 23,
+      "occurrences": 25,
       "processed": true
     },
     {
@@ -1216,8 +1216,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 66,
-      "candidates": 24,
-      "occurrences": 26,
+      "candidates": 22,
+      "occurrences": 24,
       "processed": true
     },
     {
@@ -1230,8 +1230,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 15,
-      "candidates": 6,
-      "occurrences": 6,
+      "candidates": 5,
+      "occurrences": 5,
       "processed": true
     },
     {
@@ -1244,8 +1244,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 68,
-      "candidates": 25,
-      "occurrences": 28,
+      "candidates": 23,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -1286,8 +1286,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 68,
-      "candidates": 29,
-      "occurrences": 31,
+      "candidates": 28,
+      "occurrences": 30,
       "processed": true
     },
     {
@@ -1342,8 +1342,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
       "words": 70,
-      "candidates": 29,
-      "occurrences": 30,
+      "candidates": 27,
+      "occurrences": 28,
       "processed": true
     },
     {
