@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="mobile-a11y.css">
 <link rel="stylesheet" href="reading-lab/lab.css?v=20">
+<link rel="stylesheet" href="ci-final-study.css?v=21">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要內容</a>
@@ -319,7 +320,7 @@
   <div class="card">
     <h2>🎙️ 模擬面試</h2>
     <p class="section-note">抽題 → 錄音作答 → 自動轉文字 → 分析建議。選定航空公司後，會優先抽該公司的題目；通用題只在該類別沒有公司題時補進來。</p>
-    <div class="quicknav"><button data-go="practice">🎯 題庫練習</button><button data-go="ciBroadcast">📢 華航廣播</button><button data-go="review">📋 面試回顧</button></div>
+    <div class="quicknav"><button data-go="practice">🎯 題庫練習</button><button data-go="ciBroadcast">📢 華航廣播</button><button data-open-final-study>📚 複試專題</button><button data-go="review">📋 面試回顧</button></div>
     <div class="tip">🔒 <b>隱私說明：</b>錄音檔與練習紀錄儲存在這台裝置；語音轉文字是否使用瀏覽器服務，依瀏覽器的實作與設定而定。第一次錄音會詢問麥克風權限。</div>
     <div class="chips" id="mAirline"></div>
     <div class="searchrow">
@@ -405,6 +406,7 @@
 
 <!-- ============ 面試回顧 ============ -->
 <section id="tab-review" class="hidden">
+  <div class="card"><h2>複試專題與最新版雙語擬答</h2><p class="section-note">保留原始回顧，另以 39 題練習延誤溝通、近期新聞、個人經驗與追問。</p><button class="btn" data-open-final-study>進入複試專題 →</button></div>
   <div class="card" id="ciReviewRwd">
     <h2>📢 華航初試｜已確認朗讀題</h2>
     <p class="sub">本人確認 · 現場題目有中英文 · 整理日期：2026-11-08</p>
@@ -474,6 +476,7 @@
 <script src="ci-reading.js"></script>
 <script src="ci-vocabulary.js"></script>
 <script src="ci-source-vocabulary.js"></script>
+<script src="ci-final-data.js?v=21"></script>
 <script>
 let DATA = [];
 
@@ -938,6 +941,7 @@ const store = {
 DATA.forEach((it,i)=> it.id = i);
 /* === 多公司標籤 / 各家客製擬答 工具 === */
 function airsOf(d){ return Array.isArray(d.airlines) ? d.airlines : [d.airline]; }
+function questionById(id){ return DATA.find(item=>item.id===Number(id)); }
 function hasAir(d, a){
   if(!a) return true;
   const list = airsOf(d);
@@ -985,6 +989,10 @@ function ansBlock(d, air){
     h += `</div></details>`;
   }
   if(d.tip) h += `<div class="tip">💡 ${esc(d.tip)}</div>`;
+  if(d.ciFinalKey && (!air||air==="華航")){
+    const draft=CIFinalPrep.byKey[d.ciFinalKey];
+    if(draft)h+=`<div class="tip">最新版華航複試擬答 · ${CIFinalPrep.checkedAt}${draft.personalCheck?`<br>作答前確認：${esc(draft.personalCheck)}`:""}<br>${esc(draft.tip)}</div><button class="btn ghost" data-open-final-study="${esc(draft.key)}">查看題目背景、來源與追問 →</button>`;
+  }
   return h;
 }
 $("#totalCount").textContent = DATA.length;
@@ -1454,6 +1462,15 @@ document.addEventListener("click",e=>{
 });
 
 /* ================= 面試回顧 ================= */
+const CI_REVIEW_CURRENT_KEYS={"英文自我介紹（30 秒・全組）":"intro","為了應考華航，你做了哪些準備？":"preparation","飛機無法順利起飛——旅客詢問原因，你會說實話嗎？":"delay-honesty","在社群媒體上會不會炫耀自己的空服員工作？":"social-media"};
+REVIEWS[0].qa.forEach(item=>{
+  const key=CI_REVIEW_CURRENT_KEYS[item.q],draft=key&&CIFinalPrep.byKey[key];
+  if(draft){item.zh=draft.a_zh;item.better=draft.a_en;item.ciFinalKey=key;item.note=`最新版雙語擬答 ${CIFinalPrep.checkedAt}。${draft.tip}`;}
+  if(item.q==="有沒有應徵華航的經驗？"){
+    item.zh="有，我曾參加華航面試，也有其他航空公司的應考經驗。回顧過程讓我更了解自己的表達與安全觀念需要如何改善；這次我會帶著具體反思和服務經驗來應考。";
+    item.better="Yes, I have interviewed with China Airlines before, as well as other airlines. Reviewing those experiences helped me understand where my communication and safety awareness needed improvement. This time, I bring specific reflections and practical service experience, while remaining ready to learn.";
+  }
+});
 $("#reviewList").innerHTML = REVIEWS.map(r=>`
  <div class="card">
    <h2><span class="tag ${TAGC[r.air]}">${r.air}</span>面試回顧與優化</h2>
@@ -1472,6 +1489,7 @@ $("#reviewList").innerHTML = REVIEWS.map(r=>`
        <p class="sub" style="margin:8px 0 3px">✨ 優化版本｜English</p><div class="ansbox">${esc(x.better)}</div>
        <div class="chips">${sayBtn(x.better, "en-US", "🔊 Listen")}</div>
        ${x.note?`<div class="tip">💡 ${esc(x.note)}</div>`:""}
+       ${x.ciFinalKey?`<button class="btn ghost" data-open-final-study="${x.ciFinalKey}">練這題與延伸追問 →</button>`:""}
      </div></details>`).join(""):""}
  </div>`).join("") + `
  <div class="card">
@@ -1495,7 +1513,7 @@ $("#weakList").innerHTML = WEAK.map(w=>`
 function renderStars(){
   const el = $("#starList");
   if(!stars.length){ el.innerHTML = `<p class="sub">目前沒有收藏的題目。抽題時按「☆」收藏。</p>`; return; }
-  el.innerHTML = stars.map(id=>qaCard(DATA[id],false)).join("");
+  el.innerHTML = stars.map(questionById).filter(Boolean).map(item=>qaCard(item,false)).join("");
 }
 $("#starList").addEventListener("click", e=>{
   const s = e.target.closest(".star"); if(!s) return;
@@ -1582,10 +1600,22 @@ function mRenderQ(){
   $("#mBody").innerHTML = (lang==="zh"&&M.q.q_zh?`<div class="qtext">${esc(M.q.q_zh)}</div>`:"") +
                           (lang==="en"&&M.q.q_en?`<div class="qtext en">${esc(M.q.q_en)}</div>`:"") +
                           (lang==="en"&&!M.q.q_en?`<div class="qtext">${esc(M.q.q_zh)}<span class="sub">（請用英文回答）</span></div>`:"");
+  if(M.q.ciFinalKey){
+    $("#mBody").insertAdjacentHTML("beforeend",`<p class="sub">複試專題 · ${CIFinalPrep.checkedAt} · ${CIFinalPrep.byKey[M.q.ciFinalKey]?.kind==="asked"?"本人回顧已問過":"延伸練習擬題"}</p><button class="btn ghost" data-open-final-study="${esc(M.q.ciFinalKey)}">← 回到這一題的複試專題</button>`);
+  }
   $("#mResult").innerHTML = ""; $("#mLive").textContent = ""; $("#mTimer").textContent = "按下 🔴 開始錄音，回答完按 ⏹";
   $("#mRec").disabled = false; $("#mStop").disabled = true;
   $("#mCard").scrollIntoView({behavior:"smooth"});
 }
+window.startCIFinalMock=function(item,lang){
+  if(M.recActive||M.mr&&M.mr.state!=="inactive")return false;
+  mStopAll();
+  showTab("mock");
+  document.querySelector('#mAirline [data-a="華航"]')?.click();
+  M.air="華航";M.queue=null;M.q={...item,ciFinalKey:item.key};
+  $("#mLang").value=lang==="en"?"en":"zh";$("#mMode").value="single";
+  mRenderQ();return true;
+};
 
 /* Chrome / Edge 的語音辨識長錄音常在約 45–60 秒自動結束；錄音本身不中斷，這裡只重啟轉文字。 */
 function startMRecognition(){
@@ -1791,10 +1821,11 @@ function analyze(t, dur, lang, item){
   return fb;
 }
 function fbHtml(fb){ return fb.map(([k,txt])=>`<div class="fb ${k}">${esc(txt)}</div>`).join(""); }
-function answerComparison(transcript,item,lang){
+function answerComparison(transcript,item,lang,air=M.air){
   if(!item || !item.a_zh && !item.a_en) return null;
   const text=(transcript||"").toLowerCase();
-  const ref=lang==="zh"?(item.a_zh||""):(item.a_en||"");
+  const selected=ansFor(item,air);
+  const ref=lang==="zh"?(selected.a_zh||""):(selected.a_en||"");
   if(!ref) return null;
   const zh=lang==="zh";
   const rules=zh?[
@@ -1855,7 +1886,10 @@ function mShowResult(transcript){
   const ciReview = M.q && M.q.cat==="華航初試・廣播朗讀" ? ciBroadcastReview(transcript,M.q) : null;
   const answerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(transcript,M.q,lang) : null;
   let h = "";
-  if(M.blob && typeof URL!=="undefined"){ M.audioUrl=URL.createObjectURL(M.blob); h += `<audio controls src="${M.audioUrl}"></audio>`; }
+  if(M.blob && typeof URL!=="undefined"){
+    M.audioUrl=URL.createObjectURL(M.blob);h+=`<audio controls src="${M.audioUrl}"></audio>`;
+    if(M.q?.ciFinalKey)h+=`<a class="btn ghost" href="${M.audioUrl}" download="ci-final-${esc(M.q.ciFinalKey)}-${lang}-${Date.now()}.${M.blob.type.includes("mp4")?"mp4":"webm"}">下載這次錄音</a>`;
+  }
   h += resultSummaryHtml(fb,answerReview,ciReview)+`<h3>📝 逐字稿（可修正後重新分析）</h3><textarea id="mTrans">${esc(transcript)}</textarea>
         <button class="btn sec" id="mRean" style="margin-top:6px">重新分析</button>
         <h3>💡 分析與建議</h3><div id="mFb">${fbHtml(fb)}</div>${answerReview?`<div id="answerCompare">${answerComparisonHtml(answerReview)}</div>`:""}${ciReview?`<div id="ciReview">${ciBroadcastReviewHtml(ciReview)}</div>`:""}`;
@@ -1866,7 +1900,7 @@ function mShowResult(transcript){
   }
   if(M.queue){
     /* 一鏡到底：自動存檔、續往下一題 */
-    mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, lang,
+    mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, questionKey:M.q.ciFinalKey, lang,
             dur: M.dur, transcript, fb: fb.map(x=>x[1]), ciReview, answerReview, audio: M.blob });
     M.panel.push({ q: M.q.q_zh || M.q.q_en, dur: M.dur, warn: fb.filter(x=>x[0]==="warn").length });
     const last = M.qi >= M.queue.length - 1;
@@ -1897,9 +1931,10 @@ function mShowResult(transcript){
     const t = $("#mTrans").value.trim();
     const savedCiReview = M.q && M.q.cat==="華航初試・廣播朗讀" ? ciBroadcastReview(t,M.q) : null;
     const savedAnswerReview = M.q && M.q.cat!=="華航初試・廣播朗讀" ? answerComparison(t,M.q,lang) : null;
-    await mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, lang,
+    const saved=await mSave({ ts: Date.now(), air: M.air||airsOf(M.q)[0]||"通用", q: M.q.q_zh || M.q.q_en, questionKey:M.q.ciFinalKey, lang,
                   dur: M.dur, transcript: t, fb: analyze(t, M.dur, lang, M.q).map(x=>x[1]),
                   originalText: savedCiReview?M.q.q_en:"", ciReview: savedCiReview, answerReview: savedAnswerReview, audio: M.blob });
+    if(!saved){$("#mSaveBtn").textContent="儲存失敗，請重試";return;}
     if((M.air==="華航"||airsOf(M.q).includes("華航"))&&M.q.cat!=="華航初試・廣播朗讀"&&typeof window.markCIProgress==="function")window.markCIProgress("final");
     $("#mSaveBtn").textContent = "✅ 已儲存"; $("#mSaveBtn").disabled = true;
     renderMHistory();
@@ -1944,7 +1979,7 @@ async function renderMHistory(){
     const legacyCi = !r.ciReview && !r.originalText && r.air==="華航" && r.q ? [...CI_PDF_DRILLS,...CI_NEWS_RELEASES,...CI_EXTERNAL_BROADCASTS].find(x=>r.q==="請朗讀以下華航廣播詞："+x.title) : null;
     const originalText=r.originalText||r.ciReview?.original||legacyCi?.text||"";
     const savedCiReview = r.ciReview || (originalText ? ciBroadcastReview(r.transcript,{q_en:originalText,cat:"華航初試・廣播朗讀"}) : null);
-    const previous=all.find(x=>x.id!==r.id&&x.ts<r.ts&&x.q===r.q&&x.lang===r.lang&&x.air===r.air);
+    const previous=all.find(x=>x.id!==r.id&&x.ts<r.ts&&(x.questionKey&&r.questionKey?x.questionKey===r.questionKey:x.q===r.q)&&x.lang===r.lang&&x.air===r.air);
     const headline=r.answerReview&&r.answerReview.summary?r.answerReview.summary:(savedCiReview?`原文詞彙命中率約 ${savedCiReview.similarity||0}%；${savedCiReview.missing&&savedCiReview.missing.length?`優先重讀 ${savedCiReview.missing.slice(0,3).join("、")}。`:"主要詞彙大致都有辨識到。"}`:"");
     return `<div class="hist" data-id="${r.id}">
       <b><span class="tag ${TAGC[r.air]||"cat"}">${esc(r.air)}</span>${esc(r.q)}</b>
@@ -2395,7 +2430,7 @@ function addDays(n){ return todayStr(new Date(Date.now() + n*864e5)); }
 function srsDueIds(){
   const srs = store.get("srs", {});
   const t = todayStr();
-  return stars.filter(id => srs[id] && srs[id].due <= t && DATA[id]);
+  return stars.filter(id => srs[id] && srs[id].due <= t && questionById(id));
 }
 let srsQueue = [];
 function renderSrs(){
@@ -2410,7 +2445,8 @@ function renderSrs(){
 function srsNext(){
   const body = $("#srsBody");
   if(!srsQueue.length){ renderSrs(); renderDash(); return; }
-  const d = DATA[srsQueue[0]];
+  const d = questionById(srsQueue[0]);
+  if(!d){srsQueue.shift();srsNext();return;}
   body.innerHTML = `<div style="margin-top:10px">${airTags(d)}<span class="tag cat">${esc(d.cat)}</span></div>
     ${d.q_zh?`<div class="qtext">${esc(d.q_zh)}</div>`:""}${d.q_en?`<div class="qtext en">${esc(d.q_en)}</div>`:""}
     <p class="sub">先出聲回答，再對照擬答自評：</p>
@@ -2641,13 +2677,13 @@ $("#stageNav").addEventListener("click", e=>{
 /* 封存關卡內容在第一次進入分頁時載入。 */
 
 /* ================= 備份匯出／匯入 ================= */
-const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","uxRoute","ciLastRoute"];
+const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","uxRoute","ciLastRoute","ciFinalStudy"];
 function cleanImportedRecord(r){
   if(!r || typeof r!=="object" || Array.isArray(r)) return null;
   const text=v=>typeof v==="string"?v.slice(0,20000):"";
   const clean={
     ts:Number.isFinite(Number(r.ts))?Number(r.ts):Date.now(),
-    air:text(r.air).slice(0,30), q:text(r.q).slice(0,1000), lang:r.lang==="en"?"en":"zh",
+    air:text(r.air).slice(0,30), q:text(r.q).slice(0,1000), questionKey:text(r.questionKey).slice(0,80), lang:r.lang==="en"?"en":"zh",
     dur:Math.max(1,Math.min(3600,Number(r.dur)||1)), transcript:text(r.transcript), originalText:text(r.originalText),
     fb:Array.isArray(r.fb)?r.fb.filter(x=>typeof x==="string").slice(0,30).map(text):[]
   };
@@ -2659,7 +2695,7 @@ $("#expBtn").addEventListener("click", async ()=>{
   const data = {_v:2, _date:new Date().toISOString()};
   BK_KEYS.forEach(k=> data[k] = store.get(k, null));
   const recs = await mList();
-  data.mockRecs = recs.map(r=>({ts:r.ts, air:r.air, q:r.q, lang:r.lang, dur:r.dur, transcript:r.transcript, originalText:r.originalText, fb:r.fb, ciReview:r.ciReview, answerReview:r.answerReview}));
+  data.mockRecs = recs.map(r=>({ts:r.ts, air:r.air, q:r.q, questionKey:r.questionKey, lang:r.lang, dur:r.dur, transcript:r.transcript, originalText:r.originalText, fb:r.fb, ciReview:r.ciReview, answerReview:r.answerReview}));
   const blob = new Blob([JSON.stringify(data)], {type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -2701,6 +2737,10 @@ function hydrateQuestionBank(){
   DATA=bank.slice();
   if(Array.isArray(EVA_FINAL_QUESTIONS)) DATA.push(...EVA_FINAL_QUESTIONS);
   DATA.forEach((it,i)=>{it.id=i});
+  if(window.CIFinalPrep){
+    const prepared=CIFinalPrep.attach(DATA);DATA=prepared.bank;CIFinalPrep.registered=prepared.items;
+    window.dispatchEvent(new Event("ci:final-ready"));
+  }
   $("#totalCount").textContent=DATA.length;
   fillCats(); fillMCats(); updatePool();
   P50=DATA.filter(x=>x.p50);
@@ -2724,7 +2764,8 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 }
 </script>
 <script src="eva-mode.js"></script>
-<script src="ci-mode.js"></script>
+<script src="ci-mode.js?v=21"></script>
+<script src="ci-final-study.js?v=21"></script>
 <script src="reading-lab/data.js"></script>
 <script src="reading-lab/ci-destinations.js"></script>
 <script src="reading-lab/destination-network.js"></script>

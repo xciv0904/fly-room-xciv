@@ -681,20 +681,20 @@
       }
     ],
     "source": {
-      "id": "article-d5bdeff01bcacba5",
-      "title": "🚗 加拿大旅客・連假租車",
+      "id": "article-4d90864b14aaac9c",
+      "title": "什麼是超出期待的服務？請舉例。",
       "airlines": [
-        "通用"
+        "華航"
       ],
       "kind": "面試英文段落",
-      "sourceFile": "index.html",
-      "collection": "STORY_LIBRARY",
-      "words": 107,
-      "candidates": 32,
-      "occurrences": 37,
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_FINAL_ITEMS",
+      "words": 70,
+      "candidates": 22,
+      "occurrences": 25,
       "processed": true
     },
-    "sentence": "I helped him find the rental office and, because it was a holiday period, I proactively called to check whether any cars were still available.",
+    "sentence": "Because it was a holiday, I called ahead and found there were none available.",
     "checks": {
       "ipaExactDictionaryMatch": true,
       "cmuPhonemesExactMatch": true,
@@ -773,20 +773,20 @@
       }
     ],
     "source": {
-      "id": "article-d890ee826e403590",
-      "title": "請用3分鐘自我介紹，並結合過去經歷展現你的服務精神與穩定度。",
+      "id": "article-b76792ea88bdc4e2",
+      "title": "分享一次服務失誤，以及妳如何補救。",
       "airlines": [
-        "通用"
+        "華航"
       ],
       "kind": "面試英文段落",
-      "sourceFile": "question-bank.js",
-      "collection": "__QUESTION_BANK__",
-      "words": 165,
-      "candidates": 57,
-      "occurrences": 69,
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_FINAL_ITEMS",
+      "words": 70,
+      "candidates": 25,
+      "occurrences": 33,
       "processed": true
     },
-    "sentence": "During my studies, I took the opportunity to go on exchange in South Korea for a semester and joined a study program in Canada, building independence and cross-cultural communication skills.",
+    "sentence": "Rather than blame him for being in a hurry, I apologised and explained the benefits when I had another opportunity, then checked what he needed.",
     "checks": {
       "ipaExactDictionaryMatch": true,
       "cmuPhonemesExactMatch": true,
