@@ -12,15 +12,15 @@
   const starred=item=>stars.includes(item.id);
   function visible(item){
     const match=state.filter==="全部"||state.filter==="先練重點"&&item.priority===1||state.filter==="英文核心"&&item.englishCore||state.filter==="弱點收藏"&&starred(item)||item.group===state.filter;
-    const text=[item.q_zh,item.q_en,item.a_zh,item.a_en,item.tip,item.fact||""].join(" ").toLowerCase();
+    const text=[item.q_zh,item.q_en,item.a_zh,item.a_en,item.a_ko||"",item.tip,item.fact||""].join(" ").toLowerCase();
     return match&&(!state.search||text.includes(state.search.toLowerCase().trim()));
   }
   function references(item){
     return `<div class="ci-final-sources">${item.sources.map(key=>{const s=data.sources[key];return `<a href="${h(s.url)}" ${s.url.startsWith("https:")?'target="_blank" rel="noopener noreferrer"':""}>${h(s.title)}</a>${s.date?` <span>發布 ${h(s.date)}</span>`:""}`;}).join("<br>")}</div>`;
   }
   function answer(item){
-    const zh=state.lang!=="en",en=state.lang!=="zh";
-    return `${item.personalCheck?`<p class="tip ci-final-check"><b>作答前確認：</b>${h(item.personalCheck)}</p>`:""}<div class="ci-final-answers">${zh?`<div class="ansbox" lang="zh-Hant"><b>中文擬答</b><p>${h(item.a_zh)}</p></div>`:""}${en?`<div class="ansbox en" lang="en"><b>English draft</b><p>${h(item.a_en)}</p></div>`:""}</div><div class="chips">${zh?sayBtn(item.a_zh,"zh-TW","🔊 聽中文"):""}${en?sayBtn(item.a_en,"en-US","🔊 Listen"):""}</div><p class="tip">${h(item.tip)}</p>`;
+    const zh=state.lang!=="en",en=state.lang!=="zh",ko=state.lang==="both"&&item.a_ko;
+    return `${item.answerLabel?`<p class="sub">${h(item.answerLabel)} · 更新 ${h(item.updatedAt)}</p>`:""}${item.personalCheck?`<p class="tip ci-final-check"><b>作答前確認：</b>${h(item.personalCheck)}</p>`:""}<div class="ci-final-answers">${zh?`<div class="ansbox" lang="zh-Hant"><b>中文擬答</b><p>${h(item.a_zh)}</p></div>`:""}${en?`<div class="ansbox en" lang="en"><b>English draft</b><p>${h(item.a_en)}</p></div>`:""}${ko?`<div class="ansbox ko" lang="ko"><b>한국어 · 韓文原稿</b><p>${h(item.a_ko)}</p></div>`:""}</div><div class="chips">${zh?sayBtn(item.a_zh,"zh-TW","🔊 聽中文"):""}${en?sayBtn(item.a_en,"en-US","🔊 Listen"):""}${ko?sayBtn(item.a_ko,"ko-KR","🔊 한국어"):""}</div><p class="tip">${h(item.tip)}</p>`;
   }
   function card(item){
     const children=items().filter(row=>row.parentKey===item.key),parent=item.parentKey&&items().find(row=>row.key===item.parentKey),open=item.key===state.selected;

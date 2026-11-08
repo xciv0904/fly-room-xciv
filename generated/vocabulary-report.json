@@ -501,9 +501,9 @@
       "kind": "面試英文段落",
       "sourceFile": "ci-final-data.js",
       "collection": "CI_FINAL_ITEMS",
-      "words": 60,
-      "candidates": 22,
-      "occurrences": 23,
+      "words": 98,
+      "candidates": 33,
+      "occurrences": 40,
       "processed": true
     },
     {

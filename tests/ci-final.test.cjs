@@ -22,6 +22,11 @@ test('integrating drafts reuses existing IDs, preserves other-airline answers, a
     for(const [air,answer] of Object.entries(before[i].variants||{}))if(air!=='華航')assert.deepEqual(joined.bank[i].variants[air],answer);
   }
   assert.equal(joined.items.find(row=>row.key==='intro').id,0);
+  for(const id of [0,48,49,81]){
+    assert.equal(joined.bank[id].variants['華航'].a_zh,prep.byKey.intro.a_zh);
+    assert.equal(joined.bank[id].variants['華航'].a_en,prep.byKey.intro.a_en);
+    assert.equal(joined.bank[id].variants['華航'].a_ko,prep.byKey.intro.a_ko);
+  }
   assert.equal(joined.items.find(row=>row.key==='hotel-vs-cabin').id,46);
   const matched=prep.items.filter(row=>row.match?.length).length;
   assert.equal(joined.bank.length,before.length+39-matched);
@@ -34,5 +39,6 @@ test('news qualifications and personal-story boundaries survive into the downloa
   assert.match(prep.byKey['sustainability'].tip,/Book & Claim/);assert.match(prep.byKey['fleet-news'].tip,/不要.*已交機/);
   assert.match(prep.byKey['exceed-expectations'].a_en,/Canadian guest/);assert.match(prep.byKey['digital-service'].a_en,/Colombian guest/);
   assert.match(prep.byKey['harassment'].tip,/碰觸是本題假設/);assert.match(prep.byKey['power-bank'].tip,/年度安全議題/);
+  assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-09');
   assert.equal(fs.readFileSync(require.resolve('../docs/華航複試雙語擬答-2026-11-08.md'),'utf8'),md+'\n');
 });

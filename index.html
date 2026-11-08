@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="mobile-a11y.css">
 <link rel="stylesheet" href="reading-lab/lab.css?v=20">
-<link rel="stylesheet" href="ci-final-study.css?v=21">
+<link rel="stylesheet" href="ci-final-study.css?v=22">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要內容</a>
@@ -476,7 +476,7 @@
 <script src="ci-reading.js"></script>
 <script src="ci-vocabulary.js"></script>
 <script src="ci-source-vocabulary.js"></script>
-<script src="ci-final-data.js?v=21"></script>
+<script src="ci-final-data.js?v=22"></script>
 <script>
 let DATA = [];
 
@@ -953,8 +953,8 @@ function airTags(d){ return airsOf(d).map(a=>`<span class="tag ${TAGC[a]||"gn"}"
 /* 依目前選定公司取出該公司的擬答；沒選或該公司沒客製版就回傳預設 */
 function ansFor(d, air){
   const v = d.variants && air && d.variants[air];
-  return v ? {a_zh: v.a_zh || d.a_zh, a_en: v.a_en || d.a_en, air: air, custom: true}
-           : {a_zh: d.a_zh, a_en: d.a_en, air: null, custom: false};
+  return v ? {a_zh: v.a_zh || d.a_zh, a_en: v.a_en || d.a_en, a_ko:v.a_ko||d.a_ko, air: air, custom: true}
+           : {a_zh: d.a_zh, a_en: d.a_en, a_ko:d.a_ko, air: null, custom: false};
 }
 /* 產生擬答區塊：選定公司時直接帶該版，未選公司時預設版＋可展開其他家 */
 function ansBlock(d, air){
@@ -963,8 +963,10 @@ function ansBlock(d, air){
   if(cur.custom) h += `<div class="sub" style="margin-bottom:6px">✅ 以下為 <b>${cur.air}</b> 專屬版本</div>`;
   if(cur.a_zh) h += `<div class="zh">${esc(cur.a_zh)}</div>`;
   if(cur.a_en) h += `<div class="en">${esc(cur.a_en)}</div>`;
+  if(cur.a_ko) h += `<div class="ko" lang="ko" style="white-space:pre-line"><b>한국어 · 韓文原稿</b><br>${esc(cur.a_ko)}</div>`;
   h += `</div>`;
   h += `<div class="chips" style="margin-top:6px">${sayBtn(cur.a_zh,"zh-TW","🔊 聽中文")}${sayBtn(cur.a_en,"en-US","🔊 Listen")}</div>`;
+  if(cur.a_ko)h+=`<div class="chips">${sayBtn(cur.a_ko,"ko-KR","🔊 한국어")}</div>`;
   const others = d.variants ? Object.keys(d.variants).filter(a=>a!==cur.air) : [];
   if(others.length){
     h += `<details style="margin-top:8px"><summary>🏢 其他航空公司的版本（${others.length}）</summary><div class="body">`;
@@ -1465,7 +1467,7 @@ document.addEventListener("click",e=>{
 const CI_REVIEW_CURRENT_KEYS={"英文自我介紹（30 秒・全組）":"intro","為了應考華航，你做了哪些準備？":"preparation","飛機無法順利起飛——旅客詢問原因，你會說實話嗎？":"delay-honesty","在社群媒體上會不會炫耀自己的空服員工作？":"social-media"};
 REVIEWS[0].qa.forEach(item=>{
   const key=CI_REVIEW_CURRENT_KEYS[item.q],draft=key&&CIFinalPrep.byKey[key];
-  if(draft){item.zh=draft.a_zh;item.better=draft.a_en;item.ciFinalKey=key;item.note=`最新版雙語擬答 ${CIFinalPrep.checkedAt}。${draft.tip}`;}
+  if(draft){item.zh=draft.a_zh;item.better=draft.a_en;item.ko=draft.a_ko;item.ciFinalKey=key;item.note=`最新版擬答 ${draft.updatedAt||CIFinalPrep.checkedAt}。${draft.tip}`;}
   if(item.q==="有沒有應徵華航的經驗？"){
     item.zh="有，我曾參加華航面試，也有其他航空公司的應考經驗。回顧過程讓我更了解自己的表達與安全觀念需要如何改善；這次我會帶著具體反思和服務經驗來應考。";
     item.better="Yes, I have interviewed with China Airlines before, as well as other airlines. Reviewing those experiences helped me understand where my communication and safety awareness needed improvement. This time, I bring specific reflections and practical service experience, while remaining ready to learn.";
@@ -1488,6 +1490,7 @@ $("#reviewList").innerHTML = REVIEWS.map(r=>`
        <div class="chips">${sayBtn(x.zh||REVIEW_ZH[x.q]||(/[一-鿿]/.test(x.better)?x.better:""), "zh-TW", "🔊 聽中文")}</div>
        <p class="sub" style="margin:8px 0 3px">✨ 優化版本｜English</p><div class="ansbox">${esc(x.better)}</div>
        <div class="chips">${sayBtn(x.better, "en-US", "🔊 Listen")}</div>
+       ${x.ko?`<p class="sub">本人提供｜한국어 · 韓文原稿</p><div class="ansbox" lang="ko" style="white-space:pre-line">${esc(x.ko)}</div><div class="chips">${sayBtn(x.ko,"ko-KR","🔊 한국어")}</div>`:""}
        ${x.note?`<div class="tip">💡 ${esc(x.note)}</div>`:""}
        ${x.ciFinalKey?`<button class="btn ghost" data-open-final-study="${x.ciFinalKey}">練這題與延伸追問 →</button>`:""}
      </div></details>`).join(""):""}
@@ -2764,8 +2767,8 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 }
 </script>
 <script src="eva-mode.js"></script>
-<script src="ci-mode.js?v=21"></script>
-<script src="ci-final-study.js?v=21"></script>
+<script src="ci-mode.js?v=22"></script>
+<script src="ci-final-study.js?v=22"></script>
 <script src="reading-lab/data.js"></script>
 <script src="reading-lab/ci-destinations.js"></script>
 <script src="reading-lab/destination-network.js"></script>

@@ -16,11 +16,25 @@
   };
   const CI_FINAL_ITEMS=[
     {
-      key:"intro",group:"實戰回顧",kind:"asked",priority:1,englishCore:true,coverage:["R1","E1"],match:["請簡單介紹你自己。"],sources:["review"],
+      key:"intro",group:"實戰回顧",kind:"asked",priority:1,englishCore:true,coverage:["R1","E1"],match:["請簡單介紹你自己。","請用英文做自我介紹","請用中文做自我介紹","請簡單用 30 秒左右自我介紹"],sources:["review"],updatedAt:"2026-11-09",answerLabel:"本人提供三語完整版",
       q_zh:"請用 30 秒自我介紹。",q_en:"Please introduce yourself in 30 seconds.",
-      a_zh:"考官好，我是 Shelly。我有一年凱悅飯店櫃檯經驗，學習在忙碌的環境中仔細確認需求、穩定處理客訴。我曾到加拿大研修、韓國交換，也能使用英文和韓文溝通。我希望把這份細心與可靠帶進華航，並透過專業訓練，成為讓旅客和同事安心的組員。",
-      a_en:"Hello, my name is Shelly. I have a year of hotel front desk experience with Hyatt, where I learned to stay calm and understand guests' needs. Studying in Canada and Korea also helped me communicate across cultures. I'd like to bring that care and reliability to China Airlines and develop into a crew member that passengers and colleagues can trust.",
-      tip:"只留背景、一個特質與加入華航的方向。英文約 60 字，以錄音實測能否在 30 秒自然說完。"
+      a_zh:`考官好，我是張萱利。
+我具備英文和韓語溝通能力，目前在凱悅集團任職飯店櫃檯，在工作中，我總能專注細節並預判旅客需求，同事們也形容我是團隊裡最令人安心的後盾，因為我始終以最高標準維持服務品質。
+我相信，優質的服務，不僅是走完標準流程，而是在每一次互動中，讓旅客感到安心與被重視。
+我期待將這份經驗延伸到機艙服務中，與團隊合作，為旅客提供細緻且專業的飛行體驗。
+謝謝`,
+      a_en:`Hello. My name is Shelly.
+I'm confident in communicating in both English and Korean. Currently, I work at the front desk of Hyatt hotel. I’m good at meeting guest needs with a focus on detail. My teammates see me as a very reliable person because I always maintain the highest standards of service.
+I believe that great service is more than just following rules; it’s about making every guest feel comfortable and valued.
+I’m excited to bring my hospitality experience to the cabin and work with your team to provide a professional experience for every passenger.
+Thank you.`,
+      a_ko:`안녕하십니까, 장선리입니다.
+저는 영어와 한국어 2개 국어를 할 수 있습니다.
+지금은 하얏트 호텔에서 프런트 데스크로 근무하고 있습니다.
+저는 항상 세부적인 세심한 부분에 집중하고 고객의 요구를 미리 예측하며 최고의 서비스를 제공하고 있습니다.
+최고의 서비스는 고객이 안심하고 존중 받고 계신다는 것을 느끼도록 하는 것이라고 믿습니다
+이 경험으로 기내 서비스로 확장하여 해서 팀원들과 함께 승객들에게 꼼꼼한 전문적인 비행 경험을 제공하고 싶습니다.`,
+      tip:"2026-11-09 本人提供的中英韓完整原稿。若現場限時 30 秒，請另備精簡版，勿加速唸完全文。"
     },
     {
       key:"preparation",group:"實戰回顧",kind:"asked",priority:1,coverage:["R2"],sources:["review"],
@@ -312,12 +326,15 @@
   function attach(bank){
     const list=bank.slice(),registry=[];
     for(const item of items){
-      const existing=list.find(row=>row.ciFinalKey===item.key)||list.find(row=>(item.match||[]).includes(row.q_zh));
+      const matches=list.filter(row=>row.ciFinalKey===item.key||(item.match||[]).includes(row.q_zh));
+      const existing=matches[0];
       if(existing){
-        existing.ciFinalKey=item.key;
-        existing.variants={...existing.variants,"華航":{a_zh:item.a_zh,a_en:item.a_en}};
-        existing.ciFinalDraft=item;
-        if(!existing.airlines?.includes("華航"))existing.airlines=[...(existing.airlines||[existing.airline]).filter(Boolean),"華航"];
+        for(const row of matches){
+          row.ciFinalKey=item.key;
+          row.variants={...row.variants,"華航":{a_zh:item.a_zh,a_en:item.a_en,...(item.a_ko?{a_ko:item.a_ko}:{})}};
+          row.ciFinalDraft=item;
+          if(!row.airlines?.includes("華航"))row.airlines=[...(row.airlines||[row.airline]).filter(Boolean),"華航"];
+        }
         registry.push({...item,id:existing.id});
       }else{
         const row={...item,ciFinalKey:item.key};list.push(row);registry.push(row);
@@ -328,7 +345,11 @@
   function markdown(){
     const out=["# 華航複試中英文擬答",`整理與新聞查核日期：${checkedAt}`,"共 39 題，包含上一份清單的主題、追問、18 題履歷服務題，以及六組英文核心問法。英文重疊題共用同一份雙語擬答，不另製造重複題。", "只有「實戰回顧」四題是本人記錄已問過；其餘為延伸練習。擬答需依個人事實調整，新聞狀態以所列日期為準。"];
     items.forEach((item,i)=>{
-      out.push(`\n## ${i+1}. ${item.q_zh}`,item.q_en,`分類：${item.group}${item.parentKey?`｜追問自：${byKey[item.parentKey].q_zh}`:""}`,"\n中文擬答：",item.a_zh,"\nEnglish draft:",item.a_en,`\n回答提醒：${item.tip}`);
+      out.push(`\n## ${i+1}. ${item.q_zh}`,item.q_en,`分類：${item.group}${item.parentKey?`｜追問自：${byKey[item.parentKey].q_zh}`:""}`);
+      if(item.answerLabel)out.push(`${item.answerLabel}｜更新 ${item.updatedAt}`);
+      out.push("\n中文擬答：",item.a_zh,"\nEnglish draft:",item.a_en);
+      if(item.a_ko)out.push("\n한국어 원고（韓文原稿）：",item.a_ko);
+      out.push(`\n回答提醒：${item.tip}`);
       if(item.fact)out.push(`新聞事實：${item.fact}`);
       if(item.personalCheck)out.push(`個人事實確認：${item.personalCheck}`);
       out.push("來源："+item.sources.map(key=>{const s=sources[key];return `[${s.title}](${s.url})${s.date?`（${s.date}）`:""}`}).join("、"));
