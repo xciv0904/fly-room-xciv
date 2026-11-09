@@ -4,10 +4,10 @@
   "uniqueTextCount": 1023,
   "processed": 1055,
   "withCandidates": 1054,
-  "vocabularyCount": 3439,
-  "cardCount": 3440,
-  "pronunciationPending": 550,
-  "translationPending": 232,
+  "vocabularyCount": 3414,
+  "cardCount": 3415,
+  "pronunciationPending": 444,
+  "translationPending": 128,
   "counts": {
     "華航": {
       "雜誌": 39,
@@ -44,13 +44,13 @@
   "byType": {
     "abbreviation": {
       "total": 27,
-      "pendingIPA": 16,
-      "pendingChinese": 8
+      "pendingIPA": 15,
+      "pendingChinese": 6
     },
     "date": {
       "total": 17,
-      "pendingIPA": 1,
-      "pendingChinese": 1
+      "pendingIPA": 0,
+      "pendingChinese": 0
     },
     "model": {
       "total": 13,
@@ -63,14 +63,14 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 251,
-      "pendingIPA": 112,
-      "pendingChinese": 39
+      "total": 246,
+      "pendingIPA": 105,
+      "pendingChinese": 33
     },
     "word": {
-      "total": 3030,
-      "pendingIPA": 306,
-      "pendingChinese": 160
+      "total": 3010,
+      "pendingIPA": 209,
+      "pendingChinese": 65
     }
   },
   "zeroCandidateArticles": [
@@ -1384,8 +1384,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 15,
-      "candidates": 6,
-      "occurrences": 6,
+      "candidates": 5,
+      "occurrences": 5,
       "processed": true
     },
     {
@@ -1398,8 +1398,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 70,
-      "candidates": 33,
-      "occurrences": 35,
+      "candidates": 30,
+      "occurrences": 32,
       "processed": true
     },
     {
@@ -1412,8 +1412,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 20,
-      "candidates": 4,
-      "occurrences": 5,
+      "candidates": 3,
+      "occurrences": 4,
       "processed": true
     },
     {
@@ -1426,8 +1426,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 76,
-      "candidates": 23,
-      "occurrences": 27,
+      "candidates": 22,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -1454,8 +1454,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 71,
-      "candidates": 35,
-      "occurrences": 37,
+      "candidates": 34,
+      "occurrences": 36,
       "processed": true
     },
     {
@@ -1468,8 +1468,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 19,
-      "candidates": 5,
-      "occurrences": 5,
+      "candidates": 4,
+      "occurrences": 4,
       "processed": true
     },
     {
@@ -1482,8 +1482,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 72,
-      "candidates": 25,
-      "occurrences": 28,
+      "candidates": 23,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -1552,8 +1552,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 15,
-      "candidates": 7,
-      "occurrences": 7,
+      "candidates": 6,
+      "occurrences": 6,
       "processed": true
     },
     {
@@ -1566,8 +1566,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 72,
-      "candidates": 30,
-      "occurrences": 32,
+      "candidates": 29,
+      "occurrences": 31,
       "processed": true
     },
     {
@@ -1594,8 +1594,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 72,
-      "candidates": 23,
-      "occurrences": 28,
+      "candidates": 22,
+      "occurrences": 27,
       "processed": true
     },
     {
@@ -1622,8 +1622,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 72,
-      "candidates": 26,
-      "occurrences": 29,
+      "candidates": 24,
+      "occurrences": 27,
       "processed": true
     },
     {
@@ -1650,8 +1650,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 74,
-      "candidates": 22,
-      "occurrences": 26,
+      "candidates": 21,
+      "occurrences": 25,
       "processed": true
     },
     {
@@ -1664,8 +1664,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 20,
-      "candidates": 7,
-      "occurrences": 7,
+      "candidates": 5,
+      "occurrences": 5,
       "processed": true
     },
     {
@@ -1692,8 +1692,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 19,
-      "candidates": 6,
-      "occurrences": 6,
+      "candidates": 5,
+      "occurrences": 5,
       "processed": true
     },
     {
@@ -1818,8 +1818,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 76,
-      "candidates": 25,
-      "occurrences": 28,
+      "candidates": 24,
+      "occurrences": 27,
       "processed": true
     },
     {
@@ -1874,8 +1874,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 74,
-      "candidates": 28,
-      "occurrences": 32,
+      "candidates": 27,
+      "occurrences": 31,
       "processed": true
     },
     {
@@ -1902,8 +1902,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 77,
-      "candidates": 35,
-      "occurrences": 39,
+      "candidates": 34,
+      "occurrences": 38,
       "processed": true
     },
     {
@@ -1958,8 +1958,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 68,
-      "candidates": 37,
-      "occurrences": 40,
+      "candidates": 35,
+      "occurrences": 38,
       "processed": true
     },
     {
@@ -1986,8 +1986,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 70,
-      "candidates": 30,
-      "occurrences": 32,
+      "candidates": 29,
+      "occurrences": 31,
       "processed": true
     },
     {
@@ -2000,8 +2000,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 16,
-      "candidates": 7,
-      "occurrences": 7,
+      "candidates": 6,
+      "occurrences": 6,
       "processed": true
     },
     {
@@ -2014,8 +2014,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 77,
-      "candidates": 34,
-      "occurrences": 35,
+      "candidates": 33,
+      "occurrences": 34,
       "processed": true
     },
     {
@@ -2042,8 +2042,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_INDUSTRY_ITEMS",
       "words": 69,
-      "candidates": 27,
-      "occurrences": 33,
+      "candidates": 26,
+      "occurrences": 32,
       "processed": true
     },
     {
