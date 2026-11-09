@@ -1,18 +1,18 @@
 {
   "schema": 1,
-  "articleCount": 1007,
-  "uniqueTextCount": 975,
-  "processed": 1007,
-  "withCandidates": 1006,
-  "vocabularyCount": 3315,
-  "cardCount": 3316,
-  "pronunciationPending": 426,
-  "translationPending": 119,
+  "articleCount": 1055,
+  "uniqueTextCount": 1023,
+  "processed": 1055,
+  "withCandidates": 1054,
+  "vocabularyCount": 3439,
+  "cardCount": 3440,
+  "pronunciationPending": 550,
+  "translationPending": 232,
   "counts": {
     "華航": {
       "雜誌": 39,
       "新聞稿": 20,
-      "面試英文段落": 163,
+      "面試英文段落": 211,
       "廣播詞": 5,
       "朗讀文章": 1,
       "模擬朗讀": 96
@@ -43,14 +43,14 @@
   },
   "byType": {
     "abbreviation": {
-      "total": 24,
-      "pendingIPA": 13,
-      "pendingChinese": 5
+      "total": 27,
+      "pendingIPA": 16,
+      "pendingChinese": 8
     },
     "date": {
-      "total": 16,
-      "pendingIPA": 0,
-      "pendingChinese": 0
+      "total": 17,
+      "pendingIPA": 1,
+      "pendingChinese": 1
     },
     "model": {
       "total": 13,
@@ -63,14 +63,14 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 241,
-      "pendingIPA": 102,
-      "pendingChinese": 30
+      "total": 251,
+      "pendingIPA": 112,
+      "pendingChinese": 39
     },
     "word": {
-      "total": 2920,
-      "pendingIPA": 196,
-      "pendingChinese": 60
+      "total": 3030,
+      "pendingIPA": 306,
+      "pendingChinese": 160
     }
   },
   "zeroCandidateArticles": [
@@ -1371,6 +1371,678 @@
       "collection": "CI_FINAL_ITEMS",
       "words": 63,
       "candidates": 32,
+      "occurrences": 33,
+      "processed": true
+    },
+    {
+      "id": "article-690e1f54390a1a81",
+      "title": "歐洲近期多個航班接獲炸彈威脅，妳怎麼看航空保安？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 15,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-a6ed2a60a8761c3c",
+      "title": "歐洲近期多個航班接獲炸彈威脅，妳怎麼看航空保安？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 70,
+      "candidates": 33,
+      "occurrences": 35,
+      "processed": true
+    },
+    {
+      "id": "article-ca485fc9a33cb9e2",
+      "title": "旅客說行李裡有炸彈，接著又說只是開玩笑，妳怎麼做？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 20,
+      "candidates": 4,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-c9fbbc86ee46ca6f",
+      "title": "旅客說行李裡有炸彈，接著又說只是開玩笑，妳怎麼做？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 76,
+      "candidates": 23,
+      "occurrences": 27,
+      "processed": true
+    },
+    {
+      "id": "article-131e3c5f9175fa65",
+      "title": "flydubai FZ1073 駕駛艙保安事件，讓妳想到空服員哪些責任？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 13,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-41eb5e25ff3e20b7",
+      "title": "flydubai FZ1073 駕駛艙保安事件，讓妳想到空服員哪些責任？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 71,
+      "candidates": 35,
+      "occurrences": 37,
+      "processed": true
+    },
+    {
+      "id": "article-a7334348907de30a",
+      "title": "旅客因這則新聞說「我不信任機組人員」，妳會怎麼回答？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 19,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-a215503ab91c6d0f",
+      "title": "旅客因這則新聞說「我不信任機組人員」，妳會怎麼回答？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 72,
+      "candidates": 25,
+      "occurrences": 28,
+      "processed": true
+    },
+    {
+      "id": "article-38fe7b836a48273f",
+      "title": "英國航管系統故障造成大規模航班受影響，妳學到什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 17,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-dff0ce78c6f41e12",
+      "title": "英國航管系統故障造成大規模航班受影響，妳學到什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 75,
+      "candidates": 28,
+      "occurrences": 29,
+      "processed": true
+    },
+    {
+      "id": "article-4e35146e1b2b43f4",
+      "title": "系統何時恢復還不知道，旅客卻一直要求確切起飛時間，怎麼辦？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 17,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-384ad971b09acda7",
+      "title": "系統何時恢復還不知道，旅客卻一直要求確切起飛時間，怎麼辦？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 73,
+      "candidates": 24,
+      "occurrences": 26,
+      "processed": true
+    },
+    {
+      "id": "article-7eaca23b7030c405",
+      "title": "21 Air 貨機在邁阿密衝出跑道的事故，對航空業有什麼提醒？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 15,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-af6d58c586e95792",
+      "title": "21 Air 貨機在邁阿密衝出跑道的事故，對航空業有什麼提醒？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 72,
+      "candidates": 30,
+      "occurrences": 32,
+      "processed": true
+    },
+    {
+      "id": "article-45a2b5e76a5586d0",
+      "title": "旅客說「這個機型出過事故，所以一定不安全」，妳會如何回應？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 21,
+      "candidates": 8,
+      "occurrences": 8,
+      "processed": true
+    },
+    {
+      "id": "article-d30eec5476ddf6fa",
+      "title": "旅客說「這個機型出過事故，所以一定不安全」，妳會如何回應？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 72,
+      "candidates": 23,
+      "occurrences": 28,
+      "processed": true
+    },
+    {
+      "id": "article-7288073870bba9b5",
+      "title": "捷星在澳洲發生跑道入侵近失事件，為什麼沒有撞上也值得重視？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 15,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-f2e005150293754a",
+      "title": "捷星在澳洲發生跑道入侵近失事件，為什麼沒有撞上也值得重視？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 72,
+      "candidates": 26,
+      "occurrences": 29,
+      "processed": true
+    },
+    {
+      "id": "article-c2ab8d3b0d624f62",
+      "title": "同事說「又沒有人受傷，不用通報了」，妳會怎麼做？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 19,
+      "candidates": 2,
+      "occurrences": 2,
+      "processed": true
+    },
+    {
+      "id": "article-6611f05217671986",
+      "title": "同事說「又沒有人受傷，不用通報了」，妳會怎麼做？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 74,
+      "candidates": 22,
+      "occurrences": 26,
+      "processed": true
+    },
+    {
+      "id": "article-8648dca74fdb6ac8",
+      "title": "中東衝突與機場遭攻擊如何影響民航？空服員可以做什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 20,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-77d3047e98bd9317",
+      "title": "中東衝突與機場遭攻擊如何影響民航？空服員可以做什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 73,
+      "candidates": 40,
+      "occurrences": 41,
+      "processed": true
+    },
+    {
+      "id": "article-5763b06d234d8ef9",
+      "title": "因空域風險改道，旅客擔心接不上下一班飛機，妳怎麼協助？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 19,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-9ea9ae18018eff7d",
+      "title": "因空域風險改道，旅客擔心接不上下一班飛機，妳怎麼協助？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 65,
+      "candidates": 21,
+      "occurrences": 24,
+      "processed": true
+    },
+    {
+      "id": "article-21ade07c7fd5e89b",
+      "title": "美國近期因伊波拉疫情新增赴美航空旅客聲明要求，妳怎麼看？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 17,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-d549908d73658211",
+      "title": "美國近期因伊波拉疫情新增赴美航空旅客聲明要求，妳怎麼看？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 66,
+      "candidates": 30,
+      "occurrences": 32,
+      "processed": true
+    },
+    {
+      "id": "article-786756fd0b631936",
+      "title": "旅客說自己很健康，不願填寫適用的健康聲明，妳怎麼回應？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 16,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-dc50a3869babf982",
+      "title": "旅客說自己很健康，不願填寫適用的健康聲明，妳怎麼回應？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 73,
+      "candidates": 26,
+      "occurrences": 30,
+      "processed": true
+    },
+    {
+      "id": "article-e206f4f209a770c9",
+      "title": "近期國際線燃油附加費調漲，妳怎麼看票價與服務期待？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 15,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-26783a665f160685",
+      "title": "近期國際線燃油附加費調漲，妳怎麼看票價與服務期待？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 75,
+      "candidates": 36,
+      "occurrences": 40,
+      "processed": true
+    },
+    {
+      "id": "article-c93d7b87f03b0c01",
+      "title": "旅客說「機票變貴，服務卻沒變好」，妳會怎麼回答？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 16,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-b636cf7c98d9a0f8",
+      "title": "旅客說「機票變貴，服務卻沒變好」，妳會怎麼回答？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 76,
+      "candidates": 25,
+      "occurrences": 28,
+      "processed": true
+    },
+    {
+      "id": "article-d4198f48e2bc7462",
+      "title": "IATA 調查顯示旅客更接受生物辨識與 AI，妳認為人員服務會被取代嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 18,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-757c71f085247bdd",
+      "title": "IATA 調查顯示旅客更接受生物辨識與 AI，妳認為人員服務會被取代嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 86,
+      "candidates": 37,
+      "occurrences": 39,
+      "processed": true
+    },
+    {
+      "id": "article-5aecfeac08711101",
+      "title": "旅客擔心臉部辨識會外洩個資，或不會用自助設備，妳怎麼協助？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 18,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-23f8a7e08ebb16fb",
+      "title": "旅客擔心臉部辨識會外洩個資，或不會用自助設備，妳怎麼協助？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 74,
+      "candidates": 28,
+      "occurrences": 32,
+      "processed": true
+    },
+    {
+      "id": "article-51ba404b7e37d891",
+      "title": "大韓與韓亞航空即將進一步整合，妳認為航空合併的挑戰是什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 15,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-5ea1332265e372e0",
+      "title": "大韓與韓亞航空即將進一步整合，妳認為航空合併的挑戰是什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 77,
+      "candidates": 35,
+      "occurrences": 39,
+      "processed": true
+    },
+    {
+      "id": "article-004e5a24c28c2313",
+      "title": "合併期間旅客認為自己應有某項會員權益，但系統沒有顯示，妳怎麼做？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 20,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-c9a6598ac7074e22",
+      "title": "合併期間旅客認為自己應有某項會員權益，但系統沒有顯示，妳怎麼做？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 73,
+      "candidates": 21,
+      "occurrences": 25,
+      "processed": true
+    },
+    {
+      "id": "article-126945baa0d484e8",
+      "title": "西雪梨國際機場正式啟用，妳覺得新機場為航空服務帶來什麼機會與挑戰？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 14,
+      "candidates": 8,
+      "occurrences": 8,
+      "processed": true
+    },
+    {
+      "id": "article-61ac2cf0c9d8a4c1",
+      "title": "西雪梨國際機場正式啟用，妳覺得新機場為航空服務帶來什麼機會與挑戰？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 68,
+      "candidates": 37,
+      "occurrences": 40,
+      "processed": true
+    },
+    {
+      "id": "article-12ddaa74d45add2a",
+      "title": "旅客因城市有兩座機場而訂錯接送，妳會如何協助？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 19,
+      "candidates": 4,
+      "occurrences": 4,
+      "processed": true
+    },
+    {
+      "id": "article-1690fa8f10773679",
+      "title": "旅客因城市有兩座機場而訂錯接送，妳會如何協助？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 70,
+      "candidates": 30,
+      "occurrences": 32,
+      "processed": true
+    },
+    {
+      "id": "article-ac905ee3411e82ed",
+      "title": "近期颱風造成國內線全數取消，妳認為空服員該如何面對大規模異動？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 16,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-25b0cbfc03098dd0",
+      "title": "近期颱風造成國內線全數取消，妳認為空服員該如何面對大規模異動？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 77,
+      "candidates": 34,
+      "occurrences": 35,
+      "processed": true
+    },
+    {
+      "id": "article-814dc95f0bb70f48",
+      "title": "旅客問「別家航空都飛了，為什麼你們還不能飛？」妳怎麼回答？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 15,
+      "candidates": 3,
+      "occurrences": 3,
+      "processed": true
+    },
+    {
+      "id": "article-b7646a29677281df",
+      "title": "旅客問「別家航空都飛了，為什麼你們還不能飛？」妳怎麼回答？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_INDUSTRY_ITEMS",
+      "words": 69,
+      "candidates": 27,
       "occurrences": 33,
       "processed": true
     },
