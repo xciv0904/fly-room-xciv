@@ -1,18 +1,18 @@
 {
   "schema": 1,
-  "articleCount": 1055,
-  "uniqueTextCount": 1023,
-  "processed": 1055,
-  "withCandidates": 1054,
-  "vocabularyCount": 3414,
-  "cardCount": 3415,
-  "pronunciationPending": 444,
-  "translationPending": 128,
+  "articleCount": 1083,
+  "uniqueTextCount": 1051,
+  "processed": 1083,
+  "withCandidates": 1082,
+  "vocabularyCount": 3460,
+  "cardCount": 3461,
+  "pronunciationPending": 490,
+  "translationPending": 168,
   "counts": {
     "華航": {
       "雜誌": 39,
       "新聞稿": 20,
-      "面試英文段落": 211,
+      "面試英文段落": 239,
       "廣播詞": 5,
       "朗讀文章": 1,
       "模擬朗讀": 96
@@ -68,9 +68,9 @@
       "pendingChinese": 33
     },
     "word": {
-      "total": 3010,
-      "pendingIPA": 209,
-      "pendingChinese": 65
+      "total": 3056,
+      "pendingIPA": 255,
+      "pendingChinese": 105
     }
   },
   "zeroCandidateArticles": [
@@ -2044,6 +2044,398 @@
       "words": 69,
       "candidates": 26,
       "occurrences": 32,
+      "processed": true
+    },
+    {
+      "id": "article-f7efc841be34af8a",
+      "title": "已確認是公司作業疏失造成延誤，妳會告訴旅客嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 13,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-c624531b279dc566",
+      "title": "已確認是公司作業疏失造成延誤，妳會告訴旅客嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 62,
+      "candidates": 27,
+      "occurrences": 30,
+      "processed": true
+    },
+    {
+      "id": "article-c5eae0203d7399dd",
+      "title": "主管要求統一說是天候，但妳知道不是，妳會照說嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 14,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-d1b605e511f88376",
+      "title": "主管要求統一說是天候，但妳知道不是，妳會照說嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 68,
+      "candidates": 22,
+      "occurrences": 29,
+      "processed": true
+    },
+    {
+      "id": "article-78ef695a2d461afe",
+      "title": "旅客問飛機是不是故障，但妳只聽到維修人員私下討論，妳會怎麼說？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 21,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-c62729bc8d6a9c2b",
+      "title": "旅客問飛機是不是故障，但妳只聽到維修人員私下討論，妳會怎麼說？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 66,
+      "candidates": 22,
+      "occurrences": 26,
+      "processed": true
+    },
+    {
+      "id": "article-9706dd6e42c4964b",
+      "title": "妳把未確認的起飛時間說成確定，後來發現錯了，會主動更正嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 18,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-6abee64441ad1e1c",
+      "title": "妳把未確認的起飛時間說成確定，後來發現錯了，會主動更正嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 69,
+      "candidates": 20,
+      "occurrences": 25,
+      "processed": true
+    },
+    {
+      "id": "article-5c5b1b9e77bc8798",
+      "title": "妳發現自己漏了一項安全檢查，回報可能延誤起飛，妳會主動說嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 15,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-93a1be67e4be9e12",
+      "title": "妳發現自己漏了一項安全檢查，回報可能延誤起飛，妳會主動說嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 63,
+      "candidates": 20,
+      "occurrences": 24,
+      "processed": true
+    },
+    {
+      "id": "article-6ee4564dc83488d5",
+      "title": "犯錯的是跟妳很好的同事，主管詢問時，妳會替他隱瞞嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 16,
+      "candidates": 4,
+      "occurrences": 4,
+      "processed": true
+    },
+    {
+      "id": "article-3d124e6523db1bd7",
+      "title": "犯錯的是跟妳很好的同事，主管詢問時，妳會替他隱瞞嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 63,
+      "candidates": 21,
+      "occurrences": 26,
+      "processed": true
+    },
+    {
+      "id": "article-483ec2ed5ae68416",
+      "title": "航班因旅客身體不適而延誤，其他旅客追問病情，妳會全部告訴他們嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 18,
+      "candidates": 9,
+      "occurrences": 9,
+      "processed": true
+    },
+    {
+      "id": "article-0e851b7b19af2143",
+      "title": "航班因旅客身體不適而延誤，其他旅客追問病情，妳會全部告訴他們嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 65,
+      "candidates": 27,
+      "occurrences": 30,
+      "processed": true
+    },
+    {
+      "id": "article-f79ee50099564163",
+      "title": "旅客問餐點是否含堅果，資料還沒確認，妳會說「應該沒有，放心吃」嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 19,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-32f939837f1372e1",
+      "title": "旅客問餐點是否含堅果，資料還沒確認，妳會說「應該沒有，放心吃」嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 72,
+      "candidates": 25,
+      "occurrences": 30,
+      "processed": true
+    },
+    {
+      "id": "article-66890ba3a9c45ef7",
+      "title": "妳可以在社群媒體分享穿制服的照片嗎？會怎麼拿捏？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 19,
+      "candidates": 4,
+      "occurrences": 4,
+      "processed": true
+    },
+    {
+      "id": "article-1af8a189ecb6a485",
+      "title": "妳可以在社群媒體分享穿制服的照片嗎？會怎麼拿捏？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 71,
+      "candidates": 26,
+      "occurrences": 31,
+      "processed": true
+    },
+    {
+      "id": "article-8c03309aeb8a32b7",
+      "title": "下班後用私人帳號抱怨旅客或公司，妳覺得可以嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 19,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-f05afec5fd2bf3c3",
+      "title": "下班後用私人帳號抱怨旅客或公司，妳覺得可以嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 70,
+      "candidates": 27,
+      "occurrences": 30,
+      "processed": true
+    },
+    {
+      "id": "article-4a270cf0675bdea1",
+      "title": "只要不寫姓名，妳就可以把有趣的旅客故事發上網嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 18,
+      "candidates": 3,
+      "occurrences": 3,
+      "processed": true
+    },
+    {
+      "id": "article-0316659d0bec0d24",
+      "title": "只要不寫姓名，妳就可以把有趣的旅客故事發上網嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 72,
+      "candidates": 26,
+      "occurrences": 31,
+      "processed": true
+    },
+    {
+      "id": "article-e3b29a15d256bbfe",
+      "title": "如果妳成為有很多粉絲的空服員，拍影片與工作衝突時會怎麼選？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 19,
+      "candidates": 7,
+      "occurrences": 7,
+      "processed": true
+    },
+    {
+      "id": "article-620be01f417e2d6d",
+      "title": "如果妳成為有很多粉絲的空服員，拍影片與工作衝突時會怎麼選？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 73,
+      "candidates": 23,
+      "occurrences": 27,
+      "processed": true
+    },
+    {
+      "id": "article-8a0ea750acd04de0",
+      "title": "品牌邀請妳穿航空公司制服拍業配，報酬很好，妳會接受嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 15,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-96fd89908667a7e7",
+      "title": "品牌邀請妳穿航空公司制服拍業配，報酬很好，妳會接受嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 70,
+      "candidates": 24,
+      "occurrences": 27,
+      "processed": true
+    },
+    {
+      "id": "article-7bbc2a252adae471",
+      "title": "同事上傳的限時動態拍到旅客或內部資料，妳會怎麼處理？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 16,
+      "candidates": 5,
+      "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-8d5841c3849d6007",
+      "title": "同事上傳的限時動態拍到旅客或內部資料，妳會怎麼處理？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 74,
+      "candidates": 20,
+      "occurrences": 25,
       "processed": true
     },
     {

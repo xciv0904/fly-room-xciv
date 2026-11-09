@@ -192,7 +192,7 @@
     }
   },
   {
-    "word": "supporting",
+    "word": "Supporting",
     "type": "word",
     "ipa": "/səˈpɔɹtɪŋ/",
     "stress": [
@@ -216,20 +216,20 @@
       }
     ],
     "source": {
-      "id": "article-160a6f32aba26ec7",
-      "title": "lab-0-0-0-0 · Service Information Workshop · 初級",
+      "id": "article-3d124e6523db1bd7",
+      "title": "犯錯的是跟妳很好的同事，主管詢問時，妳會替他隱瞞嗎？",
       "airlines": [
         "華航"
       ],
-      "kind": "模擬朗讀",
-      "sourceFile": "reading-lab/data.js",
-      "collection": "ReadingLabData.questions",
-      "words": 113,
-      "candidates": 41,
-      "occurrences": 45,
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 63,
+      "candidates": 21,
+      "occurrences": 26,
       "processed": true
     },
-    "sentence": "Participants will learn to identify the main action in each sentence before adding supporting details.",
+    "sentence": "Supporting a colleague means helping them take responsibility and improve.",
     "checks": {
       "ipaExactDictionaryMatch": true,
       "cmuPhonemesExactMatch": true,
@@ -921,20 +921,20 @@
       }
     ],
     "source": {
-      "id": "article-d45d3ab01f89de9d",
-      "title": "lab-0-7-0-1 · A More Understandable Terminal · 初級",
+      "id": "article-c62729bc8d6a9c2b",
+      "title": "旅客問飛機是不是故障，但妳只聽到維修人員私下討論，妳會怎麼說？",
       "airlines": [
         "華航"
       ],
-      "kind": "模擬朗讀",
-      "sourceFile": "reading-lab/data.js",
-      "collection": "ReadingLabData.questions",
-      "words": 156,
-      "candidates": 65,
-      "occurrences": 72,
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_JUDGMENT_ITEMS",
+      "words": 66,
+      "candidates": 22,
+      "occurrences": 26,
       "processed": true
     },
-    "sentence": "When a facility is temporarily unavailable, the information should explain where a traveler can obtain an alternative service.",
+    "sentence": "I would pass on the passenger's question, obtain verified information, and return with an update.",
     "checks": {
       "ipaExactDictionaryMatch": true,
       "cmuPhonemesExactMatch": true,

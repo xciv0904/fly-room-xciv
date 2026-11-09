@@ -3,8 +3,9 @@ const prep=require('../ci-final-data.js');
 function legacy(){const sandbox={window:{}};vm.runInNewContext(fs.readFileSync(require.resolve('../question-bank.js'),'utf8'),sandbox);return JSON.parse(JSON.stringify(sandbox.window.__QUESTION_BANK__)).map((row,id)=>({...row,id}));}
 test('every requested main question, follow-up and English prompt has a complete bilingual draft',()=>{
   const expected=['R1','R2','R3','R4','N1.main','N1.follow','N2.main','N2.follow.ai','N2.follow.friend','N3.main','N3.follow','N4.main','N4.follow','N5.main','N5.follow','N6.main','N6.follow','A1','A2',...Array.from({length:18},(_,i)=>`P${i+1}`),'E1','E2.company','E2.now','E3','E4','E5','E6',...Array.from({length:12},(_,i)=>[`I${i+1}.main`,`I${i+1}.follow`]).flat()];
+  expected.push(...Array.from({length:8},(_,i)=>`J${i+1}`),...Array.from({length:6},(_,i)=>`S${i+1}`));
   assert.deepEqual(new Set(prep.items.flatMap(row=>row.coverage)),new Set(expected));
-  assert.equal(prep.items.length,63);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
+  assert.equal(prep.items.length,77);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
   assert.equal(prep.items.filter(row=>row.kind==='asked').length,4);assert.equal(prep.englishPrompts.length,6);
   for(const row of prep.items){
     assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>70);assert.ok(row.a_en.split(/\s+/).length>=45);
@@ -35,12 +36,29 @@ test('integrating drafts reuses existing IDs, preserves other-airline answers, a
   assert.deepEqual(again.items.map(row=>row.id),joined.items.map(row=>row.id));
 });
 test('news qualifications and personal-story boundaries survive into the downloadable study guide',()=>{
-  const md=prep.markdown();assert.equal((md.match(/^## \d+\./gm)||[]).length,prep.items.length);
+  const md=prep.markdown();assert.equal((md.match(/^### \d+\./gm)||[]).length,50);
   assert.match(prep.byKey['sustainability'].tip,/Book & Claim/);assert.match(prep.byKey['fleet-news'].tip,/不要.*已交機/);
   assert.match(prep.byKey['exceed-expectations'].a_en,/Canadian guest/);assert.match(prep.byKey['digital-service'].a_en,/Colombian guest/);
   assert.match(prep.byKey['harassment'].tip,/碰觸是本題假設/);assert.match(prep.byKey['power-bank'].tip,/年度安全議題/);
   assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-09');
-  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試雙語擬答-2026-11-10.md'),'utf8'),md+'\n');
+  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試精選50題-2026-11-10.md'),'utf8'),md+'\n');
+  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試雙語擬答-2026-11-10.md'),'utf8'),prep.markdown({scope:'all'})+'\n');
+  assert.equal((prep.markdown({scope:'all'}).match(/^### \d+\./gm)||[]).length,prep.items.length);
+});
+test('exactly 50 distinct essentials cover six explicit topics and all extensions stay classified',()=>{
+  assert.equal(prep.essentialItems.length,50);assert.equal(new Set(prep.essentialItems.map(row=>row.key)).size,50);
+  assert.deepEqual(prep.topics.map(topic=>topic.keys.length),[8,8,8,8,10,8]);
+  assert.deepEqual(prep.essentialItems.map(row=>row.essentialRank),Array.from({length:50},(_,i)=>i+1));
+  for(const row of prep.items)assert.equal(prep.topics.filter(topic=>topic.key===row.topic).length,1);
+  for(const topic of prep.topics)assert.deepEqual(prep.essentialItems.filter(row=>row.topic===topic.key).map(row=>row.key),topic.keys);
+  const scenarios=prep.items.filter(row=>row.kind==='scenario');assert.equal(scenarios.length,14);
+  assert.ok(scenarios.every(row=>row.essentialRank&&row.id<-11063));
+  assert.equal(prep.essentialItems.filter(row=>row.kind==='asked').length,4);
+  assert.match(prep.byKey['supervisor-false-explanation'].a_zh,/不會明知不實/);
+  assert.match(prep.byKey['anonymous-passenger-story'].a_zh,/不寫姓名仍可能/);
+  assert.match(prep.byKey['uniform-social-post'].tip,/實際規範/);
+  assert.ok(prep.byKey['allergen-uncertainty'].sources.includes('mealAllergens'));
+  assert.ok(!prep.byKey['western-sydney-opening'].essentialRank);assert.ok(prep.byKey['western-sydney-opening'].topic);
 });
 test('industry expansion retains original question IDs and each historical verification date',()=>{
   const originalKeys=['intro','preparation','delay-honesty','social-media','runway-news','delay-pressure','privacy-news','ai-translation','passenger-lookup','theme-flight','countdown-turbulence','fleet-news','learning-procedures','safety-role','senior-safety','sustainability','eco-objection','power-bank','digital-service','why-cabin-crew','why-china-airlines','growth','why-hire','reliability','service-mistake','unavailable-request','exceed-expectations','proactive-boundaries','korean','harassment','prioritisation','colleague-promise','filming','unfamiliar-equipment','fatigue','not-selected','life-learning','why-now','hotel-vs-cabin'];

@@ -5,6 +5,8 @@
   const sources={
     review:{title:"本人面試回顧",url:"#review",date:"",kind:"personal"},
     stories:{title:"本人飯店服務故事",url:"#tools",date:"",kind:"personal"},
+    judgmentPractice:{title:"依本人誠實溝通與社群題延伸的假設練習（非確認考古題）",url:"#ci/final-topics/delay-honesty",date:"",kind:"practice"},
+    mealAllergens:{title:"華航：特殊飲食與過敏原注意事項",url:"https://www.china-airlines.com/tw/zh/prepare-for-the-fly/special-assistance/special-meal",date:"",checkedAt:"2026-11-10",kind:"official"},
     runway:{title:"中央社：曼谷機場跑道受損與航班延誤",url:"https://www.cna.com.tw/news/aopl/202610290323.aspx",date:"2026-10-29",kind:"news"},
     privacy:{title:"公視：涉嫌利用 AI 竊取個資案件",url:"https://news.pts.org.tw/article/834582",date:"2026-11-06",kind:"news"},
     newyear:{title:"華航：跨年主題航班",url:"https://www.china-airlines.com/tw/zh/about-china-airlines/media/news/20261104.html",date:"2026-11-04",kind:"official"},
@@ -520,11 +522,136 @@ Thank you.`,
     }
   ];
   CI_FINAL_ITEMS.push(...CI_INDUSTRY_ITEMS.map(item=>({...item,group:"航空業時事",checkedAt})));
+  const CI_JUDGMENT_ITEMS=[
+    {
+      key:"confirmed-company-error",parentKey:"delay-honesty",coverage:["J1"],
+      q_zh:"已確認是公司作業疏失造成延誤，妳會告訴旅客嗎？",q_en:"Would you tell passengers if a confirmed company operational error caused the delay?",
+      a_zh:"會，我不會把已確認的作業問題改說成天候或其他原因。我會先確認正確的說明，向旅客交代目前的原因、處理進度與下一次更新，並為造成的不便致歉。若責任細節還在釐清，我會清楚區分，不自行指名責怪某位同事。我認為維護公司的形象，需要靠負責任地處理問題，而不是提供不實資訊。",
+      a_en:"Yes. I would not describe a confirmed operational error as bad weather or invent another cause. I would verify the accurate explanation, acknowledge the inconvenience, and share the current action and next update. If individual responsibility was still being reviewed, I would say so rather than blame a colleague. I believe protecting the company's reputation requires an accountable response and truthful information.",
+      tip:"考點：誠實與公司形象。先明確回答『會』；核對說明是為了準確，不能變成隱瞞已確認原因。"
+    },
+    {
+      key:"supervisor-false-explanation",parentKey:"confirmed-company-error",coverage:["J2"],
+      q_zh:"主管要求統一說是天候，但妳知道不是，妳會照說嗎？",q_en:"Would you repeat a supervisor's explanation about weather if you knew it was inaccurate?",
+      a_zh:"我不會明知不實還照說。我會先私下向主管確認，是否有我尚未掌握的新資訊，並具體說明我發現的差異，請他確認正確的對外說法。在釐清前，我會向旅客說明目前可確認的狀況與正在查核的部分，不自行補上原因。如果仍被要求傳達不實資訊，我會依正式管道向適當主管反映，保持尊重，也守住誠實的責任。",
+      a_en:"I would not knowingly repeat inaccurate information. First, I would check privately whether my supervisor had new information and explain the specific difference I had noticed. While it was being clarified, I would tell passengers what was confirmed and what was still being checked. If I was still asked to give false information, I would raise the concern through the appropriate channel respectfully, rather than pass it on.",
+      tip:"考點：服從與判斷。先核對是否有資訊落差；『統一口徑』不等於可以說謊，也不需要在旅客面前與主管爭吵。"
+    },
+    {
+      key:"maintenance-rumour",parentKey:"delay-honesty",coverage:["J3"],
+      q_zh:"旅客問飛機是不是故障，但妳只聽到維修人員私下討論，妳會怎麼說？",q_en:"A passenger asks whether the aircraft has a fault, but you have only overheard a maintenance discussion. What would you say?",
+      a_zh:"我會坦白說目前還沒有收到已確認的原因，正在向負責人員核對，不會把聽到的片段當成結論，也不會直接保證飛機沒有問題。我會回報旅客的疑問，確認哪些資訊已經查明，再回來更新。對我而言，說實話也包括承認自己目前不知道，並主動查清楚，而不是讓旅客在沒有回應的情況下繼續等待。",
+      a_en:"I would explain that I had not yet received a confirmed explanation and was checking with the responsible team. I would neither present an overheard discussion as a fact nor promise that there was no problem. I would pass on the passenger's question, obtain verified information, and return with an update. Being honest includes admitting what I do not know and taking action to clarify it.",
+      tip:"考點：事實與推測。不能用『聽說』證明誠實，也不能用『絕對沒問題』安撫不確定的狀況。"
+    },
+    {
+      key:"correct-wrong-update",parentKey:"delay-honesty",coverage:["J4"],
+      q_zh:"妳把未確認的起飛時間說成確定，後來發現錯了，會主動更正嗎？",q_en:"You gave an unconfirmed departure time as a certainty and later realised the mistake. Would you correct it?",
+      a_zh:"會，我會盡快主動更正，清楚說明先前把尚未確認的時間說成確定，是我提供資訊不夠準確，並向旅客致歉。我會核對最新狀況，說明目前確定與仍在等待的部分，也讓相關同事知道，避免錯誤繼續傳遞。如果旅客因此受到影響，我會協助轉交具體需求並跟進，不能只道歉後就離開，也不能再用另一個不確定的時間補救。",
+      a_en:"Yes. I would correct the information promptly, acknowledge that I had presented an unconfirmed time as certain, and apologise. I would verify the latest situation and explain what was known and what remained uncertain. I would also update my colleagues so the error did not spread. If the mistake affected the passenger's plans, I would help pass on their needs and follow up instead of making another uncertain promise.",
+      tip:"考點：承擔與修正。區分『情況後來改變』和『自己先前講錯』，不要把自己的錯一律推給系統更新。"
+    },
+    {
+      key:"missed-safety-check",parentKey:"delay-honesty",coverage:["J5"],
+      q_zh:"妳發現自己漏了一項安全檢查，回報可能延誤起飛，妳會主動說嗎？",q_en:"Would you report a safety check you missed, even if doing so might delay departure?",
+      a_zh:"會，我會立即回報漏做的項目與目前狀況，依指示完成必要的處理，不會因為沒人發現或怕影響準點就隱瞞。我也不會自行判定這一項應該沒關係，就把檢查當作已完成。處理後，我會檢討自己在哪個環節漏掉，調整確認與交接的方式。我希望團隊信任我，是因為我願意承擔並修正，而不是從來不承認錯誤。",
+      a_en:"Yes. I would report the missed check and the current situation immediately, then follow instructions to complete the necessary action. I would not hide it because no one had noticed or because departure might be delayed. I would also avoid deciding on my own that the item was unimportant. Afterwards, I would review how it happened and improve my checking and handover habits.",
+      tip:"考點：安全與準點、承認疏漏。這是假設題，不可說成妳曾在航空工作中漏做檢查；不自行宣告航機可以放行。"
+    },
+    {
+      key:"friend-colleague-error",parentKey:"delay-honesty",coverage:["J6"],
+      q_zh:"犯錯的是跟妳很好的同事，主管詢問時，妳會替他隱瞞嗎？",q_en:"Would you hide a mistake made by a close colleague when a supervisor asked about it?",
+      a_zh:"不會，我會如實說明自己知道的事實，也清楚區分親眼看到與尚未確認的部分。我可以關心同事、協助補救，但不會一起隱瞞，尤其是涉及安全或旅客權益的事情。如果情況允許，我會鼓勵他主動回報，並陪他一起把事情處理好。我認為支持同事，是幫助他承擔和改善，而不是讓同樣的風險繼續存在。",
+      a_en:"No. I would describe the facts I knew and distinguish what I had observed from what was still unconfirmed. I could support my colleague and help resolve the problem, but I would not hide it, especially if safety or passenger interests were involved. Where appropriate, I would encourage them to report it themselves. Supporting a colleague means helping them take responsibility and improve.",
+      tip:"考點：團隊忠誠與誠信。既不包庇，也不把未確認的指控說成事實；回報的目的是處理問題。"
+    },
+    {
+      key:"medical-privacy-explanation",parentKey:"delay-honesty",coverage:["J7"],
+      q_zh:"航班因旅客身體不適而延誤，其他旅客追問病情，妳會全部告訴他們嗎？",q_en:"A flight is delayed while a passenger receives assistance. Would you disclose that passenger's medical details to others?",
+      a_zh:"我會誠實說明已確認、可以對外傳達的行程影響與安排，但不公開當事人的病情、姓名或其他不必要的個資。我可以依獲准資訊說明，目前組員正在協助一位旅客，並告知其他人需要配合的事項及後續更新。我不會編造另一個延誤原因，也不會因為大家好奇就轉述病情。誠實與尊重隱私可以同時做到，重點是讓旅客取得與自己行程相關的資訊。",
+      a_en:"I would explain the confirmed impact on the flight and the arrangements we could share, without disclosing the passenger's medical details or identity. With appropriate guidance, I could say that the crew were assisting a passenger and explain any instructions or updates others needed. I would not invent a different reason for the delay. Honest communication can protect privacy while still giving people relevant information.",
+      tip:"考點：透明與隱私。只談資訊界線，不自行診斷、宣布傳染病或公開座位及病史。"
+    },
+    {
+      key:"allergen-uncertainty",parentKey:"delay-honesty",coverage:["J8"],sources:["judgmentPractice","mealAllergens"],
+      q_zh:"旅客問餐點是否含堅果，資料還沒確認，妳會說「應該沒有，放心吃」嗎？",q_en:"Would you tell a passenger with a nut allergy that a meal was probably safe before checking the information?",
+      a_zh:"不會，我會直接說目前無法確認，先核對可取得的餐點與過敏原資訊，並向座艙長尋求協助。即使沒有列出某種食材，我也不會自行保證完全沒有接觸過敏原；華航的公開說明也指出，無法保證客艙或餐食完全杜絕過敏原。我會如實轉達已確認的內容與限制，協助了解可用安排，而不是用猜測讓旅客放心，也不替他做醫療判斷。",
+      a_en:"No. I would say that I could not yet confirm the information, check the available meal and allergen details, and seek the senior crew member's help. I would not guarantee that a meal was completely free from allergen contact. China Airlines' public guidance also explains that an allergen-free cabin or meal cannot be guaranteed. I would communicate the verified information and limitations without guessing or making a medical decision for the passenger.",
+      tip:"考點：不確定時能否拒絕保證。『沒列出堅果』『素食』『拿掉看得到的堅果』都不能自行推論為完全無過敏原。官方頁面查閱日 2026-11-10；不提供醫療處置擬答。"
+    },
+    {
+      key:"uniform-social-post",parentKey:"social-media",coverage:["S1"],
+      q_zh:"妳可以在社群媒體分享穿制服的照片嗎？會怎麼拿捏？",q_en:"Would you share photos of yourself in uniform on social media, and how would you decide what to post?",
+      a_zh:"我會先了解公司的制服與社群規範，確認拍攝與發布都被允許，再判斷內容是否合宜。我可以為自己的工作感到驕傲，但分享時會尊重職業形象，不讓拍攝影響工作，也不帶入旅客、內部資訊或未經同意的同事。如果規範不清楚，我會先詢問。我希望別人看到的是我對工作的珍惜與專業，而不只是制服帶來的光環。",
+      a_en:"I would first check the company's uniform and social media rules and confirm that both taking and posting the photo were allowed. I can be proud of my work while presenting it responsibly. I would not let filming interfere with duties or include passengers, internal information, or colleagues without permission. If a rule was unclear, I would ask before posting. I would want the content to reflect respect for the profession.",
+      tip:"考點：工作榮譽與炫耀的差別。不要自行宣稱華航全面允許或禁止制服自拍；實際規範要入職後確認。"
+    },
+    {
+      key:"private-account-complaint",parentKey:"social-media",coverage:["S2"],
+      q_zh:"下班後用私人帳號抱怨旅客或公司，妳覺得可以嗎？",q_en:"Do you think it is acceptable to complain about passengers or the company on a private account after work?",
+      a_zh:"我會謹慎處理，因為私人帳號也可能被截圖轉傳，下班並不代表旅客隱私與職業界線就消失。我有情緒時會先整理感受，不把可識別的旅客、同事或工作細節放上網。若是需要改善的工作問題，我會透過正式管道提出具體事實與建議。我認為情緒需要出口，但不應讓公開抱怨傷害他人，或取代真正能解決問題的溝通。",
+      a_en:"I would be careful because a private post can still be copied and shared. Being off duty does not remove privacy responsibilities or professional boundaries. If I was upset, I would take time to process it without posting identifiable passengers, colleagues, or work details. For a workplace concern, I would use appropriate channels and provide concrete facts and suggestions. Expressing frustration should not harm others or replace a useful conversation.",
+      tip:"考點：私人身分與職業責任。不要把『不能抱怨』說成不能反映問題；可以提出工作疑慮，但要選適當方式。"
+    },
+    {
+      key:"anonymous-passenger-story",parentKey:"social-media",coverage:["S3"],
+      q_zh:"只要不寫姓名，妳就可以把有趣的旅客故事發上網嗎？",q_en:"Is it acceptable to post an interesting passenger story as long as you leave out the person's name?",
+      a_zh:"不一定，不寫姓名仍可能透過日期、航班、座位、照片或特殊情節讓人認出當事人。我會先確認是否符合公司規範，並尊重相關人員的同意，不會把服務中得知的私事當成吸引注意的素材。如果想分享學習，我可以談自己的反思與一般服務觀念，避免帶出可識別的細節。我希望旅客信任我們，是因為他們知道自己的經歷會被尊重。",
+      a_en:"Not necessarily. A date, flight, seat, photo, or unusual detail may still identify someone even without a name. I would follow company rules and respect the relevant people's consent rather than use private service experiences to attract attention. If I wanted to share a lesson, I could focus on my own reflection and general service principles without identifiable details. Passengers should be able to trust that their experiences will be treated respectfully.",
+      tip:"考點：匿名不等於無法識別。這是假設情境，不表示妳曾在網路公開旅客故事；不把教學用個人回顧當成公開發布授權。"
+    },
+    {
+      key:"influencer-work-priority",parentKey:"social-media",coverage:["S4"],
+      q_zh:"如果妳成為有很多粉絲的空服員，拍影片與工作衝突時會怎麼選？",q_en:"If you became a cabin crew influencer, how would you handle a conflict between making content and your duties?",
+      a_zh:"我會以工作責任為優先，不讓拍攝打斷檢查、簡報、服務或休息安排。即使只是短短幾秒，也不能由我自行判定不影響安全就拍。能否拍攝、在哪裡拍及能否發布，都需要符合公司規範與必要同意。如果有分享的機會，我會在獲准的時間與範圍內進行。我希望影響力能來自把工作做好，而不是為了內容犧牲本來應盡的責任。",
+      a_en:"My duties would come first. I would not let filming interrupt checks, briefings, service, or required rest. Even a short recording would need to follow company rules about where and when filming was allowed and what could be shared. If there was an approved opportunity, I could create content within those limits. I would want my influence to come from doing the job well rather than allowing content creation to weaken my responsibilities.",
+      tip:"考點：社群熱度與工作排序。不要說只要旅客看不到就可以拍，也不要自行公開內部作業或保安細節。"
+    },
+    {
+      key:"sponsored-uniform-post",parentKey:"social-media",coverage:["S5"],
+      q_zh:"品牌邀請妳穿航空公司制服拍業配，報酬很好，妳會接受嗎？",q_en:"Would you accept a well-paid sponsored post that required you to wear the airline's uniform?",
+      a_zh:"我不會因為報酬高就先接受。我會先向公司確認兼職、業配、制服與品牌使用的規範，取得必要核准前不做承諾。穿制服可能讓觀眾以為公司支持這項產品，所以不能只當作我個人的穿搭選擇。如果不符合規定，我會清楚婉拒。我認為尊重受託使用的制服與品牌，也是對這份工作負責的一部分。",
+      a_en:"I would not accept simply because the payment was attractive. I would first check the rules on outside work, sponsorships, uniforms, and brand use, and obtain any required approval before making a commitment. Wearing the uniform could make viewers think the airline endorsed the product. If the proposal was not permitted, I would decline politely. Respecting the uniform and the company's brand is part of being responsible in the role.",
+      tip:"考點：利益與品牌責任。不是所有個人分享都等於官方代言，但不能自行讓制服成為商業背書。不要捏造公司實際核准流程。"
+    },
+    {
+      key:"colleague-social-leak",parentKey:"social-media",coverage:["S6"],
+      q_zh:"同事上傳的限時動態拍到旅客或內部資料，妳會怎麼處理？",q_en:"What would you do if a colleague's social media story showed a passenger or internal information?",
+      a_zh:"我會先私下提醒他具體有哪些內容可能不適合公開，請他儘速依規定移除或處理，避免繼續擴散；必要時也會透過公司指定管道回報。我不會為了證明問題而轉傳到其他群組，也不會在公開留言區與他爭辯。若內容已經流出，我會如實說明自己知道的情況，配合後續處理。保護同事與旅客，都需要及早處理問題，而不是裝作沒有看到。",
+      a_en:"I would speak to my colleague privately, identify the information that might not be appropriate to share, and ask them to address it promptly under company rules. Where required, I would report it through the designated channel. I would not forward the post to other groups or argue publicly. If it had already spread, I would describe what I knew accurately and cooperate with the response rather than pretend I had not seen it.",
+      tip:"考點：同事情誼、隱私與處理時機。移除貼文不代表事件已完全解決，也不應再散播內容。"
+    }
+  ];
+  CI_FINAL_ITEMS.push(...CI_JUDGMENT_ITEMS.map(item=>({...item,group:item.coverage[0].startsWith("S")?"社群形象情境":"誠實溝通情境",kind:"scenario",priority:1,sources:item.sources||["judgmentPractice"],checkedAt})));
   const items=CI_FINAL_ITEMS;
   items.forEach((item,index)=>{
     const itemCheckedAt=item.checkedAt||"2026-11-08";
     Object.assign(item,{id:-11001-index,airlines:["華航"],cat:`華航複試・${item.group}`,src:`${item.kind==="asked"?"本人回顧已問過":"擬題，非確認考古題"}｜整理 ${itemCheckedAt}`,checkedAt:itemCheckedAt});
   });
+  /* Editorial selection, not a claim about actual interview frequency. Every item has one topic. */
+  const topics=[
+    {key:"motivation",label:"動機與自我認識",keys:["intro","preparation","why-cabin-crew","why-china-airlines","why-hire","hotel-vs-cabin","growth","not-selected"]},
+    {key:"integrity",label:"誠實溝通與責任",keys:["delay-honesty","confirmed-company-error","supervisor-false-explanation","maintenance-rumour","correct-wrong-update","missed-safety-check","friend-colleague-error","medical-privacy-explanation"]},
+    {key:"image",label:"社群形象與界線",keys:["social-media","uniform-social-post","private-account-complaint","anonymous-passenger-story","influencer-work-priority","sponsored-uniform-post","colleague-social-leak","harassment"]},
+    {key:"safety",label:"飛安保安與判斷",keys:["safety-role","power-bank","unfamiliar-equipment","fatigue","europe-bomb-threats","flydubai-security","miami-cargo-accident","allergen-uncertainty"]},
+    {key:"service",label:"服務經驗與團隊合作",keys:["service-mistake","unavailable-request","exceed-expectations","proactive-boundaries","prioritisation","colleague-promise","korean","reliability","digital-service","learning-procedures"]},
+    {key:"industry",label:"航空時事與產業觀點",keys:["fleet-news","sustainability","uk-atc-outage","middle-east-airspace","ebola-travel-attestation","fuel-surcharge-news","iata-biometrics-ai","korean-asiana-integration"]}
+  ];
+  const extensions={
+    motivation:["life-learning","why-now"],
+    integrity:["delay-pressure","outage-no-eta","near-miss-report"],
+    image:["privacy-news","ai-translation","passenger-lookup","filming","biometric-human-option"],
+    safety:["countdown-turbulence","senior-safety","security-joke","security-trust","accident-aircraft-fear","jetstar-runway-incursion"],
+    service:["eco-objection","diversion-connection","health-form-refusal","fare-service-complaint","merger-benefit-confusion","wrong-airport-help","other-airline-still-flies"],
+    industry:["runway-news","theme-flight","western-sydney-opening","typhoon-flight-cancellations"]
+  };
+  let essentialRank=0;
+  for(const topic of topics){
+    for(const key of topic.keys){const item=items.find(row=>row.key===key);if(!item||item.topic)throw Error(`Invalid essential topic key: ${key}`);Object.assign(item,{topic:topic.key,essentialRank:++essentialRank});}
+    for(const key of extensions[topic.key]){const item=items.find(row=>row.key===key);if(!item||item.topic)throw Error(`Invalid extension topic key: ${key}`);item.topic=topic.key;}
+  }
+  if(essentialRank!==50||items.some(item=>!item.topic))throw Error("Every interview item must be classified and exactly 50 must be selected");
+  const essentialItems=items.filter(item=>item.essentialRank).sort((a,b)=>a.essentialRank-b.essentialRank);
   const byKey=Object.fromEntries(items.map(item=>[item.key,item]));
   const englishPrompts=[
     {zh:"請用 30 秒自我介紹。",en:"Please introduce yourself in 30 seconds.",keys:["intro"]},
@@ -554,28 +681,32 @@ Thank you.`,
     }
     return {bank:list,items:registry};
   }
-  function markdown(){
-    const industry=items.filter(item=>item.group==="航空業時事");
-    const out=["# 華航複試中英文擬答",`內容更新：${checkedAt}；各題新聞查核日期另列，舊題維持原查核紀錄。`,`共 ${items.length} 題，包含原有 39 題與新增航空業時事 ${industry.length} 題（${industry.filter(item=>item.kind==="news").length} 個主題及各一題追問）。保留 18 題履歷服務題與六組英文核心問法；英文重疊題共用同一份雙語擬答。`, "只有「實戰回顧」四題是本人記錄已問過；其餘為延伸練習。擬答需依個人事實調整，新聞狀態以所列日期為準。", "航空業時事作答：一個有日期的已確認事實 → 自己的觀點 → 空服員能做的事。初步報告不等於最終肇因，規定與未來計畫須在面試前再次確認。"];
-    items.forEach((item,i)=>{
-      out.push(`\n## ${i+1}. ${item.q_zh}`,item.q_en,`分類：${item.group}${item.parentKey?`｜追問自：${byKey[item.parentKey].q_zh}`:""}`);
-      if(item.answerLabel)out.push(`${item.answerLabel}｜更新 ${item.updatedAt}`);
-      out.push("\n中文擬答：",item.a_zh,"\nEnglish draft:",item.a_en);
-      if(item.a_ko)out.push("\n한국어 원고（韓文原稿）：",item.a_ko);
-      out.push(`\n回答提醒：${item.tip}`);
-      if(item.fact){
-        out.push(`新聞事實：${item.fact}`);
-        if(item.fact_en)out.push(`News background: ${item.fact_en}`);
-        out.push(`事件／措施日期：${item.eventDate}｜查核：${item.checkedAt}`);
-        if(item.newsStatus)out.push(`資料狀態：${item.newsStatus}`);
+  function markdown({scope="essential"}={}){
+    const selected=scope==="all"?items:essentialItems;
+    const out=[scope==="all"?"# 華航複試完整雙語題庫":"# 華航複試精選 50 題中英文擬答",`內容更新：${checkedAt}；各新聞題保留自己的查核日期。`,scope==="all"?`完整題庫共 ${items.length} 題，包含精選 50 題與延伸練習；所有題目均依考察重點分類。`:"精選 50 題，依本人面試回顧、可使用的服務故事及考點覆蓋選題，減少重複問法；不是實際出題頻率或必考題排名。", "只有四題標示為本人回顧已問過；新增的誠實溝通與社群情境皆是假設擬題。原有延伸題與練習紀錄保留。", "判斷題作答：先直接回答立場 → 分清已確認、未知與不宜公開的資訊 → 說明核對、回報、協助及後續跟進。誠實不等於轉述猜測，尊重公司也不等於說明知不實的話。", "時事題作答：一個有日期的已確認事實 → 自己的觀點 → 空服員能做的事。初步報告不等於最終肇因，規定與計畫須在面試前再確認。", "分類：\n"+topics.map(topic=>`- ${topic.label}：${selected.filter(item=>item.topic===topic.key).length} 題`).join("\n")];
+    let number=0;
+    for(const topic of topics){
+      out.push(`\n## ${topic.label}`);
+      for(const item of selected.filter(row=>row.topic===topic.key)){
+        out.push(`\n### ${++number}. ${item.q_zh}`,item.q_en,`考察分類：${topic.label}｜題型來源：${item.group}${item.parentKey?`｜延伸自：${byKey[item.parentKey].q_zh}`:""}`);
+        if(item.answerLabel)out.push(`${item.answerLabel}｜更新 ${item.updatedAt}`);
+        out.push("\n中文擬答：",item.a_zh,"\nEnglish draft:",item.a_en);
+        if(item.a_ko)out.push("\n한국어 원고（韓文原稿）：",item.a_ko);
+        out.push(`\n回答提醒：${item.tip}`);
+        if(item.fact){
+          out.push(`新聞事實：${item.fact}`);
+          if(item.fact_en)out.push(`News background: ${item.fact_en}`);
+          out.push(`事件／措施日期：${item.eventDate}｜查核：${item.checkedAt}`);
+          if(item.newsStatus)out.push(`資料狀態：${item.newsStatus}`);
+        }
+        if(item.personalCheck)out.push(`個人事實確認：${item.personalCheck}`);
+        out.push("來源："+item.sources.map(key=>{const source=sources[key];return `[${source.title}](${source.url})${source.date?`（${source.dateLabel||"發布"} ${source.date}）`:source.checkedAt?`（查閱 ${source.checkedAt}）`:""}`}).join("、"));
       }
-      if(item.personalCheck)out.push(`個人事實確認：${item.personalCheck}`);
-      out.push("來源："+item.sources.map(key=>{const s=sources[key];return `[${s.title}](${s.url})${s.date?`（${s.dateLabel||"發布"} ${s.date}）`:""}`}).join("、"));
-    });
-    out.push("\n## 六組英文核心問法與對應",...englishPrompts.map(p=>`- ${p.en}\n  對應：${p.keys.map(key=>byKey[key].q_zh).join("／")}`));
+    }
+    out.push("\n## 六組英文核心問法與對應",...englishPrompts.map(prompt=>`- ${prompt.en}\n  對應：${prompt.keys.map(key=>byKey[key].q_zh+(byKey[key].essentialRank?"":"（延伸題）")).join("／")}`));
     return out.join("\n\n");
   }
-  const api={checkedAt,sources,items,byKey,englishPrompts,attach,markdown};
+  const api={checkedAt,sources,items,essentialItems,topics,byKey,englishPrompts,attach,markdown};
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   root.CIFinalPrep=api;
 })(typeof window!=="undefined"?window:globalThis);

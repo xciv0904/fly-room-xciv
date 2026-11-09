@@ -15,6 +15,36 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     });
     const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
     await page.goto(origin+'/#ci/final');
+    await page.locator('[data-ci-module="final-topics"]').click();
+    await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'essential');
+    assert.equal(await page.locator('.ci-final-question').count(),50);
+    assert.deepEqual(await page.locator('.ci-final-question').evaluateAll(nodes=>nodes.map(node=>node.dataset.finalKey)),prep.essentialItems.map(row=>row.key));
+    const classified=[];
+    for(const topic of prep.topics){
+      await page.locator('#ciFinalTopic').selectOption(topic.key);
+      assert.equal(await page.locator('.ci-final-question').count(),topic.keys.length);
+      classified.push(...await page.locator('.ci-final-question').evaluateAll(nodes=>nodes.map(node=>node.dataset.finalKey)));
+    }
+    assert.equal(new Set(classified).size,50);
+    const curatedPending=page.waitForEvent('download');await page.locator('[data-final-download]').click();const curatedDownload=await curatedPending;
+    assert.equal(fs.readFileSync(await curatedDownload.path(),'utf8'),prep.markdown());
+    await page.locator('[data-final-essential="image"]').click();
+    await page.locator('#ci-final-uniform-social-post>summary').click();await page.locator('#ci-final-uniform-social-post [data-final-reveal]').click();
+    assert.equal(await page.locator('#ci-final-uniform-social-post .ansbox').count(),2);
+    await page.locator('#ci-final-uniform-social-post [data-final-star]').click();
+    await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'essential');assert.equal(await page.locator('#ciFinalTopic').inputValue(),'image');
+    assert.equal(await page.locator('#ci-final-uniform-social-post [data-final-star]').getAttribute('aria-pressed'),'true');
+    await page.locator('#ci-final-uniform-social-post [data-final-star]').click();
+    await page.evaluate(()=>CIFinalStudy.open('delay-honesty'));
+    await page.locator('#ci-final-delay-honesty [data-final-jump="confirmed-company-error"]').click();
+    await page.locator('#ci-final-confirmed-company-error [data-final-jump="supervisor-false-explanation"]').click();
+    assert.equal(await page.locator('#ci-final-supervisor-false-explanation').getAttribute('open'),'');
+    await page.evaluate(()=>CIFinalStudy.open('western-sydney-opening'));
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'all');assert.equal(await page.locator('#ci-final-western-sydney-opening').getAttribute('open'),'');
+    await page.locator('[data-final-essential=""]').click();assert.equal(await page.locator('.ci-final-question').count(),50);
+    await page.locator('[data-ci-route="final"]').click();
     await page.locator('[data-ci-module="industry-news"]').click();
     await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
     assert.equal(await page.locator('#ciFinalFilter').inputValue(),'航空業時事');
@@ -28,7 +58,7 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(await page.locator('#ci-final-security-joke').getAttribute('open'),'');
     await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
     assert.equal(await page.locator('#ci-final-security-joke').getAttribute('open'),'');
-    await page.locator('[data-final-group="航空業時事"]').click();
+    await page.locator('#ciFinalFilter').selectOption('航空業時事');
     assert.equal(await page.locator('.ci-final-question').count(),24);
     await page.locator('[data-ci-route="final"]').click();await page.locator('[data-ci-module="intro"]').click();
     await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);await page.locator('.ci-final-question').nth(questionCount-1).waitFor();
@@ -49,7 +79,7 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(await page.locator('.ci-final-answers [lang="en"]').count(),1);assert.equal(await page.locator('.ci-final-answers [lang="zh-Hant"]').count(),0);
     await page.locator('#ciFinalLang').selectOption('both');assert.equal(await page.locator('.ci-final-answers .ansbox').count(),2);
     let pending=page.waitForEvent('download');await page.locator('[data-final-download]').click();let download=await pending;
-    assert.equal(fs.readFileSync(await download.path(),'utf8'),require('../ci-final-data.js').markdown());
+    assert.equal(fs.readFileSync(await download.path(),'utf8'),prep.markdown({scope:'all'}));
     await page.locator('#ciFinalSearch').fill('');await page.locator('#ci-final-runway-news>summary').click();
     assert.match(await page.locator('#ci-final-runway-news .ci-final-sources a').first().getAttribute('href'),/202610290323/);
     await page.locator('#ci-final-runway-news [data-final-jump="delay-pressure"]').click();assert.equal(await page.locator('#ci-final-delay-pressure').getAttribute('open'),'');
@@ -77,7 +107,7 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
       assert.equal(saved.key,key);assert.equal(saved.lang,lang);assert.ok(saved.size>100);assert.ok(saved.transcript.length>50);
       await page.locator('#mBody [data-open-final-study]').click();assert.ok(page.url().endsWith('#ci/final-topics/'+key));
     };
-    await record('en','europe-bomb-threats');await record('zh');await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
+    await record('en','supervisor-false-explanation');await record('zh');await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
     assert.deepEqual(await page.evaluate(async()=>(await mList()).map(x=>x.lang)),['zh','en']);
     await page.evaluate(()=>showTab('stats'));pending=page.waitForEvent('download');await page.locator('#expBtn').click();download=await pending;
     const backup=JSON.parse(fs.readFileSync(await download.path(),'utf8'));assert.ok(backup.stars.includes(0));assert.ok(backup.stars.includes(powerId));assert.equal(backup.practiced[0],4);assert.equal(backup.mockRecs[0].questionKey,'power-bank');assert.ok(backup.ciFinalStudy);
@@ -88,12 +118,14 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(await page.locator('#ci-final-middle-east-airspace .ci-final-fact [lang="en"]').count(),1);
     assert.equal(await page.locator('#ci-final-middle-east-airspace .ci-final-fact [lang="zh-Hant"]').count(),0);
     await page.locator('#ciFinalLang').selectOption('both');
+    await page.evaluate(()=>CIFinalStudy.openEssentials('image'));await page.locator('#ci-final-uniform-social-post>summary').click();await page.locator('#ci-final-uniform-social-post [data-final-reveal]').click();
+    await page.locator('#ciFinalSearch').fill('可以在社群媒體分享穿制服');
     for(const width of [390,768,1280]){
       await page.setViewportSize({width,height:900});await page.evaluate(()=>scrollTo(0,0));
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`overflow at ${width}`);
       await page.screenshot({path:path.join(out,`ci-final-${width}.png`),fullPage:true});
     }
-    assert.deepEqual(errors,[]);console.log(JSON.stringify({questions:questionCount,industryQuestions:24,recordingLanguages:['zh','en'],downloadedGuide:true,preservedLegacyState:true,consoleErrors:errors,output:out}));
+    assert.deepEqual(errors,[]);console.log(JSON.stringify({questions:questionCount,essentialQuestions:50,classifiedTopics:6,industryQuestions:24,recordingLanguages:['zh','en'],downloadedGuide:true,preservedLegacyState:true,consoleErrors:errors,output:out}));
     await context.close();
   }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
