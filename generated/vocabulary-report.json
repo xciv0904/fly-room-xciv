@@ -4,10 +4,10 @@
   "uniqueTextCount": 1051,
   "processed": 1083,
   "withCandidates": 1082,
-  "vocabularyCount": 3460,
-  "cardCount": 3461,
-  "pronunciationPending": 490,
-  "translationPending": 168,
+  "vocabularyCount": 3452,
+  "cardCount": 3453,
+  "pronunciationPending": 447,
+  "translationPending": 130,
   "counts": {
     "華航": {
       "雜誌": 39,
@@ -68,9 +68,9 @@
       "pendingChinese": 33
     },
     "word": {
-      "total": 3056,
-      "pendingIPA": 255,
-      "pendingChinese": 105
+      "total": 3048,
+      "pendingIPA": 212,
+      "pendingChinese": 67
     }
   },
   "zeroCandidateArticles": [
@@ -2098,8 +2098,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 68,
-      "candidates": 22,
-      "occurrences": 29,
+      "candidates": 21,
+      "occurrences": 28,
       "processed": true
     },
     {
@@ -2112,8 +2112,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 21,
-      "candidates": 7,
-      "occurrences": 7,
+      "candidates": 6,
+      "occurrences": 6,
       "processed": true
     },
     {
@@ -2252,8 +2252,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 19,
-      "candidates": 6,
-      "occurrences": 6,
+      "candidates": 5,
+      "occurrences": 5,
       "processed": true
     },
     {
@@ -2294,8 +2294,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 71,
-      "candidates": 26,
-      "occurrences": 31,
+      "candidates": 25,
+      "occurrences": 30,
       "processed": true
     },
     {
@@ -2350,8 +2350,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 72,
-      "candidates": 26,
-      "occurrences": 31,
+      "candidates": 25,
+      "occurrences": 30,
       "processed": true
     },
     {
@@ -2378,8 +2378,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 73,
-      "candidates": 23,
-      "occurrences": 27,
+      "candidates": 22,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -2406,8 +2406,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 70,
-      "candidates": 24,
-      "occurrences": 27,
+      "candidates": 23,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -2420,8 +2420,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_JUDGMENT_ITEMS",
       "words": 16,
-      "candidates": 5,
-      "occurrences": 5,
+      "candidates": 4,
+      "occurrences": 4,
       "processed": true
     },
     {
