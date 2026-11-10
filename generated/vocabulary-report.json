@@ -4,10 +4,10 @@
   "uniqueTextCount": 1069,
   "processed": 1104,
   "withCandidates": 1103,
-  "vocabularyCount": 3477,
-  "cardCount": 3478,
-  "pronunciationPending": 472,
-  "translationPending": 151,
+  "vocabularyCount": 3473,
+  "cardCount": 3474,
+  "pronunciationPending": 450,
+  "translationPending": 130,
   "counts": {
     "華航": {
       "雜誌": 39,
@@ -44,8 +44,8 @@
   "byType": {
     "abbreviation": {
       "total": 28,
-      "pendingIPA": 16,
-      "pendingChinese": 7
+      "pendingIPA": 15,
+      "pendingChinese": 6
     },
     "date": {
       "total": 17,
@@ -63,14 +63,14 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 247,
-      "pendingIPA": 106,
-      "pendingChinese": 34
+      "total": 246,
+      "pendingIPA": 105,
+      "pendingChinese": 33
     },
     "word": {
-      "total": 3071,
-      "pendingIPA": 235,
-      "pendingChinese": 86
+      "total": 3068,
+      "pendingIPA": 215,
+      "pendingChinese": 67
     }
   },
   "zeroCandidateArticles": [
@@ -2462,8 +2462,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_NOV11_REVISIONS",
       "words": 84,
-      "candidates": 32,
-      "occurrences": 36,
+      "candidates": 31,
+      "occurrences": 35,
       "processed": true
     },
     {
@@ -2476,8 +2476,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_NOV11_REVISIONS",
       "words": 74,
-      "candidates": 23,
-      "occurrences": 26,
+      "candidates": 22,
+      "occurrences": 25,
       "processed": true
     },
     {
@@ -2630,8 +2630,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_NOV11_ITEMS",
       "words": 80,
-      "candidates": 20,
-      "occurrences": 27,
+      "candidates": 19,
+      "occurrences": 26,
       "processed": true
     },
     {
@@ -2686,8 +2686,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_NOV11_ITEMS",
       "words": 71,
-      "candidates": 20,
-      "occurrences": 26,
+      "candidates": 19,
+      "occurrences": 25,
       "processed": true
     },
     {
@@ -2728,8 +2728,8 @@
       "sourceFile": "ci-final-data.js",
       "collection": "CI_NOV11_ITEMS",
       "words": 65,
-      "candidates": 25,
-      "occurrences": 29,
+      "candidates": 24,
+      "occurrences": 28,
       "processed": true
     },
     {
