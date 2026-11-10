@@ -4,11 +4,12 @@ function legacy(){const sandbox={window:{}};vm.runInNewContext(fs.readFileSync(r
 test('every requested main question, follow-up and English prompt has a complete bilingual draft',()=>{
   const expected=['R1','R2','R3','R4','N1.main','N1.follow','N2.main','N2.follow.ai','N2.follow.friend','N3.main','N3.follow','N4.main','N4.follow','N5.main','N5.follow','N6.main','N6.follow','A1','A2',...Array.from({length:18},(_,i)=>`P${i+1}`),'E1','E2.company','E2.now','E3','E4','E5','E6',...Array.from({length:12},(_,i)=>[`I${i+1}.main`,`I${i+1}.follow`]).flat()];
   expected.push(...Array.from({length:8},(_,i)=>`J${i+1}`),...Array.from({length:6},(_,i)=>`S${i+1}`));
+  expected.push(...Array.from({length:10},(_,i)=>`IMP${i+1}.main`),...['1','2','3','5'].map(n=>`IMP${n}.follow`));
   assert.deepEqual(new Set(prep.items.flatMap(row=>row.coverage)),new Set(expected));
-  assert.equal(prep.items.length,77);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
+  assert.equal(prep.items.length,84);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
   assert.equal(prep.items.filter(row=>row.kind==='asked').length,4);assert.equal(prep.englishPrompts.length,6);
   for(const row of prep.items){
-    assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>70);assert.ok(row.a_en.split(/\s+/).length>=45);
+    assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>(row.kind==='followup'?50:70));assert.ok(row.a_en.split(/\s+/).length>=(row.kind==='followup'?35:45));
     if(row.parentKey)assert.ok(prep.byKey[row.parentKey]);
     for(const key of row.sources)assert.ok(prep.sources[key],`${row.key}: ${key}`);
     if(row.fact)assert.ok(row.sources.some(key=>prep.sources[key].date));
@@ -40,9 +41,9 @@ test('news qualifications and personal-story boundaries survive into the downloa
   assert.match(prep.byKey['sustainability'].tip,/Book & Claim/);assert.match(prep.byKey['fleet-news'].tip,/不要.*已交機/);
   assert.match(prep.byKey['exceed-expectations'].a_en,/Canadian guest/);assert.match(prep.byKey['digital-service'].a_en,/Colombian guest/);
   assert.match(prep.byKey['harassment'].tip,/碰觸是本題假設/);assert.match(prep.byKey['power-bank'].tip,/年度安全議題/);
-  assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-09');
-  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試精選50題-2026-11-10.md'),'utf8'),md+'\n');
-  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試雙語擬答-2026-11-10.md'),'utf8'),prep.markdown({scope:'all'})+'\n');
+  assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-11');
+  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試精選50題-2026-11-11.md'),'utf8'),md+'\n');
+  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試雙語擬答-2026-11-11.md'),'utf8'),prep.markdown({scope:'all'})+'\n');
   assert.equal((prep.markdown({scope:'all'}).match(/^### \d+\./gm)||[]).length,prep.items.length);
 });
 test('exactly 50 distinct essentials cover six explicit topics and all extensions stay classified',()=>{
@@ -64,7 +65,7 @@ test('industry expansion retains original question IDs and each historical verif
   const originalKeys=['intro','preparation','delay-honesty','social-media','runway-news','delay-pressure','privacy-news','ai-translation','passenger-lookup','theme-flight','countdown-turbulence','fleet-news','learning-procedures','safety-role','senior-safety','sustainability','eco-objection','power-bank','digital-service','why-cabin-crew','why-china-airlines','growth','why-hire','reliability','service-mistake','unavailable-request','exceed-expectations','proactive-boundaries','korean','harassment','prioritisation','colleague-promise','filming','unfamiliar-equipment','fatigue','not-selected','life-learning','why-now','hotel-vs-cabin'];
   for(const [i,key] of originalKeys.entries()){
     assert.equal(prep.items[i].key,key);assert.equal(prep.byKey[key].id,-11001-i);
-    assert.equal(prep.byKey[key].checkedAt,'2026-11-08');
+    assert.equal(prep.byKey[key].checkedAt,['intro','fleet-news','why-china-airlines','why-hire','hotel-vs-cabin'].includes(key)?'2026-11-11':'2026-11-08');
   }
   const industry=prep.items.filter(row=>row.group==='航空業時事');
   assert.equal(industry.length,24);assert.equal(industry.filter(row=>row.kind==='news').length,12);
@@ -80,4 +81,29 @@ test('industry expansion retains original question IDs and each historical verif
   assert.match(prep.byKey['middle-east-airspace'].fact,/不是全球/);
   assert.match(prep.byKey['ebola-travel-attestation'].fact,/豁免與期限/);
   assert.match(prep.markdown(),/查核：2026-11-08/);assert.match(prep.markdown(),/查核：2026-11-10/);
+});
+test('approved import merges duplicate prompts and keeps tea primary, Miffy, and original alternatives',()=>{
+  const joined=prep.attach(legacy()),tea=prep.byKey['livery-design'],miffy=prep.byKey['ip-livery'],suggestions=prep.byKey['company-suggestions'];
+  assert.equal(joined.items.find(row=>row.key==='livery-design').id,60);
+  assert.equal(joined.items.find(row=>row.key==='why-not-other-airlines').id,268);
+  assert.equal(joined.items.find(row=>row.key==='company-suggestions').id,270);
+  assert.match(tea.answerLabel,/第一版.*茶文化/);assert.match(tea.a_zh,/茶杯.*蒸氣/);
+  assert.ok(!tea.a_zh.includes('穿山甲'));assert.match(tea.answerAlternatives[0].label,/第二版.*穿山甲/);
+  assert.match(tea.answerAlternatives[0].a_en,/endemic subspecies/);
+  assert.match(tea.answerAlternatives[0].fu[0].a,/黑面琵鷺/);
+  assert.deepEqual(joined.bank[60].variants['華航'].fu,[]);
+  assert.match(joined.bank[60].variants['華航'].a_zh,/臺灣茶文化/);
+  assert.match(miffy.a_zh,/跟著 Miffy 探索臺灣/);assert.match(miffy.a_en,/Exploring Taiwan with Miffy/);
+  assert.equal(miffy.parentKey,'livery-design');assert.ok(!JSON.stringify(prep.items).includes('咖波'));
+  assert.equal(prep.items.filter(row=>row.key==='why-not-other-airlines').length,1);
+  assert.deepEqual(suggestions.coverage,['IMP8.main','IMP9.main','IMP10.main']);
+  assert.match(suggestions.answerAlternatives[0].a_zh,/輕便外搭/);
+  assert.match(suggestions.answerAlternatives[1].a_zh,/角色扮演/);
+  assert.ok(suggestions.sources.includes('employeeWorkplace'));assert.ok(suggestions.sources.includes('communityEducation'));
+  assert.match(prep.byKey.intro.a_ko,/프런트 데스크 직원으로/);
+  assert.match(prep.byKey.intro.answerAlternatives[0].a_ko,/확장하여 해서/);
+  assert.match(prep.byKey['other-airline-applications'].personalCheck,/實際申請情況/);
+  const md=prep.markdown({scope:'all'});
+  for(const text of [tea.a_zh,tea.a_en,tea.answerAlternatives[0].a_zh,miffy.a_zh,suggestions.answerAlternatives[0].a_en,prep.byKey.intro.answerAlternatives[0].a_ko])assert.ok(md.includes(text));
+  assert.match(prep.byKey['fleet-news'].fact,/11\/6/);assert.equal(prep.byKey['fleet-news'].checkedAt,'2026-11-11');
 });

@@ -1,8 +1,15 @@
 /* Bilingual interview drafts. News facts and personal recollections remain distinct. */
 (function(root){
   "use strict";
-  const checkedAt="2026-11-10";
+  const checkedAt="2026-11-11";
   const sources={
+    importPractice:{"title":"2026-11-11 個人化面試擬答整理（非確認考古題）","url":"#ci/final-topics/livery-design","date":"","checkedAt":"2026-11-11","kind":"practice"},
+    itf787:{"title":"華航：ITF 搶先體驗 787 新機客艙","url":"https://www.china-airlines.com/tw/zh/about-china-airlines/media/news/20261106.html","date":"2026-11-06","checkedAt":"2026-11-11","kind":"official"},
+    uniformPants:{"title":"華航：女性第一線同仁褲裝新選擇","url":"https://www.china-airlines.com/tw/zh/about-china-airlines/media/news/20250101.html","date":"2025-01-01","kind":"official"},
+    employeeWorkplace:{"title":"華航永續：幸福職場與服勤措施","url":"https://calec.china-airlines.com/csr/employees_workplace.html","date":"","checkedAt":"2026-11-11","kind":"official"},
+    communityEducation:{"title":"華航永續：偏鄉教育、航空知識與英語教學","url":"https://calec.china-airlines.com/csr/social_development.html","date":"","checkedAt":"2026-11-11","kind":"official"},
+    miffy:{"title":"Miffy 官方：角色與作者介紹","url":"https://www.miffy.com/biography","date":"","checkedAt":"2026-11-11","kind":"official"},
+    pangolinTaxonomy:{"title":"臺北市立動物園：臺灣穿山甲的特有亞種身分","url":"https://www.zoo.gov.taipei/News_Content.aspx?n=F18B015186A5F770&s=258D763750D741A3&sms=5B8197AA5783E7B9","date":"","checkedAt":"2026-11-11","kind":"official"},
     review:{title:"本人面試回顧",url:"#review",date:"",kind:"personal"},
     stories:{title:"本人飯店服務故事",url:"#tools",date:"",kind:"personal"},
     judgmentPractice:{title:"依本人誠實溝通與社群題延伸的假設練習（非確認考古題）",url:"#ci/final-topics/delay-honesty",date:"",kind:"practice"},
@@ -521,7 +528,7 @@ Thank you.`,
       tip:"不要臆測別家冒險起飛，也不能只用『公司規定』結束回答。以本班已確認的資訊與後續協助為主。"
     }
   ];
-  CI_FINAL_ITEMS.push(...CI_INDUSTRY_ITEMS.map(item=>({...item,group:"航空業時事",checkedAt})));
+  CI_FINAL_ITEMS.push(...CI_INDUSTRY_ITEMS.map(item=>({...item,group:"航空業時事",checkedAt:"2026-11-10"})));
   const CI_JUDGMENT_ITEMS=[
     {
       key:"confirmed-company-error",parentKey:"delay-honesty",coverage:["J1"],
@@ -622,7 +629,305 @@ Thank you.`,
       tip:"考點：同事情誼、隱私與處理時機。移除貼文不代表事件已完全解決，也不應再散播內容。"
     }
   ];
-  CI_FINAL_ITEMS.push(...CI_JUDGMENT_ITEMS.map(item=>({...item,group:item.coverage[0].startsWith("S")?"社群形象情境":"誠實溝通情境",kind:"scenario",priority:1,sources:item.sources||["judgmentPractice"],checkedAt})));
+  CI_FINAL_ITEMS.push(...CI_JUDGMENT_ITEMS.map(item=>({...item,group:item.coverage[0].startsWith("S")?"社群形象情境":"誠實溝通情境",kind:"scenario",priority:1,sources:item.sources||["judgmentPractice"],checkedAt:"2026-11-10"})));
+  /* Approved import: keep historical item order/IDs and retain earlier answers as alternatives. */
+  const CI_NOV11_REVISIONS=[
+  [
+    "why-china-airlines",
+    {
+      "a_zh": "我選擇華航，主要是因為我認同華航重視安全、以客為尊，以及有溫度的服務理念。\n目前我在凱悅飯店擔任櫃檯人員，經常接待來自不同國家的旅客。這段經驗讓我體會到，好的服務不只是解決問題，更重要的是主動察覺需求，讓客人感受到安心與尊重。\n我希望將自己的語言能力、細心觀察與應變經驗帶進華航，在遵守安全規範的前提下，和團隊一起提供專業又溫暖的服務。",
+      "a_en": "I want to join China Airlines because I value its focus on safety and warm, thoughtful service.\nI currently work at the front desk of a Hyatt hotel, where I welcome guests from different countries. This experience has taught me that good service is not just about solving problems, but also about understanding guests' needs and making them feel safe and respected.\nI hope to bring my language skills, attention to detail, and service experience to China Airlines and work with my team to provide a safe and comfortable journey.",
+      "tip": "結構：認同品牌 → 凱悅實例背景 → 能帶來的貢獻。避免只說「知名、福利好」。",
+      "updatedAt": "2026-11-11",
+      "checkedAt": "2026-11-11",
+      "answerLabel": "口語修訂版",
+      "coverage": [
+        "IMP1.main"
+      ]
+    },
+    "備選・具體新聞與團隊合作"
+  ],
+  [
+    "why-hire",
+    {
+      "a_zh": "我認為我能為華航帶來三項優勢：跨文化溝通、細心觀察，以及冷靜應變。\n目前我在凱悅飯店櫃檯工作，經常接待不同國家的旅客。我學會運用英文和韓文溝通、主動觀察需求，也能在突發狀況下保持冷靜，和同事一起解決問題。\n我了解飛航安全是空服員最重要的責任，因此我願意踏實接受訓練、遵守程序，成為旅客安心、團隊信賴的空服員。",
+      "a_en": "I believe I can bring three strengths to China Airlines: communication skills, attention to detail, and the ability to stay calm under pressure.\nI currently work at the front desk of a Hyatt hotel, where I welcome guests from different countries. I've learned to communicate in English and Korean, understand guests' needs, and handle unexpected situations calmly.\nI know safety always comes first for cabin crew. I'm eager to learn, follow procedures, and become a flight attendant whom both passengers and teammates can trust.",
+      "tip": "三個優勢要有證據；結尾回到安全與可靠。可準備協助外籍旅客完成線上報到的STAR例子。",
+      "updatedAt": "2026-11-11",
+      "checkedAt": "2026-11-11",
+      "answerLabel": "口語修訂版",
+      "coverage": [
+        "IMP3.main"
+      ]
+    },
+    "備選・服務案例與持續學習"
+  ],
+  [
+    "hotel-vs-cabin",
+    {
+      "a_zh": "我認為最大的不同是，空服員除了提供服務，更肩負旅客的安全責任。\n在飯店工作期間，我已經習慣接待不同國籍的旅客，也學會在忙碌和突發狀況下保持冷靜、與同事合作。\n不過，我知道機艙環境有更嚴格的安全規範和團隊分工。所以我會以謙虛的態度接受訓練，熟悉標準作業程序，並積極與組員配合，讓自己從服務人員成長為合格的客艙安全專業人員。",
+      "a_en": "I believe the biggest difference is that cabin crew are responsible not only for service, but also for passenger safety.\nWorking at Hyatt has taught me to communicate with international guests, stay calm under pressure, and solve problems with my team.\nHowever, I understand that aviation has stricter safety procedures and requires close teamwork. I would take training seriously, follow procedures carefully, and work closely with the crew to adapt to this new role.",
+      "tip": "承認技能可轉移，但絕不能把飯店工作與客艙安全職責混為一談。",
+      "updatedAt": "2026-11-11",
+      "checkedAt": "2026-11-11",
+      "answerLabel": "口語修訂版",
+      "coverage": [
+        "IMP4.main"
+      ]
+    },
+    "備選・客艙環境與安全職責"
+  ],
+  [
+    "fleet-news",
+    {
+      "a_zh": "最近讓我印象最深刻的是華航即將引進的波音 787 新機隊。\n我注意到華航在 2026 年旅展展示新機客艙設計，融入臺灣山岳意象，讓科技和在地美學結合。\n在凱悅飯店工作讓我體會到，好的旅程不只有舒適的環境，也需要貼心細緻的服務。如果有機會加入華航，我希望認真學習新機型的安全程序，並與團隊合作，讓旅客在新的客艙裡感受到安全與溫暖。",
+      "a_en": "One recent development that impressed me is China Airlines' upcoming Boeing 787 fleet.\nI learned that the new cabin design includes elements inspired by Taiwan's mountains, combining modern technology with local culture.\nWorking at Hyatt has taught me that a great travel experience is not only about a comfortable environment, but also about thoughtful service. If I join China Airlines, I hope to learn the aircraft's safety procedures and work closely with my team to make every journey safe and welcoming.",
+      "tip": "不要由旅展展示或月曆推論已交機或已全面投入營運；面試前再核對機隊狀態，最終配置與服務以官方最新資訊為準。",
+      "updatedAt": "2026-11-11",
+      "checkedAt": "2026-11-11",
+      "answerLabel": "第一版・11/6 旅展 787 客艙展示",
+      "coverage": [
+        "IMP5.main"
+      ],
+      "sources": [
+        "itf787",
+        "fleet",
+        "stories"
+      ],
+      "eventDate": "2026-11-06",
+      "fact": "11/6 華航於 ITF 旅展介紹即將引進的 787，互動體驗結合 2027 月曆客艙場景與臺灣山岳意象。10/29 月曆新聞註明圖片為模擬示意，最終配置以實際交機為準。",
+      "fact_en": "On November 6, China Airlines presented its upcoming 787 at ITF through interactive experiences based on its 2027 calendar cabin scenes and Taiwanese mountain imagery. The October 29 calendar release identifies the images as illustrations, with final details subject to the delivered configuration.",
+      "newsStatus": "截至所引 11/6 官方新聞仍稱「即將引進」；展示與模擬圖不代表已交機或投入營運。"
+    },
+    "備選・787 月曆與團隊準備"
+  ]
+];
+  for(const [key,revision,label] of CI_NOV11_REVISIONS){
+    const item=CI_FINAL_ITEMS.find(row=>row.key===key);
+    const previous={label,a_zh:item.a_zh,a_en:item.a_en,tip:item.tip,updatedAt:item.updatedAt||item.checkedAt||"2026-11-08"};
+    Object.assign(item,revision,{coverage:[...item.coverage,...revision.coverage],answerAlternatives:[previous]});
+  }
+  const intro=CI_FINAL_ITEMS.find(item=>item.key==="intro");
+  intro.answerAlternatives=[{label:"韓文原稿（2026-11-09）",a_ko:intro.a_ko,updatedAt:"2026-11-09"}];
+  Object.assign(intro,{a_ko:"안녕하십니까, 장선리입니다.\n저는 영어와 한국어로 의사소통할 수 있으며, 현재 하얏트 호텔에서 프런트 데스크 직원으로 근무하고 있습니다.\n저는 항상 작은 부분까지 세심하게 살피고, 고객의 요구를 미리 파악하기 위해 노력합니다.\n저는 좋은 서비스란 고객이 안심하고 존중받는다고 느끼게 하는 것이라고 생각합니다.\n이러한 경험을 바탕으로 동료들과 협력하여 승객들에게 세심하고 전문적인 서비스를 제공하고 싶습니다.\n감사합니다.",answerLabel:"中英原稿・韓文修訂版",updatedAt:"2026-11-11",checkedAt:"2026-11-11",tip:"中英文保留本人提供原稿，韓文採用語句修訂版；原韓文可展開對照。若現場限時 30 秒，請另備精簡版。韓文尚未包含中英文的同事可靠後盾段落，三語並非逐句對譯。"});
+  const CI_NOV11_ITEMS=[
+  {
+    "key": "why-not-other-airlines",
+    "group": "履歷與服務",
+    "kind": "followup",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "updatedAt": "2026-11-11",
+    "coverage": [
+      "IMP1.follow",
+      "IMP2.main"
+    ],
+    "sources": [
+      "importPractice",
+      "stories"
+    ],
+    "q_zh": "長榮、星宇也很重視服務，為什麼妳特別選擇華航？",
+    "q_en": "EVA Air and STARLUX also value service. Why China Airlines in particular?",
+    "a_zh": "我認為每家航空公司都有自己的特色，而華航最吸引我的，是它將專業服務與臺灣的人情味結合，讓世界各地的旅客認識臺灣。\n在凱悅飯店工作時，我經常接待國際旅客，也發現自己很享受透過語言和貼心的互動，讓客人對臺灣留下美好印象。\n因此，我希望加入華航，把這份熱忱延伸到機艙，在確保飛安的前提下，提供有溫度的服務。",
+    "a_en": "I believe every airline has its own strengths, but what attracts me most to China Airlines is how it shares Taiwanese hospitality with passengers from around the world.\nWorking at Hyatt, I often welcome international guests. I've learned that even a small, thoughtful gesture can leave a lasting impression of Taiwan.\nThat's why I hope to use my language skills and service experience at China Airlines to make passengers feel safe, comfortable, and welcome.",
+    "tip": "別貶低長榮或星宇；強調「個人認同」而非無法證實的競爭優勢。",
+    "parentKey": "why-china-airlines",
+    "match": [
+      "為什麼選擇我們，而不是其他航空公司？",
+      "如果其他航空公司也重視安全與服務，為什麼特別是華航？"
+    ],
+    "answerLabel": "華航認同與個人連結",
+    "answerAlternatives": [
+      {
+        "label": "追問精簡版・其他航空也重視安全與服務",
+        "q_zh": "如果其他航空公司也重視安全與服務，為什麼特別是華航？",
+        "q_en": "Other airlines also value safety and service. Why China Airlines in particular?",
+        "a_zh": "我特別欣賞華航將臺灣文化與人情味帶向國際。我在飯店接待外國旅客時，也喜歡讓他們對臺灣留下好的印象，所以希望在華航延續這份工作。",
+        "a_en": "What stands out to me is how China Airlines shares Taiwanese culture and hospitality with international travelers. I enjoy giving overseas guests a positive impression of Taiwan at the hotel, and I hope to continue doing that at China Airlines."
+      }
+    ]
+  },
+  {
+    "key": "other-airline-applications",
+    "parentKey": "why-not-other-airlines",
+    "group": "履歷與服務",
+    "kind": "followup",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "coverage": [
+      "IMP2.follow"
+    ],
+    "sources": [
+      "importPractice",
+      "stories"
+    ],
+    "q_zh": "妳有投其他航空公司嗎？",
+    "q_en": "Have you applied to other airlines?",
+    "a_zh": "有的。成為空服員是我的職涯目標，所以我也積極把握其他公司的招募機會。但我特別認同華航將臺灣文化和國際服務結合的理念，也希望在這裡發揮自己的優勢。",
+    "a_en": "Yes. Becoming a flight attendant is my career goal, so I have explored opportunities with other airlines as well. What especially attracts me to China Airlines is the connection between Taiwanese hospitality and international service, where I hope to contribute my strengths.",
+    "tip": "依當次實際投遞情況回答，不需要隱瞞其他應徵，也不要承諾未來只投一家。",
+    "personalCheck": "這份擬答預設有投遞其他航空；請核對本次實際申請情況，再選擇如實回答。"
+  },
+  {
+    "key": "international-guest-example",
+    "parentKey": "why-hire",
+    "group": "履歷與服務",
+    "kind": "followup",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "coverage": [
+      "IMP3.follow"
+    ],
+    "sources": [
+      "importPractice",
+      "stories"
+    ],
+    "q_zh": "請舉一個妳主動幫助外國旅客的例子。",
+    "q_en": "Can you share an example of helping an international guest?",
+    "a_zh": "曾有外籍旅客遇到中文介面的線上報到困難，我先了解他卡住的步驟，陪他確認資料、順利完成操作。這讓我更確定，服務的價值在於主動把困難變得簡單。",
+    "a_en": "An international guest once had trouble checking in online because the website was in Chinese. I asked where they were stuck, helped them review the steps, and they completed the process. It reminded me that thoughtful service can make a difficult situation much easier.",
+    "tip": "哥倫比亞旅客＝中文介面線上報到；保留實際做過的協助，勿混入加拿大旅客租車故事。"
+  },
+  {
+    "key": "aircraft-and-service",
+    "parentKey": "fleet-news",
+    "group": "新聞延伸",
+    "kind": "followup",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "coverage": [
+      "IMP5.follow"
+    ],
+    "sources": [
+      "importPractice",
+      "itf787"
+    ],
+    "q_zh": "妳認為現代化機型和好的服務，何者更重要？",
+    "q_en": "Which is more important: modern aircraft or good service?",
+    "a_zh": "兩者都重要，安全更是前提。新機能提供舒適的環境，而貼心服務能讓旅客真正感到被照顧。空服員的責任是依照安全程序，把好的設備轉化成好的乘機體驗。",
+    "a_en": "Both are important, with safety as the foundation. Modern aircraft provide a comfortable environment, while thoughtful service makes passengers feel cared for. Cabin crew help bring the two together by following safety procedures and creating a welcoming experience.",
+    "tip": "說明設備與服務如何互補，安全是兩者共同的前提，不需要把問題回答成只能二選一。"
+  },
+  {
+    "key": "livery-design",
+    "group": "品牌與創意",
+    "kind": "creative",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "updatedAt": "2026-11-11",
+    "coverage": [
+      "IMP6.main"
+    ],
+    "sources": [
+      "importPractice",
+      "pangolinTaxonomy",
+      "stories"
+    ],
+    "q_zh": "如果要設計華航彩繪機，妳會畫什麼？",
+    "q_en": "If you could design a livery for a China Airlines aircraft, what would it be?",
+    "a_zh": "如果有機會設計華航彩繪機，我會以臺灣茶文化為主題。\n臺灣茶在國際上很有特色，也讓我聯想到臺灣人溫暖的待客之道。\n我會在機身融入翠綠的茶田與茶葉，讓茶杯升起的蒸氣逐漸化成天空中的雲朵，並保留華航經典的梅花尾翼。\n我希望這架飛機像一張飛向世界的臺灣明信片，讓更多旅客認識臺灣，也感受到賓至如歸的溫暖。",
+    "a_en": "If I could design a special livery for China Airlines, I would choose Taiwanese tea culture as my theme.\nTaiwan is known for its tea, and to me, tea also represents our warm hospitality.\nI would decorate the aircraft with green tea fields and tea leaves, with steam turning into clouds. I would also keep the plum blossom logo on the tail.\nI hope this aircraft could be like a flying postcard, sharing Taiwanese culture and hospitality with the world.",
+    "tip": "第一版用茶文化連結臺灣待客之道；第二版用穿山甲連結母校與保育。兩者都是面試創意提案，非已宣布的彩繪機計畫。",
+    "match": [
+      "如果要設計華航彩繪機，你會畫什麼？",
+      "如果要設計華航彩繪機，妳會畫什麼？"
+    ],
+    "answerLabel": "第一版・臺灣茶文化",
+    "fu": [],
+    "answerAlternatives": [
+      {
+        "label": "第二版・穿山甲守護者號",
+        "a_zh": "我會設計「穿山甲守護者號」。華航長期支持穿山甲保育，而臺灣穿山甲是值得守護的臺灣特有亞種，剛好也是我母校暨南大學的吉祥物。機身可以畫穿山甲媽媽帶著小穿山甲走過台灣山林，傳達守護這塊土地的心意。就像帝雉和臺灣藍鵲彩繪機一樣，我認為好的彩繪機不只是造型，是讓每次起飛都變成台灣生態的行動大使。",
+        "a_en": "I'd design a Pangolin Guardian livery. China Airlines has long supported pangolin conservation, and the Taiwanese pangolin is an endemic subspecies worth protecting — it also happens to be the mascot of my university, National Chi Nan. The fuselage could show a mother pangolin leading her young through Taiwan's forests, expressing a commitment to protecting this land. Like the Mikado pheasant and blue magpie liveries, I believe a good livery isn't just a design — it turns every departure into an ambassador for Taiwan's ecology.",
+        "tip": "臺灣穿山甲為臺灣特有亞種；穿山甲不是整個物種皆為臺灣獨有。原有保育與母校構想保留。",
+        "fu": [
+          {
+            "q": "如果公司覺得穿山甲太冷門呢？",
+            "qe": "What if the company felt the pangolin is too obscure?",
+            "a": "那我會改推台灣的候鳥，例如黑面琵鷺——牠每年往返台灣過冬，本身就是「飛行」和「回家」的象徵，很貼近航空的意象。重點不是哪個動物，是能不能講出一個和品牌連得起來的故事。",
+            "ae": "Then I'd propose a migratory bird instead, such as the black-faced spoonbill — it returns to Taiwan every winter, so it's already a symbol of flight and of coming home, which sits close to what an airline means. To me the point isn't which animal, but whether the story connects to the brand."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "ip-livery",
+    "group": "品牌與創意",
+    "kind": "creative",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "updatedAt": "2026-11-11",
+    "coverage": [
+      "IMP7.main"
+    ],
+    "sources": [
+      "importPractice",
+      "miffy"
+    ],
+    "q_zh": "如果華航要推出新的IP聯名彩繪機，妳推薦和誰合作？",
+    "q_en": "If China Airlines could collaborate with an IP for a special livery, which one would you choose?",
+    "a_zh": "我會推薦米飛兔 Miffy。它的造型簡單而有辨識度，讓我想到旅行中溫暖陪伴的感受。\n我會以「跟著 Miffy 探索臺灣」為主題，讓 Miffy 帶著行李，走進臺灣的山海與城市風景，並保留華航經典的梅花尾翼。\n聯名也可以延伸到登機證、兒童活動本與行李吊牌，讓旅客留下特別的旅行回憶。\n我希望透過這個角色，吸引不同年齡的旅客，也讓國際旅客對臺灣產生好奇。",
+    "a_en": "I would recommend Miffy. Its simple, recognizable design reminds me of the warmth and companionship that can make a journey special.\nMy theme would be “Exploring Taiwan with Miffy,” featuring Miffy with a suitcase among Taiwan’s mountains, coastline, and city scenes, while keeping China Airlines’ plum blossom tail design.\nThe theme could also extend to boarding passes, children’s activity books, and luggage tags, giving passengers special memories of their trip.\nI hope this partnership could appeal to different age groups and inspire international travelers to discover more about Taiwan.",
+    "tip": "主題：跟著 Miffy 探索臺灣。透過國際角色介紹臺灣風景與親子旅行體驗；這是創意提案，不代表華航已合作或取得授權。",
+    "parentKey": "livery-design",
+    "answerLabel": "採用版・米飛兔 Miffy"
+  },
+  {
+    "key": "company-suggestions",
+    "group": "品牌與創意",
+    "kind": "creative",
+    "priority": 2,
+    "checkedAt": "2026-11-11",
+    "updatedAt": "2026-11-11",
+    "coverage": [
+      "IMP8.main",
+      "IMP9.main",
+      "IMP10.main"
+    ],
+    "sources": [
+      "importPractice",
+      "uniformPants",
+      "employeeWorkplace",
+      "communityEducation",
+      "stories"
+    ],
+    "q_zh": "你對我們公司的制服或公益活動有什麼建議？",
+    "q_en": "Do you have any thoughts or suggestions about our uniform or community programmes?",
+    "a_zh": "如果可以選一個方向分享，我想談公益活動。我知道華航已持續支持偏鄉教育，因此我希望能增加更多互動式航空體驗，例如讓孩子透過角色扮演認識空服員工作、基本的飛航安全觀念，並練習簡單英文。我相信這樣能把華航的航空專業變成孩子們看得見、摸得到的學習機會，也鼓勵他們勇敢追求夢想。",
+    "a_en": "If I could choose one area, I would talk about community programmes. I know China Airlines already supports education in rural areas. I would love to see more interactive aviation activities, such as role-playing to introduce cabin crew duties, basic flight safety, and simple English. I believe that could turn the airline's expertise into a memorable learning experience and inspire children to follow their dreams.",
+    "tip": "合題先選一個方向回答，再依追問展開。公益是擴充既有航空及英語教育；女性褲裝與黑色運動便鞋已實施，不要當成尚未推出的新建議。",
+    "match": [
+      "你對我們公司的制服或公益活動有什麼建議？"
+    ],
+    "answerLabel": "第一版・公益活動（精簡口語版）",
+    "answerAlternatives": [
+      {
+        "label": "制服方向・機能與舒適",
+        "q_zh": "妳對華航制服有什麼建議？",
+        "q_en": "What suggestions do you have for China Airlines uniforms?",
+        "a_zh": "我很欣賞華航制服優雅而專業的設計，紅色和灰色的搭配也很有辨識度。\n我注意到華航已經讓女性一線同仁可以選擇褲裝，展現公司對員工舒適度與工作需要的重視。\n如果提出建議，我會從機能性著手，例如研究更適合不同氣候的輕便外搭，在符合安全與制服規範的前提下，讓組員執勤更舒適。\n我認為好的制服應該同時兼顧品牌形象、工作安全與活動便利。",
+        "a_en": "I really like China Airlines' elegant and professional uniforms, especially the combination of red and gray.\nI also noticed that female frontline employees now have the option to wear pants, which shows the company's attention to comfort and practical needs.\nIf I could make a suggestion, I would explore lightweight layers for different weather conditions, while keeping safety and uniform standards in mind.\nI believe a good uniform should represent the brand and help crew members work safely and comfortably.",
+        "tip": "女性第一線同仁褲裝選擇自 2025/1/1 開始；空服員依規範自購黑色運動便鞋自 2026/1/1 開始。建議從不同氣候的外搭與活動便利性著手。"
+      },
+      {
+        "label": "公益方向・互動航空教育",
+        "q_zh": "妳對華航公益活動有什麼建議？",
+        "q_en": "What suggestions do you have for China Airlines community programmes?",
+        "a_zh": "我知道華航持續投入偏鄉教育與社會公益，我覺得很有意義。\n如果有機會提出建議，我希望在既有活動中增加互動式航空體驗。例如讓偏鄉小朋友透過角色扮演認識空服員的工作，學習基本的飛航安全觀念，以及簡單的英文對話。\n我相信這樣的活動不只可以拓展孩子們的國際視野，也能讓他們發現未來有更多可能，勇敢追求夢想。",
+        "a_en": "I know China Airlines has been supporting education in rural areas, and I think that is very meaningful.\nIf I could make a suggestion, I would love to see more interactive aviation activities for children.\nFor example, they could learn about cabin crew duties, basic flight safety, and simple English through role-playing.\nI believe these activities could help children learn more about the world and inspire them to follow their dreams.",
+        "tip": "航空知識、英語教學與互動體驗已有既有活動；以擴大觸及或增加角色扮演為提案。"
+      },
+      {
+        "label": "備選・制服與穿山甲保育（原稿）",
+        "a_zh": "我想先說，制服本身我覺得不需要改。華航的紅梅意象已經是很成熟的識別，梅花代表台灣精神，旅客一看就知道是誰，這種累積換掉很可惜。如果一定要說建議，我會從實務面出發：長程航班站立與走動時間長，鞋子的支撐性和布料的透氣度如果能再優化，對組員的續航力會很有幫助——這是我在飯店站一整天班的真實體會。公益的部分我特別喜歡穿山甲保育計畫，剛好穿山甲也是我母校暨南大學的吉祥物，我一直有關注。如果能延伸，我會建議把保育故事做進機上內容，例如短片或兒童版的紙本活動包，讓小旅客在飛行途中認識台灣的原生動物——這樣公益不只是對外的形象，也變成旅客實際帶得走的體驗。",
+        "a_en": "I'd start by saying I don't think the uniform needs changing. The plum blossom identity is already mature — it stands for the Taiwanese spirit and passengers recognise it instantly, so replacing that accumulated recognition would be a waste. If I had to suggest something, I'd approach it practically: on long-haul flights crew stand and move for hours, so improving the support of the shoes and the breathability of the fabric would meaningfully help crew stamina. That comes from genuinely standing full shifts at a hotel front desk. On the community side, I particularly like the pangolin conservation project — the pangolin also happens to be the mascot of my university, National Chi Nan, so I've followed it closely. If it were extended, I'd suggest bringing the conservation story into the cabin, perhaps as a short film or a children's activity pack, so young passengers learn about Taiwan's native wildlife during the flight. That way the programme isn't only an outward image; it becomes something passengers actually take home.",
+        "tip": "保留原本的飯店站班、母校及穿山甲保育連結。制服機能建議須以公司最新已實施措施為基礎。"
+      }
+    ]
+  }
+];
+  CI_FINAL_ITEMS.push(...CI_NOV11_ITEMS);
   const items=CI_FINAL_ITEMS;
   items.forEach((item,index)=>{
     const itemCheckedAt=item.checkedAt||"2026-11-08";
@@ -638,12 +943,12 @@ Thank you.`,
     {key:"industry",label:"航空時事與產業觀點",keys:["fleet-news","sustainability","uk-atc-outage","middle-east-airspace","ebola-travel-attestation","fuel-surcharge-news","iata-biometrics-ai","korean-asiana-integration"]}
   ];
   const extensions={
-    motivation:["life-learning","why-now"],
+    motivation:["life-learning","why-now","why-not-other-airlines","other-airline-applications"],
     integrity:["delay-pressure","outage-no-eta","near-miss-report"],
     image:["privacy-news","ai-translation","passenger-lookup","filming","biometric-human-option"],
     safety:["countdown-turbulence","senior-safety","security-joke","security-trust","accident-aircraft-fear","jetstar-runway-incursion"],
-    service:["eco-objection","diversion-connection","health-form-refusal","fare-service-complaint","merger-benefit-confusion","wrong-airport-help","other-airline-still-flies"],
-    industry:["runway-news","theme-flight","western-sydney-opening","typhoon-flight-cancellations"]
+    service:["eco-objection","diversion-connection","health-form-refusal","fare-service-complaint","merger-benefit-confusion","wrong-airport-help","other-airline-still-flies","international-guest-example"],
+    industry:["runway-news","theme-flight","western-sydney-opening","typhoon-flight-cancellations","aircraft-and-service","livery-design","ip-livery","company-suggestions"]
   };
   let essentialRank=0;
   for(const topic of topics){
@@ -670,7 +975,7 @@ Thank you.`,
       if(existing){
         for(const row of matches){
           row.ciFinalKey=item.key;
-          row.variants={...row.variants,"華航":{a_zh:item.a_zh,a_en:item.a_en,...(item.a_ko?{a_ko:item.a_ko}:{})}};
+          row.variants={...row.variants,"華航":{a_zh:item.a_zh,a_en:item.a_en,...(item.a_ko?{a_ko:item.a_ko}:{}),answerLabel:item.answerLabel,answerAlternatives:item.answerAlternatives,tip:item.tip,...(item.fu?{fu:item.fu}:{})}};
           row.ciFinalDraft=item;
           if(!row.airlines?.includes("華航"))row.airlines=[...(row.airlines||[row.airline]).filter(Boolean),"華航"];
         }
@@ -691,7 +996,16 @@ Thank you.`,
         out.push(`\n### ${++number}. ${item.q_zh}`,item.q_en,`考察分類：${topic.label}｜題型來源：${item.group}${item.parentKey?`｜延伸自：${byKey[item.parentKey].q_zh}`:""}`);
         if(item.answerLabel)out.push(`${item.answerLabel}｜更新 ${item.updatedAt}`);
         out.push("\n中文擬答：",item.a_zh,"\nEnglish draft:",item.a_en);
-        if(item.a_ko)out.push("\n한국어 원고（韓文原稿）：",item.a_ko);
+        if(item.a_ko)out.push("\n한국어（韓文擬答）：",item.a_ko);
+        for(const alternative of item.answerAlternatives||[]){
+          out.push(`\n#### ${alternative.label}`);
+          if(alternative.q_zh)out.push(alternative.q_zh,alternative.q_en);
+          if(alternative.a_zh)out.push("中文擬答：",alternative.a_zh);
+          if(alternative.a_en)out.push("English draft:",alternative.a_en);
+          if(alternative.a_ko)out.push("한국어：",alternative.a_ko);
+          if(alternative.tip)out.push(`提醒：${alternative.tip}`);
+          for(const follow of alternative.fu||[])out.push(`追問：${follow.q}`,follow.qe,follow.a,follow.ae);
+        }
         out.push(`\n回答提醒：${item.tip}`);
         if(item.fact){
           out.push(`新聞事實：${item.fact}`);

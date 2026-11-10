@@ -1,18 +1,18 @@
 {
   "schema": 1,
-  "articleCount": 1083,
-  "uniqueTextCount": 1051,
-  "processed": 1083,
-  "withCandidates": 1082,
-  "vocabularyCount": 3452,
-  "cardCount": 3453,
-  "pronunciationPending": 447,
-  "translationPending": 130,
+  "articleCount": 1104,
+  "uniqueTextCount": 1069,
+  "processed": 1104,
+  "withCandidates": 1103,
+  "vocabularyCount": 3477,
+  "cardCount": 3478,
+  "pronunciationPending": 472,
+  "translationPending": 151,
   "counts": {
     "華航": {
       "雜誌": 39,
       "新聞稿": 20,
-      "面試英文段落": 239,
+      "面試英文段落": 260,
       "廣播詞": 5,
       "朗讀文章": 1,
       "模擬朗讀": 96
@@ -43,9 +43,9 @@
   },
   "byType": {
     "abbreviation": {
-      "total": 27,
-      "pendingIPA": 15,
-      "pendingChinese": 6
+      "total": 28,
+      "pendingIPA": 16,
+      "pendingChinese": 7
     },
     "date": {
       "total": 17,
@@ -63,14 +63,14 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 246,
-      "pendingIPA": 105,
-      "pendingChinese": 33
+      "total": 247,
+      "pendingIPA": 106,
+      "pendingChinese": 34
     },
     "word": {
-      "total": 3048,
-      "pendingIPA": 212,
-      "pendingChinese": 67
+      "total": 3071,
+      "pendingIPA": 235,
+      "pendingChinese": 86
     }
   },
   "zeroCandidateArticles": [
@@ -82,7 +82,7 @@
   ],
   "failures": [],
   "excluded": {
-    "count": 267,
+    "count": 272,
     "reason": "短問句、非英文、翻譯／UI 文案不作文章；程式、測試、字典與衍生檔案不重複掃描"
   },
   "articles": [
@@ -2436,6 +2436,300 @@
       "words": 74,
       "candidates": 20,
       "occurrences": 25,
+      "processed": true
+    },
+    {
+      "id": "article-9523a0a52ef3b19b",
+      "title": "CI_NOV11_REVISIONS 2",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_REVISIONS",
+      "words": 90,
+      "candidates": 24,
+      "occurrences": 34,
+      "processed": true
+    },
+    {
+      "id": "article-9523a0a52ef3b19b-2b760c9b",
+      "title": "CI_NOV11_REVISIONS 2",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_REVISIONS",
+      "words": 84,
+      "candidates": 32,
+      "occurrences": 36,
+      "processed": true
+    },
+    {
+      "id": "article-9523a0a52ef3b19b-25551420",
+      "title": "CI_NOV11_REVISIONS 2",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_REVISIONS",
+      "words": 74,
+      "candidates": 23,
+      "occurrences": 26,
+      "processed": true
+    },
+    {
+      "id": "article-9523a0a52ef3b19b-6cee26e7",
+      "title": "CI_NOV11_REVISIONS 2",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_REVISIONS",
+      "words": 81,
+      "candidates": 30,
+      "occurrences": 35,
+      "processed": true
+    },
+    {
+      "id": "article-079f5a3cd8b79af4",
+      "title": "如果其他航空公司也重視安全與服務，為什麼特別是華航？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 12,
+      "candidates": 5,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-11b7d4351728da84",
+      "title": "如果其他航空公司也重視安全與服務，為什麼特別是華航？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 40,
+      "candidates": 17,
+      "occurrences": 21,
+      "processed": true
+    },
+    {
+      "id": "article-b74d28d026ba469a",
+      "title": "長榮、星宇也很重視服務，為什麼妳特別選擇華航？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 12,
+      "candidates": 8,
+      "occurrences": 8,
+      "processed": true
+    },
+    {
+      "id": "article-28cfb467af8b91d1",
+      "title": "長榮、星宇也很重視服務，為什麼妳特別選擇華航？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 74,
+      "candidates": 26,
+      "occurrences": 32,
+      "processed": true
+    },
+    {
+      "id": "article-d4fcb854b9b1a0cc",
+      "title": "妳有投其他航空公司嗎？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 42,
+      "candidates": 19,
+      "occurrences": 21,
+      "processed": true
+    },
+    {
+      "id": "article-5f4763b51105b8ae",
+      "title": "請舉一個妳主動幫助外國旅客的例子。",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 44,
+      "candidates": 18,
+      "occurrences": 18,
+      "processed": true
+    },
+    {
+      "id": "article-a38e7a8de1d2843e",
+      "title": "妳認為現代化機型和好的服務，何者更重要？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 38,
+      "candidates": 17,
+      "occurrences": 17,
+      "processed": true
+    },
+    {
+      "id": "article-e3a00d2219ccb110",
+      "title": "CI_NOV11_ITEMS 1",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 83,
+      "candidates": 34,
+      "occurrences": 41,
+      "processed": true
+    },
+    {
+      "id": "article-9dbd50966f6d5b69",
+      "title": "如果要設計華航彩繪機，妳會畫什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 15,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-04a1792e22081c76",
+      "title": "如果要設計華航彩繪機，妳會畫什麼？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 80,
+      "candidates": 20,
+      "occurrences": 27,
+      "processed": true
+    },
+    {
+      "id": "article-19b7312c8282f00b",
+      "title": "如果華航要推出新的IP聯名彩繪機，妳推薦和誰合作？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 17,
+      "candidates": 6,
+      "occurrences": 6,
+      "processed": true
+    },
+    {
+      "id": "article-1afc2858bd3a13cb",
+      "title": "如果華航要推出新的IP聯名彩繪機，妳推薦和誰合作？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 89,
+      "candidates": 36,
+      "occurrences": 41,
+      "processed": true
+    },
+    {
+      "id": "article-d62ee15c30a4ddff",
+      "title": "妳對華航制服有什麼建議？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 80,
+      "candidates": 29,
+      "occurrences": 34,
+      "processed": true
+    },
+    {
+      "id": "article-3293961c22ab36fb",
+      "title": "妳對華航公益活動有什麼建議？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 71,
+      "candidates": 20,
+      "occurrences": 26,
+      "processed": true
+    },
+    {
+      "id": "article-6b24a514e53a4821",
+      "title": "CI_NOV11_ITEMS 3",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 167,
+      "candidates": 53,
+      "occurrences": 62,
+      "processed": true
+    },
+    {
+      "id": "article-e2082777ce96f29b",
+      "title": "你對我們公司的制服或公益活動有什麼建議？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 13,
+      "candidates": 4,
+      "occurrences": 4,
+      "processed": true
+    },
+    {
+      "id": "article-88dffb247c940271",
+      "title": "你對我們公司的制服或公益活動有什麼建議？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-final-data.js",
+      "collection": "CI_NOV11_ITEMS",
+      "words": 65,
+      "candidates": 25,
+      "occurrences": 29,
       "processed": true
     },
     {

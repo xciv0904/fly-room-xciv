@@ -3,8 +3,8 @@
   const data=window.CIFinalPrep,app=document.getElementById("ciApp");
   if(!data||!app)return;
   const h=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const labels={asked:"回顧已問過",news:"新聞延伸擬題",followup:"延伸追問",annual:"年度議題擬題","review-extension":"初試延伸擬題",derived:"履歷延伸擬題",scenario:"假設情境擬題"};
-  const filters=["全部","先練重點","情境延伸","航空業時事","實戰回顧","新聞延伸","年度議題","履歷與服務","英文核心","弱點收藏"];
+  const labels={asked:"回顧已問過",news:"新聞延伸擬題",followup:"延伸追問",annual:"年度議題擬題","review-extension":"初試延伸擬題",derived:"履歷延伸擬題",creative:"品牌創意擬題",scenario:"假設情境擬題"};
+  const filters=["全部","先練重點","情境延伸","航空業時事","品牌與創意","實戰回顧","新聞延伸","年度議題","履歷與服務","英文核心","弱點收藏"];
   const saved=store.get("ciFinalStudy",{}),hasScope=["essential","all"].includes(saved.scope),state={scope:saved.scope==="all"?"all":"essential",topic:data.topics.some(topic=>topic.key===saved.topic)?saved.topic:"",filter:hasScope&&filters.includes(saved.filter)?saved.filter:"全部",search:hasScope&&typeof saved.search==="string"?saved.search:"",lang:["both","zh","en"].includes(saved.lang)?saved.lang:"both",selected:saved.selected||""};
   const revealed=new Set();
   const items=()=>data.registered||data.items;
@@ -12,7 +12,7 @@
   const starred=item=>stars.includes(item.id);
   function visible(item){
     const match=state.filter==="全部"||state.filter==="先練重點"&&item.priority===1||state.filter==="情境延伸"&&item.kind==="scenario"||state.filter==="英文核心"&&item.englishCore||state.filter==="弱點收藏"&&starred(item)||item.group===state.filter;
-    const text=[item.q_zh,item.q_en,item.a_zh,item.a_en,item.a_ko||"",item.tip,item.fact||"",item.fact_en||"",item.newsStatus||"",item.eventDate||""].join(" ").toLowerCase();
+    const text=[item.q_zh,item.q_en,item.a_zh,item.a_en,item.a_ko||"",item.tip,item.fact||"",item.fact_en||"",item.newsStatus||"",item.eventDate||"",JSON.stringify(item.answerAlternatives||[])].join(" ").toLowerCase();
     return (state.scope==="all"||!!item.essentialRank)&&(!state.topic||item.topic===state.topic)&&match&&(!state.search||text.includes(state.search.toLowerCase().trim()));
   }
   function references(item){
@@ -57,7 +57,7 @@
   }
   function answer(item){
     const zh=state.lang!=="en",en=state.lang!=="zh",ko=state.lang==="both"&&item.a_ko;
-    return `${item.answerLabel?`<p class="sub">${h(item.answerLabel)} · 更新 ${h(item.updatedAt)}</p>`:""}${item.personalCheck?`<p class="tip ci-final-check"><b>作答前確認：</b>${h(item.personalCheck)}</p>`:""}<div class="ci-final-answers">${zh?`<div class="ansbox" lang="zh-Hant"><b>中文擬答</b><p>${h(item.a_zh)}</p></div>`:""}${en?`<div class="ansbox en" lang="en"><b>English draft</b><p>${h(item.a_en)}</p></div>`:""}${ko?`<div class="ansbox ko" lang="ko"><b>한국어 · 韓文原稿</b><p>${h(item.a_ko)}</p></div>`:""}</div><div class="chips">${zh?sayBtn(item.a_zh,"zh-TW","🔊 聽中文"):""}${en?sayBtn(item.a_en,"en-US","🔊 Listen"):""}${ko?sayBtn(item.a_ko,"ko-KR","🔊 한국어"):""}</div><p class="tip">${h(item.tip)}</p>`;
+    return `${item.answerLabel?`<p class="sub">${h(item.answerLabel)} · 更新 ${h(item.updatedAt)}</p>`:""}${item.personalCheck?`<p class="tip ci-final-check"><b>作答前確認：</b>${h(item.personalCheck)}</p>`:""}<div class="ci-final-answers">${zh?`<div class="ansbox" lang="zh-Hant"><b>中文擬答</b><p>${h(item.a_zh)}</p></div>`:""}${en?`<div class="ansbox en" lang="en"><b>English draft</b><p>${h(item.a_en)}</p></div>`:""}${ko?`<div class="ansbox ko" lang="ko"><b>한국어 · 韓文擬答</b><p>${h(item.a_ko)}</p></div>`:""}</div><div class="chips">${zh?sayBtn(item.a_zh,"zh-TW","🔊 聽中文"):""}${en?sayBtn(item.a_en,"en-US","🔊 Listen"):""}${ko?sayBtn(item.a_ko,"ko-KR","🔊 한국어"):""}</div>${answerAlternativesBlock(item.answerAlternatives,{zh,en,ko:state.lang==="both"})}<p class="tip">${h(item.tip)}</p>`;
   }
   function card(item){
     const children=items().filter(row=>row.parentKey===item.key),parent=item.parentKey&&items().find(row=>row.key===item.parentKey),open=item.key===state.selected;

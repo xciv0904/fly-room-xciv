@@ -29,6 +29,36 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(new Set(classified).size,50);
     const curatedPending=page.waitForEvent('download');await page.locator('[data-final-download]').click();const curatedDownload=await curatedPending;
     assert.equal(fs.readFileSync(await curatedDownload.path(),'utf8'),prep.markdown());
+    await page.locator('[data-ci-route="final"]').click();
+    await page.locator('[data-ci-module="brand-creativity"]').click();
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'all');
+    assert.equal(await page.locator('#ciFinalFilter').inputValue(),'品牌與創意');
+    assert.equal(await page.locator('.ci-final-question').count(),3);
+    await page.evaluate(()=>CIFinalStudy.open('livery-design'));
+    await page.locator('#ci-final-livery-design [data-final-reveal]').click();
+    assert.equal(await page.locator('#ci-final-livery-design .ci-final-answers [lang="zh-Hant"] p').textContent(),prep.byKey['livery-design'].a_zh);
+    assert.match(await page.locator('#ci-final-livery-design .ci-final-answer').textContent(),/第一版・臺灣茶文化/);
+    const second=page.locator('#ci-final-livery-design .ci-answer-alternative');
+    assert.equal(await second.getAttribute('open'),null);await second.locator('>summary').click();
+    assert.match(await second.locator('.zh').first().textContent(),/穿山甲守護者號/);
+    assert.match(await second.textContent(),/黑面琵鷺/);
+    assert.equal(await page.evaluate(()=>ansFor(DATA.find(q=>q.id===60),null).a_zh),prep.byKey['livery-design'].a_zh);
+    await page.locator('#ciFinalLang').selectOption('en');
+    assert.equal(await page.locator('#ci-final-livery-design .ci-answer-alternative .zh').count(),0);
+    assert.match(await page.locator('#ci-final-livery-design .ci-answer-alternative .en').first().textContent(),/endemic subspecies/);
+    await page.locator('#ciFinalLang').selectOption('both');
+    await page.locator('#ci-final-livery-design [data-final-record][data-lang="zh"]').click();
+    assert.equal(await page.evaluate(()=>M.q.a_zh),prep.byKey['livery-design'].a_zh);
+    await page.locator('#mBody [data-open-final-study]').click();
+    await page.evaluate(()=>CIFinalStudy.open('ip-livery'));
+    await page.locator('#ci-final-ip-livery [data-final-reveal]').click();
+    assert.equal(await page.locator('#ci-final-ip-livery .ci-final-answers [lang="en"] p').textContent(),prep.byKey['ip-livery'].a_en);
+    assert.match(await page.locator('#ci-final-ip-livery').textContent(),/跟著 Miffy 探索臺灣/);
+    await page.evaluate(()=>CIFinalStudy.open('company-suggestions'));
+    await page.locator('#ci-final-company-suggestions [data-final-reveal]').click();
+    assert.equal(await page.locator('#ci-final-company-suggestions .ci-answer-alternative').count(),3);
+    await page.locator('#ciFinalSearch').fill('輕便外搭');assert.equal(await page.locator('.ci-final-question').count(),1);
+    await page.locator('#ciFinalSearch').fill('');
     await page.locator('[data-final-essential="image"]').click();
     await page.locator('#ci-final-uniform-social-post>summary').click();await page.locator('#ci-final-uniform-social-post [data-final-reveal]').click();
     assert.equal(await page.locator('#ci-final-uniform-social-post .ansbox').count(),2);
@@ -65,7 +95,8 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(await page.locator('.ci-final-question').count(),questionCount);
     assert.equal(await page.evaluate(()=>CIFinalPrep.registered.find(x=>x.key==='intro').id),0);
     assert.equal(await page.locator('#ci-final-intro').getAttribute('open'),'');assert.match(await page.locator('#ci-final-intro').textContent(),/回顧已問過/);
-    await page.locator('#ci-final-intro [data-final-reveal]').click();assert.equal(await page.locator('#ci-final-intro .ansbox').count(),3);
+    await page.locator('#ci-final-intro [data-final-reveal]').click();assert.equal(await page.locator('#ci-final-intro .ci-final-answers > .ansbox').count(),3);
+    assert.equal(await page.locator('#ci-final-intro .ci-answer-alternative').count(),1);
     const intro=require('../ci-final-data.js').byKey.intro;
     for(const [lang,text]of [['zh-Hant',intro.a_zh],['en',intro.a_en],['ko',intro.a_ko]])assert.equal(await page.locator(`#ci-final-intro .ansbox[lang="${lang}"] p`).textContent(),text);
     assert.equal(await page.evaluate(()=>SAYS[document.querySelector('#ci-final-intro .say:last-child').dataset.sid]?.l),'ko-KR');
@@ -124,6 +155,13 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
       await page.setViewportSize({width,height:900});await page.evaluate(()=>scrollTo(0,0));
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`overflow at ${width}`);
       await page.screenshot({path:path.join(out,`ci-final-${width}.png`),fullPage:true});
+    }
+    await page.evaluate(()=>CIFinalStudy.openGroup('品牌與創意'));
+    await page.setViewportSize({width:390,height:900});
+    for(const key of ['livery-design','ip-livery']){
+      await page.evaluate(k=>CIFinalStudy.open(k),key);
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`overflow for ${key}`);
+      await page.screenshot({path:path.join(out,`${key}-390.png`),fullPage:true});
     }
     assert.deepEqual(errors,[]);console.log(JSON.stringify({questions:questionCount,essentialQuestions:50,classifiedTopics:6,industryQuestions:24,recordingLanguages:['zh','en'],downloadedGuide:true,preservedLegacyState:true,consoleErrors:errors,output:out}));
     await context.close();

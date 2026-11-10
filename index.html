@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="mobile-a11y.css">
 <link rel="stylesheet" href="reading-lab/lab.css?v=20">
-<link rel="stylesheet" href="ci-final-study.css?v=24">
+<link rel="stylesheet" href="ci-final-study.css?v=25">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要內容</a>
@@ -476,7 +476,7 @@
 <script src="ci-reading.js"></script>
 <script src="ci-vocabulary.js"></script>
 <script src="ci-source-vocabulary.js"></script>
-<script src="ci-final-data.js?v=24"></script>
+<script src="ci-final-data.js?v=25"></script>
 <script>
 let DATA = [];
 
@@ -952,18 +952,26 @@ function hasAir(d, a){
 function airTags(d){ return airsOf(d).map(a=>`<span class="tag ${TAGC[a]||"gn"}">${a}</span>`).join(""); }
 /* 依目前選定公司取出該公司的擬答；沒選或該公司沒客製版就回傳預設 */
 function ansFor(d, air){
+  if(!air&&d.ciFinalKey&&airsOf(d).length===1&&airsOf(d)[0]==="華航")air="華航";
   const v = d.variants && air && d.variants[air];
-  return v ? {a_zh: v.a_zh || d.a_zh, a_en: v.a_en || d.a_en, a_ko:v.a_ko||d.a_ko, air: air, custom: true}
-           : {a_zh: d.a_zh, a_en: d.a_en, a_ko:d.a_ko, air: null, custom: false};
+  return v ? {a_zh: v.a_zh || d.a_zh, a_en: v.a_en || d.a_en, a_ko:v.a_ko||d.a_ko, answerLabel:v.answerLabel, answerAlternatives:v.answerAlternatives, fu:v.fu??d.fu, tip:v.tip||d.tip, air: air, custom: true}
+           : {a_zh: d.a_zh, a_en: d.a_en, a_ko:d.a_ko, answerLabel:d.answerLabel, answerAlternatives:d.answerAlternatives, fu:d.fu, tip:d.tip, air: null, custom: false};
+}
+function answerAlternativesBlock(alternatives=[],{zh=true,en=true,ko=true}={}){
+  return alternatives.filter(a=>zh&&a.a_zh||en&&a.a_en||ko&&a.a_ko).map(a=>{
+    const draft={...a,answerAlternatives:[],a_zh:zh?a.a_zh:"",a_en:en?a.a_en:"",a_ko:ko?a.a_ko:"",fu:(a.fu||[]).map(f=>({...f,q:zh?f.q:"",qe:en?f.qe:"",a:zh?f.a:"",ae:en?f.ae:""}))};
+    return `<details class="ci-answer-alternative" style="margin-top:12px"><summary>${esc(a.label)}</summary><div class="body">${a.q_zh&&zh?`<p>${esc(a.q_zh)}</p>`:""}${a.q_en&&en?`<p lang="en">${esc(a.q_en)}</p>`:""}${ansBlock(draft,null)}</div></details>`;
+  }).join("");
 }
 /* 產生擬答區塊：選定公司時直接帶該版，未選公司時預設版＋可展開其他家 */
 function ansBlock(d, air){
   const cur = ansFor(d, air);
   let h = `<div class="ansbox">`;
   if(cur.custom) h += `<div class="sub" style="margin-bottom:6px">✅ 以下為 <b>${cur.air}</b> 專屬版本</div>`;
+  if(cur.answerLabel)h+=`<p class="sub">${esc(cur.answerLabel)}</p>`;
   if(cur.a_zh) h += `<div class="zh">${esc(cur.a_zh)}</div>`;
   if(cur.a_en) h += `<div class="en">${esc(cur.a_en)}</div>`;
-  if(cur.a_ko) h += `<div class="ko" lang="ko" style="white-space:pre-line"><b>한국어 · 韓文原稿</b><br>${esc(cur.a_ko)}</div>`;
+  if(cur.a_ko) h += `<div class="ko" lang="ko" style="white-space:pre-line"><b>한국어 · 韓文自我介紹</b><br>${esc(cur.a_ko)}</div>`;
   h += `</div>`;
   h += `<div class="chips" style="margin-top:6px">${sayBtn(cur.a_zh,"zh-TW","🔊 聽中文")}${sayBtn(cur.a_en,"en-US","🔊 Listen")}</div>`;
   if(cur.a_ko)h+=`<div class="chips">${sayBtn(cur.a_ko,"ko-KR","🔊 한국어")}</div>`;
@@ -978,19 +986,20 @@ function ansBlock(d, air){
     });
     h += `</div></details>`;
   }
-  if(d.fu && d.fu.length){
-    h += `<details style="margin-top:8px" class="fublock"><summary>🔍 考官追問（${d.fu.length}）——第一層答完不算過關</summary><div class="body">`;
-    d.fu.forEach(f=>{
+  h+=answerAlternativesBlock(cur.answerAlternatives);
+  if(cur.fu && cur.fu.length){
+    h += `<details style="margin-top:8px" class="fublock"><summary>🔍 考官追問（${cur.fu.length}）——第一層答完不算過關</summary><div class="body">`;
+    cur.fu.forEach(f=>{
       h += `<div style="margin-bottom:12px;padding-left:10px;border-left:3px solid var(--gold)">
-        <div style="font-weight:700;font-size:14px">Q：${esc(f.q)}</div>
-        <div style="font-size:13px;color:#33475c;margin-bottom:4px">${esc(f.qe)}</div>
-        <div class="ansbox" style="margin-top:4px"><div class="zh">${esc(f.a)}</div><div class="en">${esc(f.ae)}</div></div>
+        ${f.q?`<div style="font-weight:700;font-size:14px">Q：${esc(f.q)}</div>`:""}
+        ${f.qe?`<div style="font-size:13px;color:#33475c;margin-bottom:4px">${esc(f.qe)}</div>`:""}
+        <div class="ansbox" style="margin-top:4px">${f.a?`<div class="zh">${esc(f.a)}</div>`:""}${f.ae?`<div class="en">${esc(f.ae)}</div>`:""}</div>
         <div class="chips">${sayBtn(f.a,"zh-TW","🔊 中")}${sayBtn(f.ae,"en-US","🔊 EN")}</div>
       </div>`;
     });
     h += `</div></details>`;
   }
-  if(d.tip) h += `<div class="tip">💡 ${esc(d.tip)}</div>`;
+  if(cur.tip) h += `<div class="tip">💡 ${esc(cur.tip)}</div>`;
   if(d.ciFinalKey && (!air||air==="華航")){
     const draft=CIFinalPrep.byKey[d.ciFinalKey];
     if(draft)h+=`<div class="tip">最新版華航複試擬答 · ${CIFinalPrep.checkedAt}${draft.personalCheck?`<br>作答前確認：${esc(draft.personalCheck)}`:""}<br>${esc(draft.tip)}</div><button class="btn ghost" data-open-final-study="${esc(draft.key)}">查看題目背景、來源與追問 →</button>`;
@@ -1490,7 +1499,7 @@ $("#reviewList").innerHTML = REVIEWS.map(r=>`
        <div class="chips">${sayBtn(x.zh||REVIEW_ZH[x.q]||(/[一-鿿]/.test(x.better)?x.better:""), "zh-TW", "🔊 聽中文")}</div>
        <p class="sub" style="margin:8px 0 3px">✨ 優化版本｜English</p><div class="ansbox">${esc(x.better)}</div>
        <div class="chips">${sayBtn(x.better, "en-US", "🔊 Listen")}</div>
-       ${x.ko?`<p class="sub">本人提供｜한국어 · 韓文原稿</p><div class="ansbox" lang="ko" style="white-space:pre-line">${esc(x.ko)}</div><div class="chips">${sayBtn(x.ko,"ko-KR","🔊 한국어")}</div>`:""}
+       ${x.ko?`<p class="sub">한국어 · 韓文自我介紹</p><div class="ansbox" lang="ko" style="white-space:pre-line">${esc(x.ko)}</div><div class="chips">${sayBtn(x.ko,"ko-KR","🔊 한국어")}</div>`:""}
        ${x.note?`<div class="tip">💡 ${esc(x.note)}</div>`:""}
        ${x.ciFinalKey?`<button class="btn ghost" data-open-final-study="${x.ciFinalKey}">練這題與延伸追問 →</button>`:""}
      </div></details>`).join(""):""}
@@ -2767,8 +2776,8 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 }
 </script>
 <script src="eva-mode.js"></script>
-<script src="ci-mode.js?v=24"></script>
-<script src="ci-final-study.js?v=24"></script>
+<script src="ci-mode.js?v=25"></script>
+<script src="ci-final-study.js?v=25"></script>
 <script src="reading-lab/data.js"></script>
 <script src="reading-lab/ci-destinations.js"></script>
 <script src="reading-lab/destination-network.js"></script>
