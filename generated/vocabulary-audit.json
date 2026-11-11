@@ -44,6 +44,67 @@
     }
   },
   {
+    "word": "optional",
+    "type": "word",
+    "ipa": "/ˈɑpʃənəɫ/；/ˈɔpʃənəɫ/",
+    "stress": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "AA1 P SH AH0 N AH0 L",
+        "syllableCount": 3,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "ɑ",
+          "pʃə",
+          "nəl"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "AO1 P SH AH0 N AH0 L",
+        "syllableCount": 3,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "ɔ",
+          "pʃə",
+          "nəl"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-777b1da894630381",
+      "title": "華航將推出跨年主題航班，你會設計什麼簡單且安全的機上互動？",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "面試英文段落",
+      "sourceFile": "ci-news54-data.js",
+      "collection": "data",
+      "words": 69,
+      "candidates": 22,
+      "occurrences": 25,
+      "processed": true
+    },
+    "sentence": "I would suggest using the flight’s commemorative certificate for an optional activity: passengers could write one wish for the new year while remaining seated.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
     "word": "independent",
     "type": "word",
     "ipa": "/ˌɪndɪˈpɛndənt/",
@@ -935,87 +996,6 @@
       "processed": true
     },
     "sentence": "I would pass on the passenger's question, obtain verified information, and return with an update.",
-    "checks": {
-      "ipaExactDictionaryMatch": true,
-      "cmuPhonemesExactMatch": true,
-      "sourceExists": true
-    }
-  },
-  {
-    "word": "occasionally",
-    "type": "word",
-    "ipa": "/əˈkeɪʒənəɫi/；/əˈkeɪʒənɫi/；/əˈkeɪʒnəɫi/",
-    "stress": [
-      [
-        2
-      ],
-      [
-        2
-      ],
-      [
-        2
-      ]
-    ],
-    "phonemes": [
-      {
-        "arpabet": "AH0 K EY1 ZH AH0 N AH0 L IY0",
-        "syllableCount": 5,
-        "primaryStress": [
-          2
-        ],
-        "phoneticSyllables": [
-          "ə",
-          "keɪ",
-          "ʒə",
-          "nə",
-          "li"
-        ],
-        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
-      },
-      {
-        "arpabet": "AH0 K EY1 ZH N AH0 L IY0",
-        "syllableCount": 4,
-        "primaryStress": [
-          2
-        ],
-        "phoneticSyllables": [
-          "ə",
-          "keɪ",
-          "ʒnə",
-          "li"
-        ],
-        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
-      },
-      {
-        "arpabet": "AH0 K EY1 ZH AH0 N L IY0",
-        "syllableCount": 4,
-        "primaryStress": [
-          2
-        ],
-        "phoneticSyllables": [
-          "ə",
-          "keɪ",
-          "ʒə",
-          "nli"
-        ],
-        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
-      }
-    ],
-    "source": {
-      "id": "article-34b469dbc5ba30fd",
-      "title": "工作中最容易犯的小錯是什麼？",
-      "airlines": [
-        "通用"
-      ],
-      "kind": "面試英文段落",
-      "sourceFile": "question-bank.js",
-      "collection": "__QUESTION_BANK__",
-      "words": 35,
-      "candidates": 9,
-      "occurrences": 10,
-      "processed": true
-    },
-    "sentence": "When handling multiple tasks at once, I've occasionally made small clerical errors, like entering the wrong date or room type.",
     "checks": {
       "ipaExactDictionaryMatch": true,
       "cmuPhonemesExactMatch": true,
