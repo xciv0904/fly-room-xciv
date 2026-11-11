@@ -1,7 +1,7 @@
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http');
 const prep=require('../ci-final-data.js'),questionCount=prep.items.length;
 const root=path.resolve(__dirname,'..'),out=fs.mkdtempSync(path.join(os.tmpdir(),'fly-room-ci-final-'));
-const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname.replace(/\/$/,'/index.html'));if(!file.startsWith(root+path.sep))throw Error();res.setHeader('Content-Type',({'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'})[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file));}catch{res.writeHead(404).end();}});
+const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/\/$/,'/index.html'));if(!file.startsWith(root+path.sep))throw Error();res.setHeader('Content-Type',({'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json'})[path.extname(file)]||'application/octet-stream');res.end(fs.readFileSync(file));}catch{res.writeHead(404).end();}});
 (async()=>{
   let browser;
   try{
@@ -149,6 +149,40 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(await page.locator('#ci-final-middle-east-airspace .ci-final-fact [lang="en"]').count(),1);
     assert.equal(await page.locator('#ci-final-middle-east-airspace .ci-final-fact [lang="zh-Hant"]').count(),0);
     await page.locator('#ciFinalLang').selectOption('both');
+    await page.evaluate(()=>CIFinalStudy.openNews());
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'news54');
+    assert.equal(await page.locator('.ci-final-question').count(),114);
+    assert.match(await page.locator('.ci-final-head h2').textContent(),/新聞54題/);
+    await page.locator('#ciFinalSearch').fill('Miffy');assert.equal(await page.locator('.ci-final-question').count(),2);
+    await page.locator('#ci-final-ip-livery>summary').click();await page.locator('#ci-final-ip-livery [data-final-reveal]').click();
+    assert.equal(await page.locator('#ci-final-ip-livery .ci-final-answers [lang="en"] p').textContent(),prep.byKey['ip-livery'].a_en);
+    await page.locator('#ci-final-ip-livery [data-final-jump="news54-18-follow"]').click();
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'news54');
+    await page.locator('#ci-final-news54-18-follow [data-final-reveal]').click();
+    assert.match(await page.locator('#ci-final-news54-18-follow .ci-final-answer').textContent(),/KLM.*KrisShop/s);
+    await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'news54');
+    assert.equal(await page.locator('#ci-final-news54-18-follow').getAttribute('open'),'');
+    await page.locator('#ci-final-news54-18-follow [data-final-star]').click();
+    const newsId=prep.byKey['news54-18-follow'].id;
+    assert.ok(await page.evaluate(id=>stars.includes(id),newsId));
+    await page.locator('#ci-final-news54-18-follow [data-final-star]').click();
+    pending=page.waitForEvent('download');await page.locator('[data-final-download]').click();download=await pending;
+    const newsGuide=fs.readFileSync(await download.path(),'utf8');assert.equal((newsGuide.match(/^### \d+\./gm)||[]).length,114);
+    pending=page.waitForEvent('download');await page.locator('.ci-final-head a[download]').click();download=await pending;
+    assert.equal(fs.readFileSync(await download.path()).compare(fs.readFileSync(path.join(root,'docs/華航新聞54題_中英文個人化修訂版-2026-11-12.xlsx'))),0);
+    await record('en','news54-22');await record('zh','news54-41');
+    await page.goto(origin+'/#ci/final-topics/news54');await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
+    assert.equal(await page.locator('.ci-final-question').count(),114);
+    await page.locator('#ciFinalFilter').selectOption('新聞54題');assert.equal(await page.locator('.ci-final-question').count(),114);
+    await page.locator('#ciFinalFilter').selectOption('全部');await page.locator('#ciFinalSearch').fill('米飛兔');
+    await page.locator('#ciFinalSearch').fill('');await page.locator('#ci-final-news54-41>summary').click();await page.locator('#ci-final-news54-41 [data-final-reveal]').click();
+    assert.doesNotMatch(await page.locator('#ci-final-news54-41 .ci-final-answer').textContent(),/文化藝術中心|cultural center/);
+    for(const width of [390,768,1280]){
+      await page.setViewportSize({width,height:900});
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`news collection overflow at ${width}`);
+      await page.screenshot({path:path.join(out,`news54-${width}.png`),fullPage:true});
+    }
     await page.evaluate(()=>CIFinalStudy.openEssentials('image'));await page.locator('#ci-final-uniform-social-post>summary').click();await page.locator('#ci-final-uniform-social-post [data-final-reveal]').click();
     await page.locator('#ciFinalSearch').fill('可以在社群媒體分享穿制服');
     for(const width of [390,768,1280]){

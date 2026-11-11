@@ -5,11 +5,12 @@ test('every requested main question, follow-up and English prompt has a complete
   const expected=['R1','R2','R3','R4','N1.main','N1.follow','N2.main','N2.follow.ai','N2.follow.friend','N3.main','N3.follow','N4.main','N4.follow','N5.main','N5.follow','N6.main','N6.follow','A1','A2',...Array.from({length:18},(_,i)=>`P${i+1}`),'E1','E2.company','E2.now','E3','E4','E5','E6',...Array.from({length:12},(_,i)=>[`I${i+1}.main`,`I${i+1}.follow`]).flat()];
   expected.push(...Array.from({length:8},(_,i)=>`J${i+1}`),...Array.from({length:6},(_,i)=>`S${i+1}`));
   expected.push(...Array.from({length:10},(_,i)=>`IMP${i+1}.main`),...['1','2','3','5'].map(n=>`IMP${n}.follow`));
+  expected.push(...Array.from({length:54},(_,i)=>[`NEWS54.${i+1}.main`,`NEWS54.${i+1}.follow`]).flat(),...Array.from({length:6},(_,i)=>`NEWS54.extra${i+1}.main`));
   assert.deepEqual(new Set(prep.items.flatMap(row=>row.coverage)),new Set(expected));
-  assert.equal(prep.items.length,84);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
+  assert.equal(prep.items.length,189);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
   assert.equal(prep.items.filter(row=>row.kind==='asked').length,4);assert.equal(prep.englishPrompts.length,6);
   for(const row of prep.items){
-    assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>(row.kind==='followup'?50:70));assert.ok(row.a_en.split(/\s+/).length>=(row.kind==='followup'?35:45));
+    assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>(row.kind==='followup'?50:70));assert.ok(row.a_en.split(/\s+/).length>=(row.kind==='followup'?(row.coverage.some(code=>code.startsWith('NEWS54.'))?30:35):45),row.key);
     if(row.parentKey)assert.ok(prep.byKey[row.parentKey]);
     for(const key of row.sources)assert.ok(prep.sources[key],`${row.key}: ${key}`);
     if(row.fact)assert.ok(row.sources.some(key=>prep.sources[key].date));
@@ -42,8 +43,8 @@ test('news qualifications and personal-story boundaries survive into the downloa
   assert.match(prep.byKey['exceed-expectations'].a_en,/Canadian guest/);assert.match(prep.byKey['digital-service'].a_en,/Colombian guest/);
   assert.match(prep.byKey['harassment'].tip,/碰觸是本題假設/);assert.match(prep.byKey['power-bank'].tip,/年度安全議題/);
   assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-11');
-  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試精選50題-2026-11-11.md'),'utf8'),md+'\n');
-  assert.equal(fs.readFileSync(require.resolve('../docs/華航複試雙語擬答-2026-11-11.md'),'utf8'),prep.markdown({scope:'all'})+'\n');
+  assert.equal(fs.readFileSync(require.resolve(`../docs/華航複試精選50題-${prep.checkedAt}.md`),'utf8'),md+'\n');
+  assert.equal(fs.readFileSync(require.resolve(`../docs/華航複試雙語擬答-${prep.checkedAt}.md`),'utf8'),prep.markdown({scope:'all'})+'\n');
   assert.equal((prep.markdown({scope:'all'}).match(/^### \d+\./gm)||[]).length,prep.items.length);
 });
 test('exactly 50 distinct essentials cover six explicit topics and all extensions stay classified',()=>{
@@ -106,4 +107,30 @@ test('approved import merges duplicate prompts and keeps tea primary, Miffy, and
   const md=prep.markdown({scope:'all'});
   for(const text of [tea.a_zh,tea.a_en,tea.answerAlternatives[0].a_zh,miffy.a_zh,suggestions.answerAlternatives[0].a_en,prep.byKey.intro.answerAlternatives[0].a_ko])assert.ok(md.includes(text));
   assert.match(prep.byKey['fleet-news'].fact,/11\/6/);assert.equal(prep.byKey['fleet-news'].checkedAt,'2026-11-11');
+});
+
+test('reviewed workbook collection preserves history and supplies all 228 bilingual answers',()=>{
+  const news=require('../ci-news54-data.js'),historical=require('./fixtures/ci-final-legacy-ids.json');
+  for(const [key,id]of Object.entries(historical))assert.equal(prep.byKey[key].id,id,`Saved history for ${key}`);
+  assert.equal(news.main.length,54);assert.equal(news.bonus.length,6);
+  assert.equal(prep.news54.mainKeys.length,60);assert.equal(new Set(prep.news54.allKeys).size,114);
+  for(const entry of [...news.main,...news.bonus]){
+    const row=prep.byKey[entry.key];assert.equal(row.a_zh,entry.a_zh);assert.equal(row.a_en,entry.a_en);
+    const words=entry.a_en.split(/\s+/).length,characters=[...entry.a_zh.matchAll(/\p{Script=Han}/gu)].length;
+    assert.ok(words>=55&&words<=90,`${entry.key}: English must remain a short spoken answer`);
+    assert.ok(characters>=90&&characters<=155,`${entry.key}: Chinese must remain a short spoken answer`);
+    assert.doesNotMatch(entry.a_zh+entry.a_en,/文化藝術中心|cultural center|待本人確認|\[Add|［補/);
+    if(entry.followKey){
+      const follow=prep.byKey[entry.followKey];assert.equal(follow.parentKey,entry.key);
+      assert.equal(follow.q_zh,entry.follow_zh);assert.equal(follow.q_en,entry.follow_en);
+      assert.equal(follow.a_zh,entry.follow_a_zh);assert.equal(follow.a_en,entry.follow_a_en);
+    }
+  }
+  assert.match(prep.byKey['ip-livery'].a_zh,/Miffy/);assert.match(prep.byKey['news54-18-follow'].a_en,/KLM.*KrisShop/);
+  assert.match(prep.byKey['news54-13'].a_en,/Book & Claim/);
+  assert.match(prep.byKey['news54-22'].a_en,/wheel pie.*duck and truffle/i);
+  assert.match(prep.byKey['news54-25-follow'].a_en,/review/);
+  assert.match(prep.byKey['news54-47-follow'].a_en,/Colombian.*late checkout/s);
+  const md=prep.markdown({scope:'news54'});assert.equal((md.match(/^### \d+\./gm)||[]).length,114);
+  assert.equal(fs.readFileSync(require.resolve('../docs/華航新聞54題與加碼6題-2026-11-12.md'),'utf8'),md+'\n');
 });

@@ -1,7 +1,7 @@
 /* Bilingual interview drafts. News facts and personal recollections remain distinct. */
 (function(root){
   "use strict";
-  const checkedAt="2026-11-11";
+  const checkedAt="2026-11-12";
   const sources={
     importPractice:{"title":"2026-11-11 個人化面試擬答整理（非確認考古題）","url":"#ci/final-topics/livery-design","date":"","checkedAt":"2026-11-11","kind":"practice"},
     itf787:{"title":"華航：ITF 搶先體驗 787 新機客艙","url":"https://www.china-airlines.com/tw/zh/about-china-airlines/media/news/20261106.html","date":"2026-11-06","checkedAt":"2026-11-11","kind":"official"},
@@ -928,6 +928,26 @@ Thank you.`,
   }
 ];
   CI_FINAL_ITEMS.push(...CI_NOV11_ITEMS);
+  const news54Data=typeof module!=="undefined"&&module.exports?require("./ci-news54-data.js"):root.CINews54;
+  if(!news54Data)throw Error("The reviewed news practice data must load before ci-final-data.js");
+  Object.assign(sources,news54Data.sources);
+  const news54Entries=[];
+  for(const [index,entry] of [...news54Data.main,...news54Data.bonus].entries()){
+    const existing=CI_FINAL_ITEMS.find(item=>item.key===entry.key);
+    const coverage=`NEWS54.${index<54?entry.number:`extra${entry.number}`}.main`;
+    const update={a_zh:entry.a_zh,a_en:entry.a_en,tip:entry.tip,updatedAt:checkedAt,answerLabel:"30–45秒・2026/11/12修訂",news54Number:index<54?entry.number:`加碼${entry.number}`};
+    if(existing){
+      Object.assign(existing,update,{tip:[...new Set([existing.tip,entry.tip].filter(Boolean))].join(" "),coverage:[...existing.coverage,coverage],sources:[...new Set([...existing.sources,...entry.sources])]});
+    }else{
+      CI_FINAL_ITEMS.push({...update,key:entry.key,group:"新聞54題",kind:index>=54||[10,38,41].includes(entry.number)?"derived":[18,34,36,44,46,49,52,54].includes(entry.number)?"creative":"news",priority:entry.priority,coverage:[coverage],sources:entry.sources,q_zh:entry.q_zh,q_en:entry.q_en,checkedAt,topic:entry.topic});
+    }
+    const current=CI_FINAL_ITEMS.find(item=>item.key===entry.key);
+    if(index<54){
+      CI_FINAL_ITEMS.push({key:entry.followKey,parentKey:entry.key,group:"新聞54題",kind:"followup",priority:entry.priority,coverage:[`NEWS54.${entry.number}.follow`],sources:entry.sources,q_zh:entry.follow_zh,q_en:entry.follow_en,a_zh:entry.follow_a_zh,a_en:entry.follow_a_en,tip:entry.tip,checkedAt,updatedAt:checkedAt,topic:entry.topic,news54Number:`${entry.number}・追問`});
+    }
+    news54Entries.push({number:entry.number,extra:index>=54,key:current.key,followKey:entry.followKey});
+  }
+  const news54={label:news54Data.label,entries:news54Entries,mainKeys:news54Entries.map(entry=>entry.key),allKeys:news54Entries.flatMap(entry=>[entry.key,...(entry.followKey?[entry.followKey]:[])])};
   const items=CI_FINAL_ITEMS;
   items.forEach((item,index)=>{
     const itemCheckedAt=item.checkedAt||"2026-11-08";
@@ -987,8 +1007,9 @@ Thank you.`,
     return {bank:list,items:registry};
   }
   function markdown({scope="essential"}={}){
-    const selected=scope==="all"?items:essentialItems;
-    const out=[scope==="all"?"# 華航複試完整雙語題庫":"# 華航複試精選 50 題中英文擬答",`內容更新：${checkedAt}；各新聞題保留自己的查核日期。`,scope==="all"?`完整題庫共 ${items.length} 題，包含精選 50 題與延伸練習；所有題目均依考察重點分類。`:"精選 50 題，依本人面試回顧、可使用的服務故事及考點覆蓋選題，減少重複問法；不是實際出題頻率或必考題排名。", "只有四題標示為本人回顧已問過；新增的誠實溝通與社群情境皆是假設擬題。原有延伸題與練習紀錄保留。", "判斷題作答：先直接回答立場 → 分清已確認、未知與不宜公開的資訊 → 說明核對、回報、協助及後續跟進。誠實不等於轉述猜測，尊重公司也不等於說明知不實的話。", "時事題作答：一個有日期的已確認事實 → 自己的觀點 → 空服員能做的事。初步報告不等於最終肇因，規定與計畫須在面試前再確認。", "分類：\n"+topics.map(topic=>`- ${topic.label}：${selected.filter(item=>item.topic===topic.key).length} 題`).join("\n")];
+    const selected=scope==="all"?items:scope==="news54"?news54.allKeys.map(key=>byKey[key]):essentialItems;
+    const title=scope==="all"?"# 華航複試完整雙語題庫":scope==="news54"?"# 華航新聞54題＋加碼6題・中英文修訂擬答":"# 華航複試精選 50 題中英文擬答";
+    const out=[title,`內容更新：${checkedAt}；各新聞題保留自己的查核日期。`,scope==="all"?`完整題庫共 ${items.length} 題，包含精選 50 題與延伸練習；所有題目均依考察重點分類。`:scope==="news54"?"54題主答、54題追問與6題加碼，共114個練習單元。主答以正常語速約30–45秒為目標；追問精簡回答。長度依個人語速微調，不為湊時間加長。":"精選 50 題，依本人面試回顧、可使用的服務故事及考點覆蓋選題，減少重複問法；不是實際出題頻率或必考題排名。", "只有四題標示為本人回顧已問過；其他內容為延伸擬題。原有題號、延伸題與練習紀錄保留。", "判斷題先回答立場，再說明必要的確認、處理和回覆。經驗題使用一次真實事件；不必每題硬接飯店故事。", "時事題用一個有日期的事實，加上自己的觀點與職務連結。新聞細節以所列來源為準，規定與計畫在面試前再確認。", "分類：\n"+topics.map(topic=>`- ${topic.label}：${selected.filter(item=>item.topic===topic.key).length} 題`).join("\n")];
     let number=0;
     for(const topic of topics){
       out.push(`\n## ${topic.label}`);
@@ -1020,7 +1041,7 @@ Thank you.`,
     out.push("\n## 六組英文核心問法與對應",...englishPrompts.map(prompt=>`- ${prompt.en}\n  對應：${prompt.keys.map(key=>byKey[key].q_zh+(byKey[key].essentialRank?"":"（延伸題）")).join("／")}`));
     return out.join("\n\n");
   }
-  const api={checkedAt,sources,items,essentialItems,topics,byKey,englishPrompts,attach,markdown};
+  const api={checkedAt,sources,items,essentialItems,topics,byKey,englishPrompts,news54,attach,markdown};
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   root.CIFinalPrep=api;
 })(typeof window!=="undefined"?window:globalThis);

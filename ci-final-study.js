@@ -4,16 +4,18 @@
   if(!data||!app)return;
   const h=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const labels={asked:"回顧已問過",news:"新聞延伸擬題",followup:"延伸追問",annual:"年度議題擬題","review-extension":"初試延伸擬題",derived:"履歷延伸擬題",creative:"品牌創意擬題",scenario:"假設情境擬題"};
-  const filters=["全部","先練重點","情境延伸","航空業時事","品牌與創意","實戰回顧","新聞延伸","年度議題","履歷與服務","英文核心","弱點收藏"];
-  const saved=store.get("ciFinalStudy",{}),hasScope=["essential","all"].includes(saved.scope),state={scope:saved.scope==="all"?"all":"essential",topic:data.topics.some(topic=>topic.key===saved.topic)?saved.topic:"",filter:hasScope&&filters.includes(saved.filter)?saved.filter:"全部",search:hasScope&&typeof saved.search==="string"?saved.search:"",lang:["both","zh","en"].includes(saved.lang)?saved.lang:"both",selected:saved.selected||""};
+  const filters=["全部","先練重點","情境延伸","航空業時事","品牌與創意","實戰回顧","新聞延伸","新聞54題","年度議題","履歷與服務","英文核心","弱點收藏"];
+  const saved=store.get("ciFinalStudy",{}),hasScope=["essential","all","news54"].includes(saved.scope),state={scope:hasScope?saved.scope:"essential",topic:data.topics.some(topic=>topic.key===saved.topic)?saved.topic:"",filter:hasScope&&filters.includes(saved.filter)?saved.filter:"全部",search:hasScope&&typeof saved.search==="string"?saved.search:"",lang:["both","zh","en"].includes(saved.lang)?saved.lang:"both",selected:saved.selected||""};
   const revealed=new Set();
   const items=()=>data.registered||data.items;
   const save=()=>store.set("ciFinalStudy",state);
   const starred=item=>stars.includes(item.id);
+  const inScope=item=>state.scope==="all"||state.scope==="news54"&&data.news54.allKeys.includes(item.key)||state.scope==="essential"&&!!item.essentialRank;
+  const scopeLabel=()=>state.scope==="news54"?"新聞54題＋加碼6題":state.scope==="all"?"完整題庫":"精選50題";
   function visible(item){
-    const match=state.filter==="全部"||state.filter==="先練重點"&&item.priority===1||state.filter==="情境延伸"&&item.kind==="scenario"||state.filter==="英文核心"&&item.englishCore||state.filter==="弱點收藏"&&starred(item)||item.group===state.filter;
+    const match=state.filter==="全部"||state.filter==="先練重點"&&item.priority===1||state.filter==="情境延伸"&&item.kind==="scenario"||state.filter==="新聞54題"&&data.news54.allKeys.includes(item.key)||state.filter==="英文核心"&&item.englishCore||state.filter==="弱點收藏"&&starred(item)||item.group===state.filter;
     const text=[item.q_zh,item.q_en,item.a_zh,item.a_en,item.a_ko||"",item.tip,item.fact||"",item.fact_en||"",item.newsStatus||"",item.eventDate||"",JSON.stringify(item.answerAlternatives||[])].join(" ").toLowerCase();
-    return (state.scope==="all"||!!item.essentialRank)&&(!state.topic||item.topic===state.topic)&&match&&(!state.search||text.includes(state.search.toLowerCase().trim()));
+    return inScope(item)&&(!state.topic||item.topic===state.topic)&&match&&(!state.search||text.includes(state.search.toLowerCase().trim()));
   }
   function references(item){
     return `<div class="ci-final-sources">${item.sources.map(key=>{const s=data.sources[key];return `<a href="${h(s.url)}" ${s.url.startsWith("https:")?'target="_blank" rel="noopener noreferrer"':""}>${h(s.title)}</a>${s.date?` <span>${h(s.dateLabel||"發布")} ${h(s.date)}</span>`:""}`;}).join("<br>")}</div>`;
@@ -23,17 +25,19 @@
     return `<div class="ci-final-fact"><b>新聞背景</b>${state.lang!=="en"||!item.fact_en?`<p lang="zh-Hant">${h(item.fact)}</p>`:""}${state.lang!=="zh"&&item.fact_en?`<p lang="en">${h(item.fact_en)}</p>`:""}</div><p class="sub">事件／措施日期 ${h(item.eventDate)} · 查核 ${h(item.checkedAt)}；保留所列來源時點的資訊。</p>${item.newsStatus?`<p class="tip"><b>資料狀態：</b>${h(item.newsStatus)}</p>`:""}`;
   }
   function layout(){
-    const scoped=data.items.filter(item=>state.scope==="all"||item.essentialRank);
+    const scoped=data.items.filter(inScope);
     return `<div class="card ci-final-head">
       <button class="ci-eva-back" data-ci-route="final">← 複試準備</button>
       <span class="ci-phase-label">FINAL INTERVIEW · 中文 / ENGLISH</span>
-      <h2>華航複試${state.scope==="all"?`完整題庫・${data.items.length} 題`:"精選 50 題"}</h2>
-      <p>用六大主題練核心問題：先回答，再看中英文擬答，最後錄音回聽。</p>
-      <p class="sub">更新 ${data.checkedAt} · 依本人回顧、可用故事與考點覆蓋選題。四題為回顧已問過；其餘為延伸擬題，並非出題頻率排名。</p>
+      <h2>${state.scope==="news54"?"華航新聞54題＋加碼6題":`華航複試${state.scope==="all"?`完整題庫・${data.items.length} 題`:"精選 50 題"}`}</h2>
+      <p>${state.scope==="news54"?"54組主題與追問，加上6題個人特色練習。主答約30–45秒，追問直接回答；先練再對照中英文。":"用六大主題練核心問題：先回答，再看中英文擬答，最後錄音回聽。"}</p>
+      <p class="sub">更新 ${data.checkedAt} · ${state.scope==="news54"?"本批依公開新聞延伸擬題，並非歷屆真題；個人案例沿用已提供的飯店資料。":"依本人回顧、可用故事與考點覆蓋選題。四題為回顧已問過；其餘為延伸擬題，並非出題頻率排名。"}</p>
       <div class="ci-final-actions">
         <button class="btn" data-final-essential="integrity">⚖️ 練誠實溝通</button>
         <button class="btn" data-final-essential="image">📱 練社群與界線</button>
-        <button class="btn ghost" data-final-download>下載${state.scope==="all"?"完整題庫":"精選 50 題"}擬答</button>
+        <button class="btn" data-final-news>新聞54題＋6題加碼</button>
+        <button class="btn ghost" data-final-download>下載${h(scopeLabel())}擬答</button>
+        ${state.scope==="news54"?'<a class="btn ghost" href="docs/華航新聞54題_中英文個人化修訂版-2026-11-12.xlsx" download>下載新版 Excel</a>':""}
         <button class="btn ghost" data-final-essential="">查看精選全部 50 題</button>
       </div>
       <details class="ci-final-guide"><summary>怎麼回答判斷題</summary>
@@ -46,12 +50,12 @@
       <label for="ciFinalSearch">搜尋題目、新聞或擬答</label>
       <input id="ciFinalSearch" type="search" value="${h(state.search)}" placeholder="例如：說實話、制服、social media">
       <div class="searchrow">
-        <label>練習範圍<select id="ciFinalScope"><option value="essential" ${state.scope==="essential"?"selected":""}>精選 50 題</option><option value="all" ${state.scope==="all"?"selected":""}>完整 ${data.items.length} 題（含延伸）</option></select></label>
+        <label>練習範圍<select id="ciFinalScope"><option value="essential" ${state.scope==="essential"?"selected":""}>精選 50 題</option><option value="news54" ${state.scope==="news54"?"selected":""}>新聞54題＋加碼6題（含54追問）</option><option value="all" ${state.scope==="all"?"selected":""}>完整 ${data.items.length} 題（含延伸）</option></select></label>
         <label>主題分類<select id="ciFinalTopic"><option value="">全部主題</option>${data.topics.map(topic=>`<option value="${topic.key}" ${state.topic===topic.key?"selected":""}>${h(topic.label)}（${scoped.filter(item=>item.topic===topic.key).length}）</option>`).join("")}</select></label>
         <label>題型與來源<select id="ciFinalFilter">${filters.map(filter=>`<option ${filter===state.filter?"selected":""}>${filter}</option>`).join("")}</select></label>
         <label>擬答顯示<select id="ciFinalLang"><option value="both" ${state.lang==="both"?"selected":""}>中英對照</option><option value="zh" ${state.lang==="zh"?"selected":""}>中文</option><option value="en" ${state.lang==="en"?"selected":""}>English</option></select></label>
       </div>
-      <p class="sub">六類共 50 題；其餘 ${data.items.length-data.essentialItems.length} 題保留在完整題庫。題號、收藏與舊紀錄保留。</p>
+      <p class="sub">${state.scope==="news54"?"本批含60題主答與54題追問，共114個練習單元。重複題沿用既有題號，收藏與舊紀錄保留。":`六類共 50 題；其餘 ${data.items.length-data.essentialItems.length} 題保留在完整題庫。題號、收藏與舊紀錄保留。`}</p>
       <p id="ciFinalCount" class="sub" role="status"></p><p id="ciFinalStatus" class="sub" role="status"></p>
     </div><div id="ciFinalEnglish"></div><div id="ciFinalList"></div>`;
   }
@@ -64,9 +68,9 @@
     return `<details class="card ci-final-question" id="ci-final-${h(item.key)}" data-final-key="${h(item.key)}" ${open?"open":""}><summary><span class="ci-final-number">${item.essentialRank?String(item.essentialRank).padStart(2,"0"):"+"}</span><span><span class="ci-final-badges"><span class="tag cat">${labels[item.kind]}</span><span class="tag">${h(data.topics.find(topic=>topic.key===item.topic)?.label||"")}</span>${item.priority===1?'<span class="tag">先練</span>':""}${starred(item)?'<span class="tag">★ 弱點</span>':""}</span><span class="ci-final-q">${h(item.q_zh)}</span><span class="ci-final-q en" lang="en">${h(item.q_en)}</span></span></summary><div class="ci-final-body">${parent?`<p class="sub">接續問題：<button class="ci-final-link" data-final-jump="${h(parent.key)}">${h(parent.q_zh)}</button></p>`:""}${newsBackground(item)}${references(item)}<div class="ci-final-actions"><button class="btn" data-final-record="${h(item.key)}" data-lang="zh" ${!data.registered?"disabled":""}>🎙 中文錄音</button><button class="btn sec" data-final-record="${h(item.key)}" data-lang="en" ${!data.registered?"disabled":""}>🎙 English</button><button class="btn ghost" data-final-star="${h(item.key)}" aria-pressed="${starred(item)}" ${!data.registered?"disabled":""}>${starred(item)?"★ 已加入弱點":"☆ 加入弱點"}</button></div><div class="ci-final-answer" data-answer-for="${h(item.key)}">${revealed.has(item.key)?answer(item):`<p class="sub">先用自己的話答 30–45 秒，再對照擬答。</p><button class="btn ghost" data-final-reveal="${h(item.key)}">查看中英文擬答</button>`}</div>${children.length?`<div class="ci-final-follow"><b>接著練追問</b>${children.map(child=>`<button class="ci-final-link" data-final-jump="${h(child.key)}">${h(child.q_zh)} →</button>`).join("")}</div>`:""}</div></details>`;
   }
   function renderList(){
-    const rank=item=>item.essentialRank||1000+data.items.findIndex(row=>row.key===item.key),list=items().filter(visible).sort((a,b)=>rank(a)-rank(b)),el=document.getElementById("ciFinalList");if(!el)return;
+    const rank=item=>state.scope==="news54"?data.news54.allKeys.indexOf(item.key):item.essentialRank||1000+data.items.findIndex(row=>row.key===item.key),list=items().filter(visible).sort((a,b)=>rank(a)-rank(b)),el=document.getElementById("ciFinalList");if(!el)return;
     el.innerHTML=data.topics.map(topic=>{const rows=list.filter(item=>item.topic===topic.key);return rows.length?`<h3 class="ci-final-topic-title">${h(topic.label)} <span class="tag">${rows.length}</span></h3>${rows.map(card).join("")}`:""}).join("")||'<div class="card"><p>目前沒有符合條件的題目。可換分類、清除搜尋，或先加入弱點。</p><button class="btn ghost" data-final-reset>顯示全部題目</button></div>';
-    document.getElementById("ciFinalCount").textContent=`顯示 ${list.length} / ${state.scope==="all"?items().length:data.essentialItems.length} 題 · ${state.scope==="all"?"完整題庫":"精選題庫"}${data.registered?"":" · 題庫連結載入中…"}`;
+    document.getElementById("ciFinalCount").textContent=`顯示 ${list.length} / ${data.items.filter(inScope).length} 個練習單元 · ${scopeLabel()}${data.registered?"":" · 題庫連結載入中…"}`;
   }
   function route(key="",sync=true){
     const name=`ci/final-topics${key?`/${key}`:""}`;
@@ -75,6 +79,8 @@
     window.setUXContext?.("🌸 華航 › 複試專題",true);
   }
   function render(key="",sync=true){
+    const routeKey=key;
+    if(key==="news54"){state.scope="news54";state.filter="全部";state.topic="";state.search="";state.selected="";key="";}
     document.getElementById("ciSprintPlanWrap")?.classList.add("hidden");
     document.getElementById("ciSprintPanel")?.classList.add("ci-final-active");
     if(key&&items().some(item=>item.key===key)){
@@ -82,7 +88,7 @@
       const item=items().find(item=>item.key===key);
       if(!visible(item)){state.filter="全部";state.topic="";state.search="";if(!item.essentialRank)state.scope="all";}
     }
-    route(key,sync);save();
+    route(routeKey,sync);save();
     app.innerHTML=layout();
     if(state.filter==="英文核心")document.getElementById("ciFinalEnglish").innerHTML=`<div class="card"><h3>六組英文核心問法</h3>${data.englishPrompts.map(p=>`<p lang="en">${h(p.en)}<br>${p.keys.map(k=>`<button class="ci-final-link" data-final-jump="${k}">${h(data.byKey[k].q_zh)} →</button>`).join(" ")}</p>`).join("")}</div>`;
     renderList();
@@ -94,6 +100,7 @@
   }
   function openGroup(group){if(!filters.includes(group))return;state.scope="all";state.topic="";state.filter=group;state.search="";state.selected="";open()}
   function openEssentials(topic=""){state.scope="essential";state.topic=data.topics.some(row=>row.key===topic)?topic:"";state.filter="全部";state.search="";state.selected="";open()}
+  function openNews(){open("news54")}
   function jump(key){state.filter="全部";state.topic="";state.search="";state.selected=key;open(key)}
   document.addEventListener("click",event=>{
     const trigger=event.target.closest("[data-open-final-study]");if(trigger){open(trigger.dataset.openFinalStudy);return;}
@@ -106,9 +113,10 @@
     const target=event.target.closest("[data-final-jump]");if(target){jump(target.dataset.finalJump);return;}
     const group=event.target.closest("[data-final-group]");if(group){openGroup(group.dataset.finalGroup);return;}
     const essential=event.target.closest("[data-final-essential]");if(essential){openEssentials(essential.dataset.finalEssential);return;}
+    if(event.target.closest("[data-final-news]")){openNews();return;}
     if(event.target.closest("[data-final-reset]")){state.filter="全部";state.topic="";state.search="";render();return;}
     if(event.target.closest("[data-final-download]")){
-      const url=URL.createObjectURL(new Blob([data.markdown({scope:state.scope})],{type:"text/markdown;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download=`華航複試${state.scope==="all"?"完整雙語題庫":"精選50題"}-${data.checkedAt}.md`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      const url=URL.createObjectURL(new Blob([data.markdown({scope:state.scope})],{type:"text/markdown;charset=utf-8"})),a=document.createElement("a");a.href=url;a.download=`華航複試${scopeLabel()}-${data.checkedAt}.md`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
     }
   });
   app.addEventListener("input",event=>{if(event.target.id!=="ciFinalSearch")return;state.search=event.target.value;save();renderList()});
@@ -124,5 +132,5 @@
     const hash=`#ci/final-topics/${state.selected}`;if(location.hash!==hash)window.setAppRoute?.(`ci/final-topics/${state.selected}`,{replace:true});
   },true);
   window.addEventListener("ci:final-ready",()=>{if(document.getElementById("ciFinalList"))renderList()});
-  window.CIFinalStudy={render,open,openGroup,openEssentials};
+  window.CIFinalStudy={render,open,openGroup,openEssentials,openNews};
 })();
