@@ -37,6 +37,7 @@
         <button class="btn" data-final-essential="image">📱 練社群與界線</button>
         <button class="btn" data-final-news>新聞54題＋6題加碼</button>
         <button class="btn ghost" data-final-download>下載${h(scopeLabel())}擬答</button>
+        <a class="btn ghost" data-final-cram href="docs/華航考前最後衝刺大補帖-2026-11-13.pdf" download>考前大補帖 PDF・50詞＋雙語模板</a>
         ${state.scope==="news54"?'<a class="btn ghost" href="docs/華航新聞54題_中英文個人化修訂版-2026-11-12.xlsx" download>下載新版 Excel</a>':""}
         <button class="btn ghost" data-final-essential="">查看精選全部 50 題</button>
       </div>

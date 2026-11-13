@@ -169,7 +169,7 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     await page.locator('#ci-final-news54-18-follow [data-final-star]').click();
     pending=page.waitForEvent('download');await page.locator('[data-final-download]').click();download=await pending;
     const newsGuide=fs.readFileSync(await download.path(),'utf8');assert.equal((newsGuide.match(/^### \d+\./gm)||[]).length,114);
-    pending=page.waitForEvent('download');await page.locator('.ci-final-head a[download]').click();download=await pending;
+    pending=page.waitForEvent('download');await page.locator('.ci-final-head a[download][href$=".xlsx"]').click();download=await pending;
     assert.equal(fs.readFileSync(await download.path()).compare(fs.readFileSync(path.join(root,'docs/華航新聞54題_中英文個人化修訂版-2026-11-12.xlsx'))),0);
     await record('en','news54-22');await record('zh','news54-41');
     await page.goto(origin+'/#ci/final-topics/news54');await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
