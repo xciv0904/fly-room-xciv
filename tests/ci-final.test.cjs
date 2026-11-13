@@ -42,7 +42,7 @@ test('news qualifications and personal-story boundaries survive into the downloa
   assert.match(prep.byKey['sustainability'].tip,/Book & Claim/);assert.match(prep.byKey['fleet-news'].tip,/不要.*已交機/);
   assert.match(prep.byKey['exceed-expectations'].a_en,/Canadian guest/);assert.match(prep.byKey['digital-service'].a_en,/Colombian guest/);
   assert.match(prep.byKey['harassment'].tip,/碰觸是本題假設/);assert.match(prep.byKey['power-bank'].tip,/年度安全議題/);
-  assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-11');
+  assert.ok(md.includes(prep.byKey.intro.a_ko));assert.equal(prep.byKey.intro.updatedAt,'2026-11-13');
   assert.equal(fs.readFileSync(require.resolve(`../docs/華航複試精選50題-${prep.checkedAt}.md`),'utf8'),md+'\n');
   assert.equal(fs.readFileSync(require.resolve(`../docs/華航複試雙語擬答-${prep.checkedAt}.md`),'utf8'),prep.markdown({scope:'all'})+'\n');
   assert.equal((prep.markdown({scope:'all'}).match(/^### \d+\./gm)||[]).length,prep.items.length);
@@ -66,7 +66,7 @@ test('industry expansion retains original question IDs and each historical verif
   const originalKeys=['intro','preparation','delay-honesty','social-media','runway-news','delay-pressure','privacy-news','ai-translation','passenger-lookup','theme-flight','countdown-turbulence','fleet-news','learning-procedures','safety-role','senior-safety','sustainability','eco-objection','power-bank','digital-service','why-cabin-crew','why-china-airlines','growth','why-hire','reliability','service-mistake','unavailable-request','exceed-expectations','proactive-boundaries','korean','harassment','prioritisation','colleague-promise','filming','unfamiliar-equipment','fatigue','not-selected','life-learning','why-now','hotel-vs-cabin'];
   for(const [i,key] of originalKeys.entries()){
     assert.equal(prep.items[i].key,key);assert.equal(prep.byKey[key].id,-11001-i);
-    assert.equal(prep.byKey[key].checkedAt,['intro','fleet-news','why-china-airlines','why-hire','hotel-vs-cabin'].includes(key)?'2026-11-11':'2026-11-08');
+    assert.equal(prep.byKey[key].checkedAt,key==='intro'?'2026-11-13':['fleet-news','why-china-airlines','why-hire','hotel-vs-cabin'].includes(key)?'2026-11-11':'2026-11-08');
   }
   const industry=prep.items.filter(row=>row.group==='航空業時事');
   assert.equal(industry.length,24);assert.equal(industry.filter(row=>row.kind==='news').length,12);
@@ -101,7 +101,9 @@ test('approved import merges duplicate prompts and keeps tea primary, Miffy, and
   assert.match(suggestions.answerAlternatives[0].a_zh,/輕便外搭/);
   assert.match(suggestions.answerAlternatives[1].a_zh,/角色扮演/);
   assert.ok(suggestions.sources.includes('employeeWorkplace'));assert.ok(suggestions.sources.includes('communityEducation'));
-  assert.match(prep.byKey.intro.a_ko,/프런트 데스크 직원으로/);
+  assert.match(prep.byKey.intro.a_ko,/프런트 데스크에서 일하고 있습니다/);
+  assert.match(prep.byKey.intro.a_ko,/안전하고 편안한 비행을 만들고 싶습니다/);
+  assert.match(prep.byKey.intro.answerAlternatives[1].a_ko,/프런트 데스크 직원으로/);
   assert.match(prep.byKey.intro.answerAlternatives[0].a_ko,/확장하여 해서/);
   assert.match(prep.byKey['other-airline-applications'].personalCheck,/實際申請情況/);
   const md=prep.markdown({scope:'all'});
@@ -132,5 +134,5 @@ test('reviewed workbook collection preserves history and supplies all 228 biling
   assert.match(prep.byKey['news54-25-follow'].a_en,/review/);
   assert.match(prep.byKey['news54-47-follow'].a_en,/Colombian.*late checkout/s);
   const md=prep.markdown({scope:'news54'});assert.equal((md.match(/^### \d+\./gm)||[]).length,114);
-  assert.equal(fs.readFileSync(require.resolve('../docs/華航新聞54題與加碼6題-2026-11-12.md'),'utf8'),md+'\n');
+  assert.equal(fs.readFileSync(require.resolve(`../docs/華航新聞54題與加碼6題-${prep.checkedAt}.md`),'utf8'),md+'\n');
 });

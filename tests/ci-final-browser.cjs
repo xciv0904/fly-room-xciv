@@ -96,7 +96,7 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
     assert.equal(await page.evaluate(()=>CIFinalPrep.registered.find(x=>x.key==='intro').id),0);
     assert.equal(await page.locator('#ci-final-intro').getAttribute('open'),'');assert.match(await page.locator('#ci-final-intro').textContent(),/回顧已問過/);
     await page.locator('#ci-final-intro [data-final-reveal]').click();assert.equal(await page.locator('#ci-final-intro .ci-final-answers > .ansbox').count(),3);
-    assert.equal(await page.locator('#ci-final-intro .ci-answer-alternative').count(),1);
+    assert.equal(await page.locator('#ci-final-intro .ci-answer-alternative').count(),2);
     const intro=require('../ci-final-data.js').byKey.intro;
     for(const [lang,text]of [['zh-Hant',intro.a_zh],['en',intro.a_en],['ko',intro.a_ko]])assert.equal(await page.locator(`#ci-final-intro .ansbox[lang="${lang}"] p`).textContent(),text);
     assert.equal(await page.evaluate(()=>SAYS[document.querySelector('#ci-final-intro .say:last-child').dataset.sid]?.l),'ko-KR');

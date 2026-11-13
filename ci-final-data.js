@@ -1,7 +1,7 @@
 /* Bilingual interview drafts. News facts and personal recollections remain distinct. */
 (function(root){
   "use strict";
-  const checkedAt="2026-11-12";
+  const checkedAt="2026-11-13";
   const sources={
     importPractice:{"title":"2026-11-11 個人化面試擬答整理（非確認考古題）","url":"#ci/final-topics/livery-design","date":"","checkedAt":"2026-11-11","kind":"practice"},
     itf787:{"title":"華航：ITF 搶先體驗 787 新機客艙","url":"https://www.china-airlines.com/tw/zh/about-china-airlines/media/news/20261106.html","date":"2026-11-06","checkedAt":"2026-11-11","kind":"official"},
@@ -710,6 +710,12 @@ Thank you.`,
   const intro=CI_FINAL_ITEMS.find(item=>item.key==="intro");
   intro.answerAlternatives=[{label:"韓文原稿（2026-11-09）",a_ko:intro.a_ko,updatedAt:"2026-11-09"}];
   Object.assign(intro,{a_ko:"안녕하십니까, 장선리입니다.\n저는 영어와 한국어로 의사소통할 수 있으며, 현재 하얏트 호텔에서 프런트 데스크 직원으로 근무하고 있습니다.\n저는 항상 작은 부분까지 세심하게 살피고, 고객의 요구를 미리 파악하기 위해 노력합니다.\n저는 좋은 서비스란 고객이 안심하고 존중받는다고 느끼게 하는 것이라고 생각합니다.\n이러한 경험을 바탕으로 동료들과 협력하여 승객들에게 세심하고 전문적인 서비스를 제공하고 싶습니다.\n감사합니다.",answerLabel:"中英原稿・韓文修訂版",updatedAt:"2026-11-11",checkedAt:"2026-11-11",tip:"中英文保留本人提供原稿，韓文採用語句修訂版；原韓文可展開對照。若現場限時 30 秒，請另備精簡版。韓文尚未包含中英文的同事可靠後盾段落，三語並非逐句對譯。"});
+  intro.answerAlternatives.push({label:"韓文前版（2026-11-11）",a_ko:intro.a_ko,updatedAt:intro.updatedAt});
+  Object.assign(intro,{
+    a_ko:"안녕하십니까. OOO입니다.\n\n저는 영어와 한국어로 소통할 수 있습니다.\n\n현재 하얏트 호텔 프런트 데스크에서 일하고 있습니다.\n\n저는 작은 부분까지 살피고, 고객에게 필요한 도움을 먼저 드립니다.\n\n저는 고객이 안심하고 존중받는 것이 가장 중요하다고 생각합니다.\n\n이 경험을 살려, 기내에서도 동료들과 함께 안전하고 편안한 비행을 만들고 싶습니다.\n\n감사합니다.",
+    answerLabel:"中英原稿・韓文本人更新版",updatedAt:"2026-11-13",checkedAt:"2026-11-13",
+    tip:"韓文採用本人 2026-11-13 提供版本，OOO 為姓名欄位，練習時替換成自己的姓名；前兩版可展開對照。中英文保留本人原稿，三語並非逐句對譯。現場若有限時，以實際錄音調整語速與長度。"
+  });
   const CI_NOV11_ITEMS=[
   {
     "key": "why-not-other-airlines",
@@ -935,15 +941,15 @@ Thank you.`,
   for(const [index,entry] of [...news54Data.main,...news54Data.bonus].entries()){
     const existing=CI_FINAL_ITEMS.find(item=>item.key===entry.key);
     const coverage=`NEWS54.${index<54?entry.number:`extra${entry.number}`}.main`;
-    const update={a_zh:entry.a_zh,a_en:entry.a_en,tip:entry.tip,updatedAt:checkedAt,answerLabel:"30–45秒・2026/11/12修訂",news54Number:index<54?entry.number:`加碼${entry.number}`};
+    const update={a_zh:entry.a_zh,a_en:entry.a_en,tip:entry.tip,updatedAt:news54Data.checkedAt,answerLabel:"30–45秒・2026/11/12修訂",news54Number:index<54?entry.number:`加碼${entry.number}`};
     if(existing){
       Object.assign(existing,update,{tip:[...new Set([existing.tip,entry.tip].filter(Boolean))].join(" "),coverage:[...existing.coverage,coverage],sources:[...new Set([...existing.sources,...entry.sources])]});
     }else{
-      CI_FINAL_ITEMS.push({...update,key:entry.key,group:"新聞54題",kind:index>=54||[10,38,41].includes(entry.number)?"derived":[18,34,36,44,46,49,52,54].includes(entry.number)?"creative":"news",priority:entry.priority,coverage:[coverage],sources:entry.sources,q_zh:entry.q_zh,q_en:entry.q_en,checkedAt,topic:entry.topic});
+      CI_FINAL_ITEMS.push({...update,key:entry.key,group:"新聞54題",kind:index>=54||[10,38,41].includes(entry.number)?"derived":[18,34,36,44,46,49,52,54].includes(entry.number)?"creative":"news",priority:entry.priority,coverage:[coverage],sources:entry.sources,q_zh:entry.q_zh,q_en:entry.q_en,checkedAt:news54Data.checkedAt,topic:entry.topic});
     }
     const current=CI_FINAL_ITEMS.find(item=>item.key===entry.key);
     if(index<54){
-      CI_FINAL_ITEMS.push({key:entry.followKey,parentKey:entry.key,group:"新聞54題",kind:"followup",priority:entry.priority,coverage:[`NEWS54.${entry.number}.follow`],sources:entry.sources,q_zh:entry.follow_zh,q_en:entry.follow_en,a_zh:entry.follow_a_zh,a_en:entry.follow_a_en,tip:entry.tip,checkedAt,updatedAt:checkedAt,topic:entry.topic,news54Number:`${entry.number}・追問`});
+      CI_FINAL_ITEMS.push({key:entry.followKey,parentKey:entry.key,group:"新聞54題",kind:"followup",priority:entry.priority,coverage:[`NEWS54.${entry.number}.follow`],sources:entry.sources,q_zh:entry.follow_zh,q_en:entry.follow_en,a_zh:entry.follow_a_zh,a_en:entry.follow_a_en,tip:entry.tip,checkedAt:news54Data.checkedAt,updatedAt:news54Data.checkedAt,topic:entry.topic,news54Number:`${entry.number}・追問`});
     }
     news54Entries.push({number:entry.number,extra:index>=54,key:current.key,followKey:entry.followKey});
   }
