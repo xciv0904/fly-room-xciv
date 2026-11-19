@@ -1,20 +1,20 @@
 {
   "schema": 1,
-  "articleCount": 1182,
-  "uniqueTextCount": 1147,
-  "processed": 1182,
-  "withCandidates": 1181,
-  "vocabularyCount": 3592,
-  "cardCount": 3593,
-  "pronunciationPending": 470,
-  "translationPending": 147,
+  "articleCount": 1185,
+  "uniqueTextCount": 1150,
+  "processed": 1185,
+  "withCandidates": 1184,
+  "vocabularyCount": 3612,
+  "cardCount": 3613,
+  "pronunciationPending": 490,
+  "translationPending": 166,
   "counts": {
     "華航": {
       "雜誌": 39,
       "新聞稿": 20,
       "面試英文段落": 338,
+      "朗讀文章": 4,
       "廣播詞": 5,
-      "朗讀文章": 1,
       "模擬朗讀": 96
     },
     "通用": {
@@ -63,14 +63,14 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 252,
-      "pendingIPA": 108,
-      "pendingChinese": 36
+      "total": 254,
+      "pendingIPA": 110,
+      "pendingChinese": 38
     },
     "word": {
-      "total": 3178,
-      "pendingIPA": 229,
-      "pendingChinese": 79
+      "total": 3196,
+      "pendingIPA": 247,
+      "pendingChinese": 96
     }
   },
   "zeroCandidateArticles": [
@@ -82,7 +82,7 @@
   ],
   "failures": [],
   "excluded": {
-    "count": 314,
+    "count": 364,
     "reason": "短問句、非英文、翻譯／UI 文案不作文章；程式、測試、字典與衍生檔案不重複掃描"
   },
   "articles": [
@@ -2758,6 +2758,48 @@
       "words": 16,
       "candidates": 5,
       "occurrences": 5,
+      "processed": true
+    },
+    {
+      "id": "article-ac0d390351504397",
+      "title": "records 1",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "朗讀文章",
+      "sourceFile": "ci-interview-records-data.js",
+      "collection": "records",
+      "words": 55,
+      "candidates": 17,
+      "occurrences": 18,
+      "processed": true
+    },
+    {
+      "id": "article-61225d1c06518194",
+      "title": "records 2",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "朗讀文章",
+      "sourceFile": "ci-interview-records-data.js",
+      "collection": "records",
+      "words": 52,
+      "candidates": 13,
+      "occurrences": 14,
+      "processed": true
+    },
+    {
+      "id": "article-24395770ec7ecfe8",
+      "title": "records 3",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "朗讀文章",
+      "sourceFile": "ci-interview-records-data.js",
+      "collection": "records",
+      "words": 39,
+      "candidates": 10,
+      "occurrences": 10,
       "processed": true
     },
     {

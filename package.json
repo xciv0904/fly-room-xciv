@@ -4,6 +4,7 @@
   "scripts": {
     "build:vocabulary": "node scripts/build-vocabulary.cjs",
     "test": "node --test tests/*.test.cjs",
+    "test:prep": "node tests/prep-browser.cjs",
     "test:browser": "node tests/reading-lab-browser.cjs",
     "test:center": "node tests/reading-center-browser.cjs",
     "test:curriculum": "node tests/curriculum-browser.cjs",

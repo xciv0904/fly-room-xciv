@@ -12,7 +12,8 @@
 <link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="mobile-a11y.css">
 <link rel="stylesheet" href="reading-lab/lab.css?v=20">
-<link rel="stylesheet" href="ci-final-study.css?v=25">
+<link rel="stylesheet" href="ci-final-study.css?v=29">
+<link rel="stylesheet" href="prep.css?v=30">
 </head>
 <body>
 <a class="skip-link" href="#mainContent">跳到主要內容</a>
@@ -477,7 +478,8 @@
 <script src="ci-vocabulary.js"></script>
 <script src="ci-source-vocabulary.js"></script>
 <script src="ci-news54-data.js?v=26"></script>
-<script src="ci-final-data.js?v=27"></script>
+<script src="ci-interview-records-data.js?v=29"></script>
+<script src="ci-final-data.js?v=29"></script>
 <script>
 let DATA = [];
 
@@ -1032,7 +1034,8 @@ function isDeviceDataEmpty(){
   const noStats = Object.keys(store.get("stats",{})||{}).length===0;
   const noStreak = !((store.get("daily",{streak:0})||{}).streak);
   const noSprint = Object.keys(store.get("sprint",{})||{}).length===0;
-  return noStars && noStats && noStreak && noSprint;
+  const prep=store.get("prepV2",null),noPrep=!(prep&&prep.version===1&&(prep.active||prep.sessions?.length||Object.keys(prep.plans||{}).length||Object.keys(prep.audits||{}).length));
+  return noStars && noStats && noStreak && noSprint && noPrep;
 }
 function checkDataBanner(){
   if(store.get("bannerDismissed", false)) return;
@@ -1483,7 +1486,8 @@ REVIEWS[0].qa.forEach(item=>{
     item.better="Yes, I have interviewed with China Airlines before, as well as other airlines. Reviewing those experiences helped me understand where my communication and safety awareness needed improvement. This time, I bring specific reflections and practical service experience, while remaining ready to learn.";
   }
 });
-$("#reviewList").innerHTML = REVIEWS.map(r=>`
+const ciRealReview=CIFinalPrep.interviewRecords;
+$("#reviewList").innerHTML = `<div class="card ci-real-review"><h2><span class="tag ci">華航</span>${esc(ciRealReview.session.title)}</h2><p>${ciRealReview.session.candidates}位考生（包含本人）、${ciRealReview.session.interviewers}位考官。${esc(ciRealReview.session.format)}</p><p class="sub">本人實際作答2題；同組其他考生題目1題。原始回答、優化擬答與練習建議分開保存。</p><div class="chips">${ciRealReview.records.map(record=>`<button class="btn ghost" data-open-final-study="${record.key}">${record.provenance==="self"?"本人作答":"同組考生"} · ${esc(record.question.original)}</button>`).join("")}</div><button class="btn" data-open-final-study="real-20261114">比較原始／優化回答並練習 →</button><button class="btn ghost" data-open-final-study="how-to">How to 程序表達訓練 →</button><p class="sub">下方較早場次的回顧保留原紀錄，流程依各場次區分。</p></div>` + REVIEWS.map(r=>`
  <div class="card">
    <h2><span class="tag ${TAGC[r.air]}">${r.air}</span>面試回顧與優化</h2>
    <p class="sub" style="margin-bottom:4px">✅ ${r.good.length} 個優勢　🔧 ${r.fix.length} 個待改善${r.qa?`　🗣️ ${r.qa.length} 題實戰回顧`:""}</p>
@@ -1614,7 +1618,8 @@ function mRenderQ(){
                           (lang==="en"&&M.q.q_en?`<div class="qtext en">${esc(M.q.q_en)}</div>`:"") +
                           (lang==="en"&&!M.q.q_en?`<div class="qtext">${esc(M.q.q_zh)}<span class="sub">（請用英文回答）</span></div>`:"");
   if(M.q.ciFinalKey){
-    $("#mBody").insertAdjacentHTML("beforeend",`<p class="sub">複試專題 · ${CIFinalPrep.checkedAt} · ${CIFinalPrep.byKey[M.q.ciFinalKey]?.kind==="asked"?"本人回顧已問過":"延伸練習擬題"}</p><button class="btn ghost" data-open-final-study="${esc(M.q.ciFinalKey)}">← 回到這一題的複試專題</button>`);
+    const draft=CIFinalPrep.byKey[M.q.ciFinalKey],record=draft?.interviewRecord;
+    $("#mBody").insertAdjacentHTML("beforeend",`<p class="sub">複試專題 · ${CIFinalPrep.checkedAt} · ${draft?.kind==="asked"?"本人回顧已問過":draft?.kind==="peer-asked"?"同組考生被問，非本人作答":"延伸練習擬題"}${record?` · ${CIFinalPrep.interviewRecords.session.date} · ${esc(record.tags.join("／"))}`:""}</p>${record?.trainingType==="how-to"?'<p class="tip">How to 說明程序：練習15–30秒，用簡單動詞和 First / Then / After that / Finally 說清楚必要步驟。</p>':""}<button class="btn ghost" data-open-final-study="${esc(M.q.ciFinalKey)}">← 回到這一題的複試專題</button>`);
   }
   $("#mResult").innerHTML = ""; $("#mLive").textContent = ""; $("#mTimer").textContent = "按下 🔴 開始錄音，回答完按 ⏹";
   $("#mRec").disabled = false; $("#mStop").disabled = true;
@@ -2690,7 +2695,7 @@ $("#stageNav").addEventListener("click", e=>{
 /* 封存關卡內容在第一次進入分頁時載入。 */
 
 /* ================= 備份匯出／匯入 ================= */
-const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","uxRoute","ciLastRoute","ciFinalStudy"];
+const BK_KEYS = ["practiced","stars","srs","daily","sprint","examdate","sqScore","stats","evaProgress","ciProgress","ciSprintDates","ciSprintChecks","pronunciationWords","uxLastTab","uxRoute","ciLastRoute","ciFinalStudy","prepV2"];
 function cleanImportedRecord(r){
   if(!r || typeof r!=="object" || Array.isArray(r)) return null;
   const text=v=>typeof v==="string"?v.slice(0,20000):"";
@@ -2726,7 +2731,11 @@ $("#impFile").addEventListener("change", e=>{
       if(!data || typeof data!=="object" || Array.isArray(data)) throw new Error("invalid backup root");
       const hasKnown=BK_KEYS.some(k=>Object.prototype.hasOwnProperty.call(data,k)) || Array.isArray(data.mockRecs);
       if(!hasKnown) throw new Error("unknown backup format");
+      // Validate the entire new state before any existing progress is changed.
+      if(data.prepV2!=null){if(!window.PrepCore)throw new Error("validator not ready");data.prepV2=PrepCore.validateState(data.prepV2);}
+      if(data.mockRecs!==undefined&&(!Array.isArray(data.mockRecs)||data.mockRecs.length>100))throw new Error("invalid recording list");
       BK_KEYS.forEach(k=>{ if(data[k]!==null && data[k]!==undefined) store.set(k, data[k]); });
+      window.PrepApp?.reload();
       stars = store.get("stars", []);
       if(Array.isArray(data.mockRecs)){
         if(data.mockRecs.length>100) throw new Error("too many records");
@@ -2777,8 +2786,8 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 }
 </script>
 <script src="eva-mode.js"></script>
-<script src="ci-mode.js?v=26"></script>
-<script src="ci-final-study.js?v=28"></script>
+<script src="ci-mode.js?v=30"></script>
+<script src="ci-final-study.js?v=30"></script>
 <script src="reading-lab/data.js"></script>
 <script src="reading-lab/ci-destinations.js"></script>
 <script src="reading-lab/destination-network.js"></script>
@@ -2789,6 +2798,9 @@ if(location.protocol==="https:" && "serviceWorker" in navigator){
 <script src="reading-lab/curriculum-ui.js?v=20"></script>
 <script src="reading-lab/db.js"></script>
 <script src="reading-lab/media.js"></script>
+<script src="prep-core.js?v=30"></script>
+<script src="prep-pages.js?v=30"></script>
+<script src="prep-ui.js?v=30"></script>
 <script src="reading-lab/speech.js"></script>
 <script src="reading-lab/vocabulary.js"></script>
 <script src="reading-lab/learning.js?v=20"></script>

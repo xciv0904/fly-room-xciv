@@ -6,11 +6,12 @@ test('every requested main question, follow-up and English prompt has a complete
   expected.push(...Array.from({length:8},(_,i)=>`J${i+1}`),...Array.from({length:6},(_,i)=>`S${i+1}`));
   expected.push(...Array.from({length:10},(_,i)=>`IMP${i+1}.main`),...['1','2','3','5'].map(n=>`IMP${n}.follow`));
   expected.push(...Array.from({length:54},(_,i)=>[`NEWS54.${i+1}.main`,`NEWS54.${i+1}.follow`]).flat(),...Array.from({length:6},(_,i)=>`NEWS54.extra${i+1}.main`));
+  expected.push('REAL20261114.1','REAL20261114.2','REAL20261114.3');
   assert.deepEqual(new Set(prep.items.flatMap(row=>row.coverage)),new Set(expected));
-  assert.equal(prep.items.length,189);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
-  assert.equal(prep.items.filter(row=>row.kind==='asked').length,4);assert.equal(prep.englishPrompts.length,6);
+  assert.equal(prep.items.length,192);assert.equal(new Set(prep.items.map(row=>row.key)).size,prep.items.length);
+  assert.equal(prep.items.filter(row=>row.kind==='asked').length,6);assert.equal(prep.items.filter(row=>row.kind==='peer-asked').length,1);assert.equal(prep.englishPrompts.length,6);
   for(const row of prep.items){
-    assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>(row.kind==='followup'?50:70));assert.ok(row.a_en.split(/\s+/).length>=(row.kind==='followup'?(row.coverage.some(code=>code.startsWith('NEWS54.'))?30:35):45),row.key);
+    assert.match(row.q_zh,/\p{Script=Han}/u);assert.ok(row.q_en.length>15);assert.ok(row.a_zh.length>(row.interviewRecord?40:row.kind==='followup'?50:70));assert.ok(row.a_en.split(/\s+/).length>=(row.interviewRecord?35:row.kind==='followup'?(row.coverage.some(code=>code.startsWith('NEWS54.'))?30:35):45),row.key);
     if(row.parentKey)assert.ok(prep.byKey[row.parentKey]);
     for(const key of row.sources)assert.ok(prep.sources[key],`${row.key}: ${key}`);
     if(row.fact)assert.ok(row.sources.some(key=>prep.sources[key].date));
@@ -49,7 +50,7 @@ test('news qualifications and personal-story boundaries survive into the downloa
 });
 test('exactly 50 distinct essentials cover six explicit topics and all extensions stay classified',()=>{
   assert.equal(prep.essentialItems.length,50);assert.equal(new Set(prep.essentialItems.map(row=>row.key)).size,50);
-  assert.deepEqual(prep.topics.map(topic=>topic.keys.length),[8,8,8,8,10,8]);
+  assert.deepEqual(prep.topics.map(topic=>topic.keys.length),[8,8,8,8,10,8,0]);
   assert.deepEqual(prep.essentialItems.map(row=>row.essentialRank),Array.from({length:50},(_,i)=>i+1));
   for(const row of prep.items)assert.equal(prep.topics.filter(topic=>topic.key===row.topic).length,1);
   for(const topic of prep.topics)assert.deepEqual(prep.essentialItems.filter(row=>row.topic===topic.key).map(row=>row.key),topic.keys);

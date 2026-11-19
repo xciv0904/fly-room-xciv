@@ -1,7 +1,7 @@
 /* Bilingual interview drafts. News facts and personal recollections remain distinct. */
 (function(root){
   "use strict";
-  const checkedAt="2026-11-13";
+  const checkedAt="2026-11-20";
   const sources={
     importPractice:{"title":"2026-11-11 個人化面試擬答整理（非確認考古題）","url":"#ci/final-topics/livery-design","date":"","checkedAt":"2026-11-11","kind":"practice"},
     itf787:{"title":"華航：ITF 搶先體驗 787 新機客艙","url":"https://www.china-airlines.com/tw/zh/about-china-airlines/media/news/20261106.html","date":"2026-11-06","checkedAt":"2026-11-11","kind":"official"},
@@ -954,10 +954,23 @@ Thank you.`,
     news54Entries.push({number:entry.number,extra:index>=54,key:current.key,followKey:entry.followKey});
   }
   const news54={label:news54Data.label,entries:news54Entries,mainKeys:news54Entries.map(entry=>entry.key),allKeys:news54Entries.flatMap(entry=>[entry.key,...(entry.followKey?[entry.followKey]:[])])};
+  const interviewData=typeof module!=="undefined"&&module.exports?require("./ci-interview-records-data.js"):root.CIInterviewRecords;
+  if(!interviewData)throw Error("The personal interview records must load before ci-final-data.js");
+  sources.real20261114={title:interviewData.session.title,url:"#ci/final-topics/real-20261114",date:interviewData.session.date,kind:"personal",checkedAt:interviewData.checkedAt};
+  const interviewRecords={...interviewData,keys:interviewData.records.map(record=>record.key)};
+  for(const [index,record] of interviewData.records.entries()){
+    CI_FINAL_ITEMS.push({
+      key:record.key,group:"真實面試紀錄",kind:record.provenance==="self"?"asked":"peer-asked",priority:1,
+      coverage:[`REAL20261114.${index+1}`],sources:["real20261114"],checkedAt:interviewData.checkedAt,updatedAt:interviewData.checkedAt,
+      q_zh:record.question.zh,q_en:record.question.en,a_zh:record.reference.zh,a_en:record.reference.en,
+      interviewRecord:record,answerLabel:"本人提供的參考擬答",tags:record.tags,
+      tip:record.provenance==="peer"?"同組其他考生被問，並非本人實際作答；沒有提供原始回答。分析為練習建議，非考官官方評分。":"保留本人事後回憶原文；優化擬答與分析另列。分析為練習建議，非考官官方評分。"
+    });
+  }
   const items=CI_FINAL_ITEMS;
   items.forEach((item,index)=>{
     const itemCheckedAt=item.checkedAt||"2026-11-08";
-    Object.assign(item,{id:-11001-index,airlines:["華航"],cat:`華航複試・${item.group}`,src:`${item.kind==="asked"?"本人回顧已問過":"擬題，非確認考古題"}｜整理 ${itemCheckedAt}`,checkedAt:itemCheckedAt});
+    Object.assign(item,{id:-11001-index,airlines:["華航"],cat:`華航複試・${item.group}`,src:`${item.kind==="asked"?"本人回顧已問過":item.kind==="peer-asked"?"同組考生被問，非本人作答":"擬題，非確認考古題"}｜整理 ${itemCheckedAt}`,checkedAt:itemCheckedAt});
   });
   /* Editorial selection, not a claim about actual interview frequency. Every item has one topic. */
   const topics=[
@@ -966,7 +979,8 @@ Thank you.`,
     {key:"image",label:"社群形象與界線",keys:["social-media","uniform-social-post","private-account-complaint","anonymous-passenger-story","influencer-work-priority","sponsored-uniform-post","colleague-social-leak","harassment"]},
     {key:"safety",label:"飛安保安與判斷",keys:["safety-role","power-bank","unfamiliar-equipment","fatigue","europe-bomb-threats","flydubai-security","miami-cargo-accident","allergen-uncertainty"]},
     {key:"service",label:"服務經驗與團隊合作",keys:["service-mistake","unavailable-request","exceed-expectations","proactive-boundaries","prioritisation","colleague-promise","korean","reliability","digital-service","learning-procedures"]},
-    {key:"industry",label:"航空時事與產業觀點",keys:["fleet-news","sustainability","uk-atc-outage","middle-east-airspace","ebola-travel-attestation","fuel-surcharge-news","iata-biometrics-ai","korean-asiana-integration"]}
+    {key:"industry",label:"航空時事與產業觀點",keys:["fleet-news","sustainability","uk-atc-outage","middle-east-airspace","ebola-travel-attestation","fuel-surcharge-news","iata-biometrics-ai","korean-asiana-integration"]},
+    {key:"everyday",label:"生活經驗與即席表達",keys:[]}
   ];
   const extensions={
     motivation:["life-learning","why-now","why-not-other-airlines","other-airline-applications"],
@@ -974,7 +988,8 @@ Thank you.`,
     image:["privacy-news","ai-translation","passenger-lookup","filming","biometric-human-option"],
     safety:["countdown-turbulence","senior-safety","security-joke","security-trust","accident-aircraft-fear","jetstar-runway-incursion"],
     service:["eco-objection","diversion-connection","health-form-refusal","fare-service-complaint","merger-benefit-confusion","wrong-airport-help","other-airline-still-flies","international-guest-example"],
-    industry:["runway-news","theme-flight","western-sydney-opening","typhoon-flight-cancellations","aircraft-and-service","livery-design","ip-livery","company-suggestions"]
+    industry:["runway-news","theme-flight","western-sydney-opening","typhoon-flight-cancellations","aircraft-and-service","livery-design","ip-livery","company-suggestions"],
+    everyday:interviewRecords.keys
   };
   let essentialRank=0;
   for(const topic of topics){
@@ -1013,16 +1028,37 @@ Thank you.`,
     return {bank:list,items:registry};
   }
   function markdown({scope="essential"}={}){
-    const selected=scope==="all"?items:scope==="news54"?news54.allKeys.map(key=>byKey[key]):essentialItems;
-    const title=scope==="all"?"# 華航複試完整雙語題庫":scope==="news54"?"# 華航新聞54題＋加碼6題・中英文修訂擬答":"# 華航複試精選 50 題中英文擬答";
-    const out=[title,`內容更新：${checkedAt}；各新聞題保留自己的查核日期。`,scope==="all"?`完整題庫共 ${items.length} 題，包含精選 50 題與延伸練習；所有題目均依考察重點分類。`:scope==="news54"?"54題主答、54題追問與6題加碼，共114個練習單元。主答以正常語速約30–45秒為目標；追問精簡回答。長度依個人語速微調，不為湊時間加長。":"精選 50 題，依本人面試回顧、可使用的服務故事及考點覆蓋選題，減少重複問法；不是實際出題頻率或必考題排名。", "只有四題標示為本人回顧已問過；其他內容為延伸擬題。原有題號、延伸題與練習紀錄保留。", "判斷題先回答立場，再說明必要的確認、處理和回覆。經驗題使用一次真實事件；不必每題硬接飯店故事。", "時事題用一個有日期的事實，加上自己的觀點與職務連結。新聞細節以所列來源為準，規定與計畫在面試前再確認。", "分類：\n"+topics.map(topic=>`- ${topic.label}：${selected.filter(item=>item.topic===topic.key).length} 題`).join("\n")];
+    const selected=scope==="all"?items:scope==="news54"?news54.allKeys.map(key=>byKey[key]):scope==="records"?interviewRecords.keys.map(key=>byKey[key]):essentialItems;
+    const title=scope==="records"?`# ${interviewRecords.session.title}`:scope==="all"?"# 華航複試完整雙語題庫":scope==="news54"?"# 華航新聞54題＋加碼6題・中英文修訂擬答":"# 華航複試精選 50 題中英文擬答";
+    const introduction=scope==="records"?"共3題：本人實際作答2題、同組考生題目1題。原始回答、優化擬答和練習分析分開保存。":scope==="all"?`完整題庫共 ${items.length} 題，包含精選50題與延伸練習；所有題目均依考察重點分類。`:scope==="news54"?"54題主答、54題追問與6題加碼，共114個練習單元。主答以正常語速約30–45秒為目標；追問精簡回答。":"精選50題，依本人面試回顧、服務故事及考點覆蓋選題，減少重複問法；不是出題頻率或必考題排名。";
+    const out=[title,`內容更新：${checkedAt}；各新聞題保留自己的查核日期。`,introduction,
+      `本次匯出包含${selected.filter(item=>item.kind==="asked").length}題本人回顧已問過、${selected.filter(item=>item.kind==="peer-asked").length}題同組考生題目；其餘為延伸擬題。原有題號與練習紀錄保留。`,
+      scope==="records"?"原始回答保留口語、文法與紀錄筆誤；修正、中文語意和分析另列。":"判斷題先回答立場，再分清資訊與說明處理方式。經驗題使用一次真實事件，不必每題硬接飯店故事。",
+      scope==="records"?"程序題以簡單動詞和 First / Then / After that / Finally 完整交代步驟，練習15–30秒英文即興回答。":"時事題用一個有日期的事實，加上自己的觀點與職務連結。新聞細節與計畫狀態以所列來源為準。",
+      "分類：\n"+topics.filter(topic=>selected.some(item=>item.topic===topic.key)).map(topic=>`- ${topic.label}：${selected.filter(item=>item.topic===topic.key).length}題`).join("\n")];
+    if(scope==="records"||scope==="all"){
+      const s=interviewRecords.session;
+      out.push(`\n## ${s.title}`,`航空公司：${s.airlineName}｜日期：${s.date}｜階段：${s.stage}`,`同組考生${s.candidates}人（包含本人）；考官${s.interviewers}人。${s.format}`,s.source,"所有分析均為練習建議，非考官官方評分。");
+    }
     let number=0;
     for(const topic of topics){
       out.push(`\n## ${topic.label}`);
       for(const item of selected.filter(row=>row.topic===topic.key)){
         out.push(`\n### ${++number}. ${item.q_zh}`,item.q_en,`考察分類：${topic.label}｜題型來源：${item.group}${item.parentKey?`｜延伸自：${byKey[item.parentKey].q_zh}`:""}`);
         if(item.answerLabel)out.push(`${item.answerLabel}｜更新 ${item.updatedAt}`);
+        const record=item.interviewRecord;
+        if(record){
+          out.push(`題目來源：${record.provenance==="self"?"本人實際作答":"同組考生被問，非本人作答"}`,`原始提問語言：${record.question.language==="zh-TW"?"中文":"英文"}｜原始題目：${record.question.original}`,`題型：${record.tags.join("、")}`);
+          if(record.original){out.push("\n本人原始回答（保留口語及文法原貌）：",record.original.raw);if(record.original.meaningZh)out.push("原始回答中文語意：",record.original.meaningZh);if(record.original.note)out.push("原始紀錄附註：",record.original.note);}
+          else out.push("此題未提供本人或同組考生的原始回答，下列均為參考擬答。");
+        }
         out.push("\n中文擬答：",item.a_zh,"\nEnglish draft:",item.a_en);
+        if(record){
+          out.push("\n簡短英文備用版：",record.reference.shortEn,"回答架構："+record.analysis.structure.join(" → "),"關鍵英文句型：",...record.analysis.phrases.map(p=>`- ${p.en}｜${p.zh}`));
+          if(record.analysis.strengths.length)out.push("回答優點：",...record.analysis.strengths.map(x=>`- ${x}`));
+          out.push("改善建議（非考官官方評分）：",...record.analysis.improvements.map(x=>`- ${x}`));
+          if(record.analysis.corrections.length)out.push("英文錯誤解析：",...record.analysis.corrections.map(x=>`- ${x.original}：${x.issue}\n  建議：${x.suggestion}`));
+        }
         if(item.a_ko)out.push("\n한국어（韓文擬答）：",item.a_ko);
         for(const alternative of item.answerAlternatives||[]){
           out.push(`\n#### ${alternative.label}`);
@@ -1044,10 +1080,11 @@ Thank you.`,
         out.push("來源："+item.sources.map(key=>{const source=sources[key];return `[${source.title}](${source.url})${source.date?`（${source.dateLabel||"發布"} ${source.date}）`:source.checkedAt?`（查閱 ${source.checkedAt}）`:""}`}).join("、"));
       }
     }
-    out.push("\n## 六組英文核心問法與對應",...englishPrompts.map(prompt=>`- ${prompt.en}\n  對應：${prompt.keys.map(key=>byKey[key].q_zh+(byKey[key].essentialRank?"":"（延伸題）")).join("／")}`));
+    if(scope==="records"||scope==="all")out.push("\n## How to 說明程序：15–30秒英文即席表達",...interviewRecords.howTo.steps.map(step=>`${step.label}: ${step.en}`),"訓練重點：",...interviewRecords.howTo.focus.map(text=>`- ${text}`));
+    if(scope!=="records")out.push("\n## 六組英文核心問法與對應",...englishPrompts.map(prompt=>`- ${prompt.en}\n  對應：${prompt.keys.map(key=>byKey[key].q_zh+(byKey[key].essentialRank?"":"（延伸題）")).join("／")}`));
     return out.join("\n\n");
   }
-  const api={checkedAt,sources,items,essentialItems,topics,byKey,englishPrompts,news54,attach,markdown};
+  const api={checkedAt,sources,items,essentialItems,topics,byKey,englishPrompts,news54,interviewRecords,attach,markdown};
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   root.CIFinalPrep=api;
 })(typeof window!=="undefined"?window:globalThis);

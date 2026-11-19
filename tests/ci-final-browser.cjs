@@ -197,7 +197,68 @@ const server=http.createServer((req,res)=>{try{const file=path.resolve(root,'.'+
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`overflow for ${key}`);
       await page.screenshot({path:path.join(out,`${key}-390.png`),fullPage:true});
     }
-    assert.deepEqual(errors,[]);console.log(JSON.stringify({questions:questionCount,essentialQuestions:50,classifiedTopics:6,industryQuestions:24,recordingLanguages:['zh','en'],downloadedGuide:true,preservedLegacyState:true,consoleErrors:errors,output:out}));
+    // November 14 real records reuse the same study, favorites, speech and recording paths.
+    const records=require('../ci-interview-records-data.js'),[drama,rice,noodles]=records.records;
+    await page.locator('[data-ci-route="final"]').click();
+    assert.match(await page.locator('#ciApp .ci-route-head p').textContent(),/沒有自我介紹/);
+    await page.locator('[data-ci-module="interview-records"]').click();
+    assert.ok(page.url().endsWith('#ci/final-topics/real-20261114'));
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'records');assert.equal(await page.locator('.ci-final-question').count(),3);
+    assert.match(await page.locator('.ci-interview-context').textContent(),/3人（包含本人）/);assert.match(await page.locator('.ci-interview-context').textContent(),/5人/);
+    assert.equal(await page.locator('.ci-interview-optimized').count(),0,'answers begin hidden');
+    await page.locator(`#ci-final-${drama.key}>summary`).click();await page.locator(`[data-final-reveal="${drama.key}"]`).click();
+    assert.equal(await page.locator(`#ci-final-${drama.key} .ci-interview-optimized [lang="zh-Hant"] p`).textContent(),drama.reference.zh);
+    await page.locator(`#ci-final-${drama.key} [data-final-version="original"]`).click();
+    assert.equal(await page.locator(`#ci-final-${drama.key} .ci-interview-original p`).textContent(),drama.original.raw);
+    assert.match(await page.locator(`#ci-final-${drama.key} .ci-final-answer .tip`).textContent(),/法律無法懲罰加害者/);
+    await page.locator(`[data-final-conceal="${drama.key}"]`).click();assert.equal(await page.locator(`#ci-final-${drama.key} .ci-interview-original`).count(),0);
+    await page.locator(`[data-final-reveal="${drama.key}"]`).click();
+    assert.equal(await page.locator(`#ci-final-${drama.key} .ci-interview-original p`).textContent(),drama.original.raw);
+    await page.locator('#ciFinalSearch').fill('till it be nice');assert.equal(await page.locator('.ci-final-question').count(),1,'raw wording is searchable');
+    await page.locator('#ciFinalSearch').fill('影視作品');assert.equal(await page.locator('.ci-final-question').count(),1,'provided categories are searchable');
+    await page.locator('#ciFinalSearch').fill('');await page.evaluate(key=>CIFinalStudy.open(key),rice.key);
+    await page.locator(`[data-final-reveal="${rice.key}"]`).click();await page.locator(`#ci-final-${rice.key} [data-final-version="original"]`).click();
+    assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-original p`).textContent(),rice.original.raw);
+    await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);
+    assert.equal(await page.locator('#ciFinalScope').inputValue(),'records');assert.equal(await page.locator(`[data-final-reveal="${rice.key}"]`).count(),1);
+    await page.locator(`[data-final-reveal="${rice.key}"]`).click();assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-original p`).textContent(),rice.original.raw);
+    await page.locator(`#ci-final-${rice.key} .ci-interview-analysis>summary`).click();assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-analysis ol>li`).count(),5);
+    assert.match(await page.locator(`#ci-final-${rice.key} .ci-interview-analysis`).textContent(),/非考官官方評分/);
+    await page.locator(`#ci-final-${rice.key} [data-final-version="optimized"]`).click();await page.locator('#ciFinalLang').selectOption('en');
+    assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-optimized [lang="zh-Hant"]`).count(),0);
+    assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-optimized [lang="en"] p`).textContent(),rice.reference.en);
+    assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-short p`).textContent(),rice.reference.shortEn);
+    assert.deepEqual(await page.locator(`#ci-final-${rice.key} .ci-interview-short .say`).evaluate(button=>({t:SAYS[button.dataset.sid].t,l:SAYS[button.dataset.sid].l})),{t:rice.reference.shortEn,l:'en-US'});
+    await page.locator('#ciFinalLang').selectOption('zh');assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-short`).count(),0);
+    assert.equal(await page.locator(`#ci-final-${rice.key} .ci-interview-optimized [lang="zh-Hant"] p`).textContent(),rice.reference.zh);
+    await page.locator('#ciFinalLang').selectOption('both');await page.locator(`#ci-final-${rice.key} [data-final-star]`).click();
+    const riceId=prep.byKey[rice.key].id;assert.ok(await page.evaluate(id=>stars.includes(id),riceId));
+    await page.reload();await page.waitForFunction(count=>CIFinalPrep.registered?.length===count,questionCount);assert.equal(await page.locator(`#ci-final-${rice.key} [data-final-star]`).getAttribute('aria-pressed'),'true');
+    await page.locator('.ci-interview-context [data-final-howto]').click();assert.equal(await page.locator('.ci-final-question').count(),2);
+    await page.locator('.ci-howto-guide>summary').click();assert.equal(await page.locator('.ci-howto-guide ol li').count(),5);
+    assert.ok((await page.locator('.ci-howto-guide').textContent()).includes("Finally, ... and you're done!"));
+    for(let i=0;i<4;i++){await page.locator('[data-final-random]').click();assert.ok([rice.key,noodles.key].includes(await page.locator('.ci-final-question[open]').getAttribute('data-final-key')));assert.equal(await page.locator('.ci-final-question').count(),2);}
+    await page.evaluate(key=>CIFinalStudy.open(key),noodles.key);await page.locator(`[data-final-reveal="${noodles.key}"]`).click();
+    await page.locator(`#ci-final-${noodles.key} [data-final-version="original"]`).click();assert.equal(await page.locator(`#ci-final-${noodles.key} .ci-interview-original`).count(),0);
+    assert.match(await page.locator(`#ci-final-${noodles.key} .ci-peer-record`).textContent(),/並非本人實際作答/);
+    assert.match(await page.locator(`#ci-final-${noodles.key} .ci-interview-question-meta`).textContent(),/同組其他考生被問/);
+    pending=page.waitForEvent('download');await page.locator('[data-final-download]').click();download=await pending;
+    assert.equal(fs.readFileSync(await download.path(),'utf8'),prep.markdown({scope:'records'}));
+    await record('en',rice.key);await record('zh',drama.key);
+    assert.equal(await page.evaluate(key=>CIFinalPrep.byKey[key].interviewRecord.original.raw,rice.key),rice.original.raw,'recording never overwrites the historical answer');
+    await page.evaluate(()=>showTab('review'));assert.match(await page.locator('.ci-real-review').textContent(),/沒有自我介紹/);
+    await page.locator('.ci-real-review [data-open-final-study="real-20261114"]').click();assert.equal(await page.locator('.ci-final-question').count(),3);
+    await page.evaluate(key=>CIFinalStudy.open(key),rice.key);await page.locator(`[data-final-reveal="${rice.key}"]`).click();
+    await page.locator(`#ci-final-${rice.key} [data-final-version="original"]`).click();await page.locator(`#ci-final-${rice.key} .ci-interview-analysis>summary`).click();
+    for(const width of [390,768,1280]){await page.setViewportSize({width,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`real records overflow at ${width}`);await page.screenshot({path:path.join(out,`real-records-${width}.png`),fullPage:true});}
+    await page.locator(`#ci-final-${rice.key} [data-final-version="optimized"]`).click();
+    for(const width of [390,1280]){await page.setViewportSize({width,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.locator(`#ci-final-${rice.key}`).screenshot({path:path.join(out,`real-optimized-${width}.png`)});}
+    await page.locator('.ci-interview-context [data-final-howto]').click();await page.locator('.ci-howto-guide>summary').click();await page.setViewportSize({width:390,height:900});
+    await page.locator('.ci-howto-guide').screenshot({path:path.join(out,'how-to-template-390.png')});
+    await page.evaluate(key=>CIFinalStudy.open(key),noodles.key);await page.locator(`#ci-final-${noodles.key} [data-final-record][data-lang="en"]`).click();
+    assert.match(await page.locator('#mBody').textContent(),/同組考生被問，非本人作答/);await page.locator('#mBody [data-open-final-study]').click();
+    await page.locator(`#ci-final-${noodles.key} .ci-final-sources a`).click();await page.waitForFunction(()=>document.querySelectorAll('.ci-final-question').length===3);
+    assert.deepEqual(errors,[]);console.log(JSON.stringify({questions:questionCount,essentialQuestions:50,classifiedTopics:prep.topics.length,industryQuestions:24,realRecords:3,selfAnswered:2,peerQuestion:1,proceduralQuestions:2,originalsPreserved:true,recordingLanguages:['zh','en'],downloadedGuide:true,preservedLegacyState:true,consoleErrors:errors,output:out}));
     await context.close();
   }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});
