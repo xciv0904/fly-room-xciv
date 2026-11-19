@@ -4,10 +4,10 @@
   "uniqueTextCount": 1150,
   "processed": 1185,
   "withCandidates": 1184,
-  "vocabularyCount": 3612,
-  "cardCount": 3613,
-  "pronunciationPending": 490,
-  "translationPending": 166,
+  "vocabularyCount": 3600,
+  "cardCount": 3601,
+  "pronunciationPending": 470,
+  "translationPending": 147,
   "counts": {
     "華航": {
       "雜誌": 39,
@@ -63,14 +63,14 @@
       "pendingChinese": 14
     },
     "proper": {
-      "total": 254,
-      "pendingIPA": 110,
-      "pendingChinese": 38
+      "total": 252,
+      "pendingIPA": 108,
+      "pendingChinese": 36
     },
     "word": {
-      "total": 3196,
-      "pendingIPA": 247,
-      "pendingChinese": 96
+      "total": 3186,
+      "pendingIPA": 229,
+      "pendingChinese": 79
     }
   },
   "zeroCandidateArticles": [
@@ -2770,8 +2770,8 @@
       "sourceFile": "ci-interview-records-data.js",
       "collection": "records",
       "words": 55,
-      "candidates": 17,
-      "occurrences": 18,
+      "candidates": 14,
+      "occurrences": 15,
       "processed": true
     },
     {
@@ -2784,8 +2784,8 @@
       "sourceFile": "ci-interview-records-data.js",
       "collection": "records",
       "words": 52,
-      "candidates": 13,
-      "occurrences": 14,
+      "candidates": 8,
+      "occurrences": 9,
       "processed": true
     },
     {
@@ -2798,8 +2798,8 @@
       "sourceFile": "ci-interview-records-data.js",
       "collection": "records",
       "words": 39,
-      "candidates": 10,
-      "occurrences": 10,
+      "candidates": 6,
+      "occurrences": 6,
       "processed": true
     },
     {

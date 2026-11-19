@@ -105,6 +105,65 @@
     }
   },
   {
+    "word": "secret",
+    "type": "word",
+    "ipa": "/ˈsikɹət/；/ˈsikɹɪt/",
+    "stress": [
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ],
+    "phonemes": [
+      {
+        "arpabet": "S IY1 K R AH0 T",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "si",
+          "kɹət"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      },
+      {
+        "arpabet": "S IY1 K R IH0 T",
+        "syllableCount": 2,
+        "primaryStress": [
+          1
+        ],
+        "phoneticSyllables": [
+          "si",
+          "kɹɪt"
+        ],
+        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
+      }
+    ],
+    "source": {
+      "id": "article-ac0d390351504397",
+      "title": "records 1",
+      "airlines": [
+        "華航"
+      ],
+      "kind": "朗讀文章",
+      "sourceFile": "ci-interview-records-data.js",
+      "collection": "records",
+      "words": 55,
+      "candidates": 14,
+      "occurrences": 15,
+      "processed": true
+    },
+    "sentence": "It's about a secret group that helps people who have been treated unfairly, especially when the legal system cannot give them justice.",
+    "checks": {
+      "ipaExactDictionaryMatch": true,
+      "cmuPhonemesExactMatch": true,
+      "sourceExists": true
+    }
+  },
+  {
     "word": "independent",
     "type": "word",
     "ipa": "/ˌɪndɪˈpɛndənt/",
@@ -952,50 +1011,6 @@
       "processed": true
     },
     "sentence": "If still heated, I'd offer to reseat one of them — framing it as comfort, not punishment.",
-    "checks": {
-      "ipaExactDictionaryMatch": true,
-      "cmuPhonemesExactMatch": true,
-      "sourceExists": true
-    }
-  },
-  {
-    "word": "obtain",
-    "type": "word",
-    "ipa": "/əbˈteɪn/",
-    "stress": [
-      [
-        2
-      ]
-    ],
-    "phonemes": [
-      {
-        "arpabet": "AH0 B T EY1 N",
-        "syllableCount": 2,
-        "primaryStress": [
-          2
-        ],
-        "phoneticSyllables": [
-          "ə",
-          "bteɪn"
-        ],
-        "segmentationStatus": "phoneme-grouping-assisted-not-orthographic-syllables"
-      }
-    ],
-    "source": {
-      "id": "article-c62729bc8d6a9c2b",
-      "title": "旅客問飛機是不是故障，但妳只聽到維修人員私下討論，妳會怎麼說？",
-      "airlines": [
-        "華航"
-      ],
-      "kind": "面試英文段落",
-      "sourceFile": "ci-final-data.js",
-      "collection": "CI_JUDGMENT_ITEMS",
-      "words": 66,
-      "candidates": 22,
-      "occurrences": 26,
-      "processed": true
-    },
-    "sentence": "I would pass on the passenger's question, obtain verified information, and return with an update.",
     "checks": {
       "ipaExactDictionaryMatch": true,
       "cmuPhonemesExactMatch": true,
